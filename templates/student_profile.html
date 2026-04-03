@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="grid two">
+  <article class="card">
+    <h3>Profile Snapshot</h3>
+    <table class="table">
+      <tbody>
+        <tr>
+          <th>Name</th>
+          <td>{{ display_name }}</td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td>{{ session.get('email') }}</td>
+        </tr>
+        <tr>
+          <th>Current Mood</th>
+          <td>{{ mood_label }} ({{ mood_score }}/5)</td>
+        </tr>
+        <tr>
+          <th>Mental Battery</th>
+          <td>{{ mood_battery }}%</td>
+        </tr>
+      </tbody>
+    </table>
+  </article>
+
+  <article class="card pastel-blue">
+    <h3>Wellbeing Preferences</h3>
+    <ul class="list">
+      <li>Preferred support mode: In-person counselling</li>
+      <li>Quiet hours reminder: Enabled</li>
+      <li>AI vent session summaries: Enabled</li>
+      <li>Emergency escalation: Trusted contact configured</li>
+    </ul>
+  </article>
+</div>
+
+<div class="grid two">
+  <article class="card pastel-green">
+    <h3>Support Plan</h3>
+    <p class="mini">Personalized from your latest mood check-in and weekly rhythm.</p>
+    <ul class="list">
+      <li>Daily 10-minute grounding sequence</li>
+      <li>Two structured check-ins per week</li>
+      <li>One counselling follow-up this Friday</li>
+    </ul>
+  </article>
+
+  <article class="card pastel-yellow">
+    <h3>Privacy & Data</h3>
+    <ul class="list">
+      <li>Raw vent text is never permanently stored</li>
+      <li>Only derived wellbeing signals are kept</li>
+      <li>You can update mood anytime from sidebar</li>
+    </ul>
+  </article>
+</div>
+{% endblock %}

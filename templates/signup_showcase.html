@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EqWell | Sign Up Showcase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body class="cinematic-page signup-page">
+  <section class="signup-shell">
+    <a class="signup-back" href="{{ url_for('home') }}">&larr; Back to Home</a>
+
+    <article class="signup-card">
+      <p class="signup-kicker">Showcase Prototype</p>
+      <h1>Create your EqWell account</h1>
+      <p class="signup-sub">This is a visual demo page only. Signup submission is intentionally disabled.</p>
+
+      <form class="signup-form" onsubmit="return false;">
+        <label>
+          Full Name
+          <input type="text" placeholder="Ariana Vale" />
+        </label>
+
+        <label>
+          Institution Email
+          <input type="email" placeholder="name@campus.edu" />
+        </label>
+
+        <label>
+          Role
+          <select>
+            <option>Student</option>
+            <option>Warden</option>
+            <option>Admin</option>
+            <option>Counsellor</option>
+          </select>
+        </label>
+
+        <button type="button" disabled>Sign up (showcase only)</button>
+      </form>
+
+      <p class="signup-note">Use existing demo credentials from the login page to access dashboards.</p>
+      <a class="signup-login-link" href="{{ url_for('login') }}">Go to Login</a>
+    </article>
+  </section>
+</body>
+</html>

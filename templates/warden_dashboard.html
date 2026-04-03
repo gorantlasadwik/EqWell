@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<article id="analytics" class="card dark">
+  <span class="pill warn">Morning Overview</span>
+  <h2 style="font-size: 38px; margin: 14px 0 8px;">Campus Pulse</h2>
+  <p style="margin: 0; color: #cdd5e8;">Collective mood is steady. Mild stress spike detected in Block D2 during exam prep hours.</p>
+  <div class="grid three" style="margin-top: 16px;">
+    <div class="card pastel-yellow">
+      <h4 style="margin-bottom: 6px;">Total Signals</h4>
+      <p class="metric" style="font-size: 30px; margin: 0;">4,281</p>
+    </div>
+    <div class="card pastel-blue">
+      <h4 style="margin-bottom: 6px;">Alert Blocks</h4>
+      <p class="metric" style="font-size: 30px; margin: 0;">2</p>
+    </div>
+    <div class="card pastel-green">
+      <h4 style="margin-bottom: 6px;">Counselling Demand</h4>
+      <p class="metric" style="font-size: 30px; margin: 0;">12</p>
+    </div>
+  </div>
+</article>
+
+<div id="students" class="grid three">
+  <article class="card">
+    <h4>Block D1</h4>
+    <p class="mini">Stable wellbeing pattern.</p>
+    <div class="progress"><span style="width: 82%; background: #3cae71;"></span></div>
+    <p class="mini">Health index: 82%</p>
+  </article>
+
+  <article class="card pastel-pink">
+    <h4>Block D2</h4>
+    <p class="mini">Spike detected: academic load.</p>
+    <div class="progress"><span style="width: 54%; background: #c74971;"></span></div>
+    <p class="mini">Health index: 54%</p>
+  </article>
+
+  <article class="card">
+    <h4>Block C</h4>
+    <p class="mini">Balanced distribution of signals.</p>
+    <div class="progress"><span style="width: 75%; background: #13a4ec;"></span></div>
+    <p class="mini">Health index: 75%</p>
+  </article>
+</div>
+
+<div id="sessions" class="grid two">
+  <article class="card">
+    <h3>Early Warning Alerts</h3>
+    <ul class="list">
+      <li>02:10 AM: Repeated panic markers from Block D2 cluster.</li>
+      <li>09:25 AM: Attendance drop linked to sleep disruption.</li>
+      <li>11:40 AM: Counselling request queue increased by 18%.</li>
+    </ul>
+  </article>
+
+  <article class="card">
+    <h3>Top Stress Factors</h3>
+    <ul class="list">
+      <li>Academic pressure: 64%</li>
+      <li>Sleep debt: 24%</li>
+      <li>Social friction: 12%</li>
+    </ul>
+    <div style="display:flex; gap:8px; margin-top: 12px;">
+      <span class="pill warn">Exams Week</span>
+      <span class="pill info">Night Shift</span>
+    </div>
+  </article>
+</div>
+
+<article id="reports" class="card">
+  <h3>Counselling Demand Split</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Count</th>
+        <th>Delta</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Pending Requests</td>
+        <td>7</td>
+        <td>+2 today</td>
+      </tr>
+      <tr>
+        <td>In Progress</td>
+        <td>3</td>
+        <td>Stable</td>
+      </tr>
+      <tr>
+        <td>Completed</td>
+        <td>2</td>
+        <td>+1 today</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+{% endblock %}

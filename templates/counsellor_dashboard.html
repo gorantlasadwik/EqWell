@@ -1,0 +1,615 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  .c-shell {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    gap: 18px;
+  }
+
+  .c-blob {
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    border-radius: 999px;
+    filter: blur(78px);
+    opacity: 0.33;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .c-blob.one {
+    right: -70px;
+    top: -64px;
+    background: radial-gradient(circle, rgba(242, 231, 196, 0.7) 0%, rgba(242, 231, 196, 0) 70%);
+  }
+
+  .c-blob.two {
+    left: -80px;
+    bottom: 18px;
+    background: radial-gradient(circle, rgba(198, 221, 251, 0.58) 0%, rgba(198, 221, 251, 0) 70%);
+  }
+
+  .c-head {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 16px;
+  }
+
+  .c-title {
+    margin: 0;
+    font-size: clamp(30px, 4.2vw, 48px);
+    letter-spacing: -0.03em;
+  }
+
+  .c-sub {
+    margin: 8px 0 0;
+    color: #cfd8e9;
+  }
+
+  .c-kpi {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  .c-kpi .pill {
+    font-size: 11px;
+  }
+
+  .c-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f5f3ee;
+    border: 1px solid #ddd9d2;
+    border-radius: 999px;
+    padding: 6px 8px;
+    color: #5b6478;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+
+  .c-toggle span {
+    width: 34px;
+    height: 18px;
+    border-radius: 999px;
+    background: #f2e7c4;
+    position: relative;
+    display: inline-block;
+  }
+
+  .c-toggle span::after {
+    content: '';
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  }
+
+  .c-bento {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+  }
+
+  .c-main,
+  .c-side {
+    display: grid;
+    gap: 16px;
+    align-content: start;
+  }
+
+  .c-schedule {
+    background: #f7f4ef;
+  }
+
+  .c-schedule-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .c-link {
+    color: #355f8e;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .c-link:hover {
+    text-decoration: underline;
+  }
+
+  .session-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .session-item {
+    border-radius: 18px;
+    border: 1px solid #ddd9d2;
+    background: #ffffff;
+    padding: 14px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .session-item.live {
+    background: #11131a;
+    border-color: #11131a;
+    color: #f3f6fd;
+  }
+
+  .session-time {
+    min-width: 70px;
+    text-align: center;
+    border-right: 1px solid rgba(125, 132, 146, 0.35);
+    padding-right: 12px;
+  }
+
+  .session-item.live .session-time {
+    border-right-color: rgba(255, 255, 255, 0.24);
+  }
+
+  .session-time .to {
+    color: #8f97aa;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .session-item.live .session-time .to {
+    color: #ced7eb;
+  }
+
+  .session-name {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .session-note {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: #6d7588;
+  }
+
+  .session-item.live .session-note {
+    color: #d4dcef;
+  }
+
+  .btn-session {
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-weight: 800;
+    font-size: 12px;
+    background: #f2e7c4;
+    color: #1e2431;
+  }
+
+  .btn-session.ghost {
+    background: #eef0f5;
+    color: #465067;
+  }
+
+  .c-model-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .c-mini {
+    border: 1px solid #ddd9d2;
+    background: #fff;
+    border-radius: 16px;
+    padding: 12px;
+  }
+
+  .c-mini p {
+    margin: 0;
+  }
+
+  .c-mini .label {
+    font-size: 11px;
+    color: #6a7285;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .c-mini .value {
+    margin-top: 6px;
+    font-size: 24px;
+    font-weight: 800;
+  }
+
+  .c-mini .delta {
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .c-mini .delta.good {
+    color: #2f8551;
+  }
+
+  .c-mini .delta.warn {
+    color: #c74971;
+  }
+
+  .c-mini .meter {
+    margin-top: 8px;
+    height: 6px;
+    border-radius: 999px;
+    background: #ece8e2;
+    overflow: hidden;
+  }
+
+  .c-mini .meter span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+  }
+
+  .queue-item {
+    display: grid;
+    grid-template-columns: 42px 1fr auto;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .queue-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #2c3342;
+    background: #f2e7c4;
+  }
+
+  .queue-item p {
+    margin: 0;
+  }
+
+  .queue-name {
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .queue-meta {
+    margin-top: 2px;
+    color: #6f778a;
+    font-size: 12px;
+  }
+
+  .c-insight {
+    background: linear-gradient(150deg, #11131a 0%, #232b39 100%);
+    color: #f4f7fe;
+    border: 0;
+  }
+
+  .c-insight p {
+    color: #d4dcf0;
+  }
+
+  .c-bars {
+    display: grid;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .c-bar {
+    display: grid;
+    gap: 4px;
+  }
+
+  .c-bar-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #dbe3f5;
+    font-weight: 700;
+  }
+
+  .c-bar-track {
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+  }
+
+  .c-bar-track span {
+    display: block;
+    height: 100%;
+    background: #f2e7c4;
+    border-radius: 999px;
+  }
+
+  .c-report-card {
+    background: #f7f4ef;
+  }
+
+  .c-visual {
+    height: 170px;
+    border-radius: 18px;
+    background: #ffffff;
+    border: 1px solid #ddd9d2;
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    text-align: center;
+  }
+
+  .c-visual::before,
+  .c-visual::after {
+    content: '';
+    position: absolute;
+    border-radius: 999px;
+    filter: blur(18px);
+  }
+
+  .c-visual::before {
+    width: 124px;
+    height: 124px;
+    background: rgba(242, 231, 196, 0.8);
+    left: 20%;
+    top: 28%;
+  }
+
+  .c-visual::after {
+    width: 108px;
+    height: 108px;
+    background: rgba(199, 73, 113, 0.32);
+    right: 20%;
+    top: 34%;
+  }
+
+  .c-visual strong {
+    position: relative;
+    z-index: 1;
+    font-size: 36px;
+    letter-spacing: -0.02em;
+  }
+
+  .c-visual span {
+    position: relative;
+    z-index: 1;
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #6a7284;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 1080px) {
+    .c-head,
+    .c-bento,
+    .c-model-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="c-shell">
+  <span class="c-blob one"></span>
+  <span class="c-blob two"></span>
+
+  <section id="analytics" class="c-head">
+    <article class="card dark">
+      <span class="pill info" style="background: #c6ddfb; color: #1a365f;">Today</span>
+      <h2 class="c-title">Welcome back, Dr. Aris</h2>
+      <p class="c-sub">You have 6 sessions scheduled, with 2 high-priority students waiting in queue.</p>
+      <div class="c-kpi">
+        <span class="pill warn">6 Sessions</span>
+        <span class="pill info">Queue: 2 Priority</span>
+      </div>
+    </article>
+
+    <article class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+        <div>
+          <p class="mini" style="margin: 0; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 800;">Availability</p>
+          <h3 style="margin: 6px 0 0; font-size: 28px;">Counsellor Status</h3>
+        </div>
+        <div class="c-toggle">Active <span></span></div>
+      </div>
+      <div class="grid two" style="margin-top: 14px;">
+        <div class="card pastel-yellow" style="padding: 12px;">
+          <p class="mini" style="margin: 0;">Upcoming</p>
+          <p class="metric" style="margin: 2px 0 0; font-size: 30px;">6</p>
+        </div>
+        <div class="card pastel-blue" style="padding: 12px;">
+          <p class="mini" style="margin: 0;">High Priority</p>
+          <p class="metric" style="margin: 2px 0 0; font-size: 30px;">2</p>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="c-bento">
+    <div class="c-main">
+      <article id="sessions" class="card c-schedule">
+        <div class="c-schedule-head">
+          <h3 style="margin: 0; font-size: 30px;">Today's Schedule</h3>
+          <a class="c-link" href="#reports">Full Calendar</a>
+        </div>
+
+        <div class="session-list">
+          <div class="session-item live">
+            <div class="session-time">
+              <div class="to">Now</div>
+              <div style="font-size: 22px; font-weight: 800; margin-top: 2px;">10:30</div>
+            </div>
+            <div>
+              <p class="session-name">Julianne Moore</p>
+              <p class="session-note">Crisis Intervention • Room 402</p>
+            </div>
+            <button class="btn-session" type="button">Join Session</button>
+          </div>
+
+          <div class="session-item">
+            <div class="session-time">
+              <div class="to">12:00</div>
+              <div style="font-size: 19px; font-weight: 800; margin-top: 2px;">13:00</div>
+            </div>
+            <div>
+              <p class="session-name">Marcus Chen</p>
+              <p class="session-note">Stress Management • Virtual</p>
+            </div>
+            <button class="btn-session ghost" type="button">History</button>
+          </div>
+
+          <div class="session-item" style="opacity: 0.68;">
+            <div class="session-time">
+              <div class="to">14:30</div>
+              <div style="font-size: 19px; font-weight: 800; margin-top: 2px;">15:30</div>
+            </div>
+            <div>
+              <p class="session-name">Sarah Jenkins</p>
+              <p class="session-note">Regular Check-in • Room 108</p>
+            </div>
+            <span class="tag" style="background: #f2ede2;">Pending</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div style="display:flex; justify-content: space-between; gap: 12px; align-items: baseline;">
+          <div>
+            <h3 style="margin: 0;">Expert Validation Model</h3>
+            <p class="mini" style="margin-top: 4px;">AI-assisted stress scoring system</p>
+          </div>
+          <p style="margin: 0; color: #355f8e; font-size: 28px; font-weight: 900;">94.8%</p>
+        </div>
+
+        <div class="c-model-grid">
+          <div class="c-mini">
+            <p class="label">Physiological</p>
+            <p class="value">8.4 <span class="delta good">+0.2</span></p>
+            <div class="meter"><span style="width: 84%; background: #c74971;"></span></div>
+          </div>
+          <div class="c-mini">
+            <p class="label">Cognitive Load</p>
+            <p class="value">6.2 <span class="delta warn">-0.5</span></p>
+            <div class="meter"><span style="width: 62%; background: #355f8e;"></span></div>
+          </div>
+          <div class="c-mini">
+            <p class="label">Social Metric</p>
+            <p class="value">9.1 <span class="delta good">+1.1</span></p>
+            <div class="meter"><span style="width: 91%; background: #11131a;"></span></div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="c-side">
+      <article id="students" class="card" style="background: #e4e0da;">
+        <h3 style="margin-bottom: 14px;">Upcoming Queue</h3>
+
+        <div class="queue-item">
+          <span class="queue-avatar">AV</span>
+          <div>
+            <p class="queue-name">Amelia V.</p>
+            <p class="queue-meta">Wait: 12 min</p>
+          </div>
+          <span class="material-symbols-outlined" style="color: #c74971;">priority_high</span>
+        </div>
+
+        <div class="queue-item" style="margin-top: 14px; opacity: 0.8;">
+          <span class="queue-avatar" style="background:#dce6f4;">DR</span>
+          <div>
+            <p class="queue-name">David R.</p>
+            <p class="queue-meta">Wait: 45 min</p>
+          </div>
+          <span class="tag">Queued</span>
+        </div>
+
+        <div class="queue-item" style="margin-top: 14px; opacity: 0.8;">
+          <span class="queue-avatar" style="background:#f2d5de;">EK</span>
+          <div>
+            <p class="queue-name">Elena K.</p>
+            <p class="queue-meta">Scheduled: 16:00</p>
+          </div>
+          <span class="tag" style="background:#f8ecff;">Later</span>
+        </div>
+
+        <button class="sidebar-action" style="margin-top: 18px;">Manage Queue</button>
+      </article>
+
+      <article class="card c-insight">
+        <h3 style="margin-bottom: 8px;">Historical Insights</h3>
+        <p class="mini" style="color:#d8e0f2;">System noted a 22% increase in academic stress markers this week. Prioritize exam-anxiety protocol in the next 3 sessions.</p>
+
+        <div class="c-bars">
+          <div class="c-bar">
+            <div class="c-bar-row"><span>Recovery Rate</span><span>78%</span></div>
+            <div class="c-bar-track"><span style="width:78%;"></span></div>
+          </div>
+          <div class="c-bar">
+            <div class="c-bar-row"><span>Model Confidence</span><span>High</span></div>
+            <div class="c-bar-track"><span style="width:92%;"></span></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="reports" class="grid two">
+    <article class="card c-report-card">
+      <h3 style="margin-bottom: 12px;">Mood Visualization</h3>
+      <div class="c-visual">
+        <div>
+          <strong>Calm</strong>
+          <span>Current Cohort Vibe</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card c-report-card">
+      <h3 style="margin-bottom: 12px;">Validation Scoring</h3>
+
+      <div class="card" style="padding: 12px; margin-bottom: 10px;">
+        <div style="display:flex; align-items:center; gap: 10px;">
+          <span class="material-symbols-outlined" style="color:#355f8e;">check_circle</span>
+          <div style="flex:1;">
+            <p style="margin:0; font-weight: 800;">Stress Model Validated</p>
+            <p class="mini" style="margin: 2px 0 0;">Case #8922 consistent with expert review.</p>
+          </div>
+          <strong>+0.4</strong>
+        </div>
+      </div>
+
+      <div class="card" style="padding: 12px; margin-bottom: 0;">
+        <div style="display:flex; align-items:center; gap: 10px;">
+          <span class="material-symbols-outlined" style="color:#c74971;">feedback</span>
+          <div style="flex:1;">
+            <p style="margin:0; font-weight: 800;">Manual Overwrite</p>
+            <p class="mini" style="margin: 2px 0 0;">Case #8921 sensitivity adjusted by Dr. Aris.</p>
+          </div>
+          <strong>-0.1</strong>
+        </div>
+      </div>
+    </article>
+  </section>
+</div>
+{% endblock %}

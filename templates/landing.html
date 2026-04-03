@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EqWell | Digital Sanctuary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body class="cinematic-page">
+  <div class="cinematic-wrap">
+    <div class="cinematic-video-shell" aria-hidden="true">
+      <div class="cinematic-image"></div>
+      <div class="cinematic-overlay"></div>
+      <div class="cinematic-overlay-soft"></div>
+    </div>
+
+    <header class="cinematic-nav-shell">
+      <nav class="cinematic-nav">
+        <a class="cinematic-logo" href="{{ url_for('home') }}">EqWell</a>
+
+        <div class="cinematic-menu" aria-label="Primary">
+          <a class="active" href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('login') }}">Students</a>
+          <a href="{{ url_for('login') }}">Wardens</a>
+          <a href="{{ url_for('login') }}">Counsellors</a>
+          <a href="{{ url_for('login') }}">Insights</a>
+        </div>
+
+        <div class="cinematic-actions">
+          <a class="btn-pill btn-ghost" href="{{ url_for('login') }}">Log in</a>
+          <a class="btn-pill btn-dark" href="{{ url_for('signup_showcase') }}">Sign up</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="cinematic-hero">
+      <h1 class="cinematic-title animate-fade-rise">
+        Student wellbeing,<br />
+        <span>detected early with</span> <em>human support.</em>
+      </h1>
+
+      <p class="cinematic-sub animate-fade-rise-delay">
+        EqWell connects students, wardens, administrators, and counsellors in one privacy-first system.
+        Track mood signals, prioritize interventions, and deliver timely care before stress becomes crisis.
+      </p>
+
+      <div class="cinematic-hero-actions animate-fade-rise-delay-2">
+        <a class="btn-pill btn-dark hero" href="{{ url_for('login') }}">Begin Journey</a>
+        <a class="btn-pill btn-ghost hero" href="{{ url_for('signup_showcase') }}">Create Account</a>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

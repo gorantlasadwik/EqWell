@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="sanctuary" class="grid four">
+  <article id="pulse-check" class="card">
+    <p class="mini">Students</p>
+    <p class="metric">4,281</p>
+  </article>
+  <article class="card">
+    <p class="mini">Active Counsellors</p>
+    <p class="metric">156</p>
+  </article>
+  <article class="card">
+    <p class="mini">Average Stress</p>
+    <p class="metric">2.7</p>
+  </article>
+  <article class="card">
+    <p class="mini">High Risk</p>
+    <p class="metric">82</p>
+  </article>
+</div>
+
+<div id="insights" class="grid two">
+  <article class="card">
+    <h3>Stress Model Weighting</h3>
+    <p class="mini">Tune the role of key factors in system scoring.</p>
+
+    <div style="margin-top: 16px;">
+      <p class="mini" style="margin-bottom: 6px;">Academic Load Variance (0.85)</p>
+      <div class="progress"><span style="width:85%;"></span></div>
+    </div>
+
+    <div style="margin-top: 14px;">
+      <p class="mini" style="margin-bottom: 6px;">Circadian Rhythm Alignment (0.42)</p>
+      <div class="progress"><span style="width:42%;"></span></div>
+    </div>
+
+    <div style="margin-top: 14px;">
+      <p class="mini" style="margin-bottom: 6px;">Social Isolation Marker (0.68)</p>
+      <div class="progress"><span style="width:68%;"></span></div>
+    </div>
+
+    <div style="margin-top: 16px; display: flex; gap: 8px;">
+      <span class="pill dark">Apply Model Changes</span>
+      <span class="pill info">Reset Defaults</span>
+    </div>
+  </article>
+
+  <article class="card">
+    <h3>Personnel Management</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Role</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Dr. Aris Thorne</td>
+          <td>Lead Counsellor</td>
+          <td><span class="tag" style="background: #e4f3e8;">Active</span></td>
+        </tr>
+        <tr>
+          <td>Warden Silas</td>
+          <td>West Wing</td>
+          <td><span class="tag">On Duty</span></td>
+        </tr>
+        <tr>
+          <td>Elena Vance</td>
+          <td>Wellbeing Liaison</td>
+          <td><span class="tag" style="background: #f8ecff;">Review</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </article>
+</div>
+
+<div id="community" class="grid two">
+  <article class="card pastel-blue">
+    <h3>Resilience Report</h3>
+    <p class="mini">Cross-campus recovery score has improved post-assessment week.</p>
+    <p class="metric" style="font-size: 34px;">84%</p>
+    <p class="mini">Download monthly report for full details.</p>
+  </article>
+
+  <article class="card pastel-green">
+    <h3>Engagement Metrics</h3>
+    <p class="mini">Peak sanctuary usage shifts from evening to late-night hours.</p>
+    <p class="metric" style="font-size: 34px;">+18%</p>
+    <p class="mini">Recommend adding one extra counsellor in night slot.</p>
+  </article>
+</div>
+
+<article id="resources" class="card dark">
+  <h3 style="margin-bottom: 10px;">Context Event Signals</h3>
+  <p style="margin: 0 0 12px; color: #c6d0e2;">Current global signal: Exams Week bias +0.3, scope D2 and C blocks.</p>
+  <ul class="list" style="color: #d8e1f2;">
+    <li>Exam Week: +0.3 (global)</li>
+    <li>Hostel outage recovered: -0.2 (Block B)</li>
+    <li>Festival prep: +0.1 (Block A)</li>
+  </ul>
+</article>
+{% endblock %}

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }} | EqWell</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            surface: '#ece8e2',
+            'surface-container-lowest': '#ffffff',
+            'surface-container-low': '#f3f2f1',
+            'surface-container': '#ece8e2',
+            'surface-container-high': '#e4e0da',
+            'surface-container-highest': '#dcd8d2',
+            'on-surface': '#1a1c22',
+            'on-surface-variant': '#5f687b',
+            primary: '#11131a',
+            secondary: '#355f8e',
+            'secondary-container': '#e6dab2',
+            'secondary-fixed': '#c4d8f2',
+            'secondary-fixed-dim': '#aec0d9',
+            'on-secondary-container': '#2d3240',
+            tertiary: '#170000',
+            'tertiary-fixed': '#f2c4ce',
+            'on-tertiary-container': '#c74971',
+            'on-secondary-fixed-variant': '#3d4f6a',
+            outline: '#d7d4cf'
+          },
+          fontFamily: {
+            headline: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          },
+          borderRadius: {
+            xl2: '2rem',
+            xl3: '3rem'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 450, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .reflection-blob {
+      filter: blur(80px);
+      opacity: 0.4;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .slot-calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .day-cell {
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid rgba(68, 71, 72, 0.18);
+      background: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      color: #3f4344;
+      transition: all 0.16s ease;
+    }
+
+    .day-cell.empty {
+      border: 0;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    .day-cell.available {
+      border-color: #96b9a2;
+      background: #edf7f0;
+      color: #1b4b2b;
+    }
+
+    .day-cell.selected {
+      border-color: #11131a;
+      background: #11131a;
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(17, 19, 26, 0.2);
+    }
+
+    .slot-panel {
+      margin-top: 16px;
+      border-radius: 18px;
+      background: #f6f3ee;
+      padding: 12px;
+    }
+
+    .slot-list {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .slot-chip {
+      border-radius: 999px;
+      border: 1px solid rgba(68, 71, 72, 0.24);
+      background: #fff;
+      color: #2d3132;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 10px;
+    }
+
+    .slot-chip.empty {
+      color: #7d8283;
+    }
+
+    .student-chat-fab {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 56px;
+      height: 56px;
+      border-radius: 999px;
+      border: 0;
+      background: #11131a;
+      color: #fff;
+      box-shadow: 0 20px 40px rgba(17, 19, 26, 0.25);
+      display: grid;
+      place-items: center;
+      z-index: 90;
+      cursor: pointer;
+    }
+
+    .student-chat-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: flex-end;
+      justify-content: flex-end;
+      background: rgba(9, 10, 13, 0.28);
+      z-index: 95;
+      padding: 24px;
+    }
+
+    .student-chat-modal.open {
+      display: flex;
+    }
+
+    .student-chat-dialog {
+      width: min(430px, 100%);
+      max-height: min(72vh, 700px);
+      background: #f3f2f1;
+      border-radius: 24px;
+      border: 1px solid rgba(68, 71, 72, 0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .student-chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(68, 71, 72, 0.14);
+      background: #f0ede9;
+    }
+
+    .student-chat-header h4 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #1c1c19;
+    }
+
+    .student-chat-close {
+      border: 0;
+      background: transparent;
+      color: #575d5f;
+      cursor: pointer;
+    }
+
+    .student-chat-log {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: auto;
+      min-height: 220px;
+    }
+
+    .chat-msg {
+      max-width: 88%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      line-height: 1.42;
+    }
+
+    .chat-msg.bot {
+      background: #ece8e1;
+      color: #232321;
+      border-top-left-radius: 4px;
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+      background: #11131a;
+      color: #fff;
+      border-top-right-radius: 4px;
+    }
+
+    .student-chat-input-row {
+      border-top: 1px solid rgba(68, 71, 72, 0.14);
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+    }
+
+    .student-chat-input {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(68, 71, 72, 0.24);
+      background: #fff;
+      padding: 9px 10px;
+      resize: none;
+      font: 500 13px/1.4 Inter, sans-serif;
+    }
+
+    .student-chat-send {
+      border-radius: 999px;
+      border: 0;
+      background: #11131a;
+      color: #fff;
+      font: 700 12px/1 Inter, sans-serif;
+      padding: 0 14px;
+      cursor: pointer;
+    }
+
+    .chat-status {
+      margin: 0;
+      padding: 0 12px 10px;
+      color: #6a7072;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 1024px) {
+      .student-shell {
+        margin-left: 0;
+      }
+
+      .student-sidebar {
+        display: none;
+      }
+
+      .student-main {
+        margin-left: 0;
+      }
+
+      .student-page {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+    }
+  </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased overflow-x-hidden">
+  <aside class="student-sidebar fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-50">
+    <div class="mb-12 px-4">
+      <h1 class="text-2xl font-black text-[#f4f6fa] font-headline">EqWell</h1>
+      <p class="text-xs font-medium tracking-widest uppercase text-[#a7afc2] mt-1">Student Wellbeing</p>
+    </div>
+
+    <nav class="flex-1 space-y-2">
+      <a class="bg-[#f4f1ea] text-[#12131a] rounded-full px-6 py-3 font-bold flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_dashboard') }}">
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-headline tracking-tight">Dashboard</span>
+      </a>
+      <a class="text-[#c1c8da] px-6 py-3 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_mood') }}">
+        <span class="material-symbols-outlined">history_edu</span>
+        <span class="font-headline tracking-tight">Mood History</span>
+      </a>
+      <a class="text-[#c1c8da] px-6 py-3 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="#calendar-section">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="font-headline tracking-tight">Counselling</span>
+      </a>
+      <a class="text-[#c1c8da] px-6 py-3 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_profile') }}">
+        <span class="material-symbols-outlined">settings</span>
+        <span class="font-headline tracking-tight">Settings</span>
+      </a>
+    </nav>
+
+    <div class="mt-auto border-t border-[#242c3b] pt-6 px-6">
+      <form method="post" action="{{ url_for('logout') }}">
+        <button class="w-full text-left text-[#c1c8da] hover:text-[#f4f6fa] transition-colors flex items-center gap-4" type="submit">
+          <span class="material-symbols-outlined">logout</span>
+          <span class="font-headline tracking-tight">Logout</span>
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <main class="student-main ml-72 min-h-screen relative">
+    <div class="reflection-blob absolute top-20 right-20 w-96 h-96 rounded-full bg-secondary-fixed"></div>
+    <div class="reflection-blob absolute bottom-40 left-20 w-80 h-80 rounded-full bg-tertiary-fixed"></div>
+
+    <header class="flex justify-between items-center w-full px-12 py-6 sticky top-0 bg-[#f3f2f1]/85 backdrop-blur-[20px] border-b border-[#d7d4cf] z-40">
+      <div class="flex flex-col">
+        <h2 class="font-headline text-3xl font-bold tracking-tight text-[#1a1c22]">Hi, {{ display_name.split(' ')[0] }}!</h2>
+        <p class="text-on-surface-variant font-medium mt-1">Let us take a look at your wellbeing today.</p>
+      </div>
+      <div class="flex items-center gap-6">
+        <div class="relative">
+          <input class="bg-surface-container-low border-none rounded-full px-6 py-3 w-64 focus:ring-2 focus:ring-secondary-container transition-all text-sm font-medium" placeholder="Search resources..." type="text" />
+          <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-stone-400">search</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container-high hover:opacity-80 transition-opacity" type="button">
+            <span class="material-symbols-outlined">notifications</span>
+          </button>
+          <div class="w-12 h-12 rounded-full bg-primary text-white shadow-sm grid place-items-center font-bold text-sm">
+            {{ display_name[:2] | upper }}
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="student-page px-12 py-8 max-w-7xl mx-auto space-y-8 relative z-10">
+      <section class="grid grid-cols-12 gap-8">
+        <div class="col-span-12 bg-surface-container-lowest rounded-3xl p-10 shadow-[0_12px_48px_rgba(28,28,25,0.06)] relative overflow-hidden group">
+          <div class="absolute -right-20 -top-20 w-80 h-80 bg-secondary-container rounded-full blur-[100px] opacity-20"></div>
+          <div class="absolute right-40 top-40 w-40 h-40 bg-on-tertiary-container rounded-full blur-[60px] opacity-10"></div>
+
+          <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+            <div class="space-y-6">
+              <span class="inline-block px-4 py-1.5 bg-surface-container text-xs font-black tracking-widest uppercase rounded-full">Vital Insight</span>
+              <h3 class="text-5xl font-headline font-extrabold tracking-tight">Your Mental Battery</h3>
+              <p class="text-xl text-on-surface-variant max-w-md leading-relaxed">You have maintained a steady pace this week. Remember to take a break after your next class.</p>
+              <div class="flex items-center gap-4 flex-wrap">
+                <div class="px-6 py-3 bg-secondary-container rounded-full flex items-center gap-2 font-bold text-on-secondary-container">
+                  <span class="material-symbols-outlined">bolt</span>
+                  Steady Flow
+                </div>
+                <div class="px-6 py-3 bg-surface-container rounded-full flex items-center gap-2 font-bold text-on-surface">
+                  Mood: {{ mood_label }} ({{ mood_score }}/5)
+                </div>
+              </div>
+            </div>
+
+            <div class="relative w-72 h-72 flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 288 288" aria-hidden="true">
+                <circle class="text-surface-container-low" cx="144" cy="144" fill="transparent" r="120" stroke="currentColor" stroke-width="24"></circle>
+                <circle class="text-secondary-container transition-all duration-1000" cx="144" cy="144" fill="transparent" r="120" stroke="currentColor" stroke-dasharray="753.6" stroke-dashoffset="{{ 753.6 - ((mood_battery / 100) * 753.6) }}" stroke-linecap="round" stroke-width="24"></circle>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="text-6xl font-headline font-black tracking-tighter">{{ mood_battery }}%</span>
+                <span class="text-sm font-bold text-on-secondary-container tracking-wider uppercase">Energy</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-5 space-y-8">
+          <div id="calendar-section" class="bg-surface-container-lowest rounded-3xl p-8 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+            <div class="flex justify-between items-center gap-2">
+              <h4 class="font-headline text-xl font-bold">Counselling Calendar</h4>
+              <span class="px-3 py-1 rounded-full text-xs font-bold tracking-wide bg-secondary-container text-on-secondary-container">Available Slots</span>
+            </div>
+            <p class="text-sm font-medium text-stone-500 mt-2">Pick a highlighted date to see free counselling slots.</p>
+
+            <div class="mt-4 text-sm font-bold text-stone-600" id="calendar-month"></div>
+            <div class="grid grid-cols-7 gap-2 mt-3 text-[11px] font-black uppercase tracking-wider text-stone-400">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+
+            <div id="slot-calendar-grid" class="slot-calendar-grid"></div>
+
+            <div class="slot-panel">
+              <p id="slot-selected-date" class="text-xs font-bold tracking-wide text-stone-500">Select a highlighted date</p>
+              <div id="slot-list" class="slot-list"></div>
+            </div>
+          </div>
+
+          <div class="bg-surface-container-lowest rounded-3xl p-8 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+            <div class="flex justify-between items-end mb-6">
+              <div>
+                <p class="text-xs font-black tracking-widest uppercase text-stone-400 mb-1">Current State</p>
+                <h4 class="font-headline text-2xl font-bold">Stress Score</h4>
+              </div>
+              <span class="text-3xl font-headline font-extrabold text-on-tertiary-container">35<span class="text-sm text-stone-400 font-bold">/100</span></span>
+            </div>
+            <div class="w-full h-4 bg-surface-container-low rounded-full overflow-hidden">
+              <div class="h-full bg-on-tertiary-container w-[35%] rounded-full"></div>
+            </div>
+            <p class="mt-4 text-sm font-medium text-stone-500">Your stress level is <span class="text-green-600 font-bold">Low</span>. You are doing great.</p>
+          </div>
+
+          <div class="bg-primary text-white rounded-3xl p-8 shadow-[0_12px_48px_rgba(28,28,25,0.06)] flex items-center justify-between">
+            <div>
+              <h4 class="font-headline text-lg font-bold mb-1">Weekly Trend</h4>
+              <p class="text-stone-400 text-sm">Consistent growth</p>
+            </div>
+            <div class="flex items-end gap-1.5 h-12">
+              <div class="w-2 bg-stone-700 h-4 rounded-full"></div>
+              <div class="w-2 bg-secondary-container h-6 rounded-full"></div>
+              <div class="w-2 bg-stone-700 h-5 rounded-full"></div>
+              <div class="w-2 bg-stone-700 h-8 rounded-full"></div>
+              <div class="w-2 bg-secondary-container h-12 rounded-full"></div>
+              <div class="w-2 bg-secondary-container h-10 rounded-full"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 bg-surface-container-lowest rounded-3xl p-10 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+          <div class="flex justify-between items-center mb-10">
+            <h4 class="font-headline text-3xl font-extrabold tracking-tight">My Habits and Sessions</h4>
+            <button class="material-symbols-outlined text-stone-400 hover:text-primary transition-colors" type="button">more_horiz</button>
+          </div>
+          <div class="space-y-6">
+            <div class="group flex items-center justify-between p-6 rounded-2xl bg-surface-container-low hover:bg-surface-container-high transition-all">
+              <div class="flex items-center gap-6">
+                <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-on-tertiary-container">
+                  <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">self_improvement</span>
+                </div>
+                <div>
+                  <h5 class="font-bold text-lg">Stretching Session</h5>
+                  <p class="text-sm font-medium text-stone-500">9/12 sessions completed</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <span class="text-sm font-bold text-on-tertiary-container bg-tertiary-fixed px-3 py-1 rounded-full">+15 pts</span>
+                <span class="material-symbols-outlined text-stone-300">chevron_right</span>
+              </div>
+            </div>
+
+            <div class="group flex items-center justify-between p-6 rounded-2xl bg-surface-container-low hover:bg-surface-container-high transition-all border-l-8 border-secondary-container">
+              <div class="flex items-center gap-6">
+                <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-secondary">
+                  <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+                </div>
+                <div>
+                  <h5 class="font-bold text-lg">Counselling Session</h5>
+                  <p class="text-sm font-medium text-stone-500">Friday, 2:00 PM with Dr. Aris</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <button class="px-5 py-2.5 bg-primary text-white rounded-full text-sm font-bold hover:scale-105 transition-transform" type="button">Prepare</button>
+              </div>
+            </div>
+
+            <div class="p-8 rounded-2xl bg-secondary-fixed flex flex-col md:flex-row items-center justify-between gap-6 mt-4">
+              <div class="flex items-center gap-6">
+                <div class="w-16 h-16 bg-white/50 backdrop-blur-md rounded-full flex items-center justify-center">
+                  <span class="material-symbols-outlined text-4xl text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">forum</span>
+                </div>
+                <div>
+                  <h5 class="font-bold text-xl text-on-secondary-container">Feeling overwhelmed?</h5>
+                  <p class="text-on-secondary-fixed-variant font-medium">Chat with EqWell AI to clear your mind.</p>
+                </div>
+              </div>
+              <button id="open-student-chat-btn" class="w-full md:w-auto px-8 py-4 bg-primary text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]" type="button">
+                AI Vent Session
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <button id="student-chat-fab" class="student-chat-fab" type="button" aria-label="Open AI chat">
+    <span class="material-symbols-outlined">forum</span>
+  </button>
+
+  <div id="student-chat-modal" class="student-chat-modal" aria-hidden="true">
+    <div class="student-chat-dialog">
+      <div class="student-chat-header">
+        <h4>EqWell AI Chat</h4>
+        <button id="student-chat-close" class="student-chat-close" type="button" aria-label="Close chat">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div id="student-chat-log" class="student-chat-log">
+        <div class="chat-msg bot">Hi, I am your EqWell assistant. Tell me how your day feels right now.</div>
+      </div>
+
+      <div class="student-chat-input-row">
+        <textarea id="student-chat-input" class="student-chat-input" placeholder="Type your thoughts..." rows="3"></textarea>
+        <button id="student-chat-send" class="student-chat-send" type="button">Send</button>
+      </div>
+      <p id="student-chat-status" class="chat-status"></p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var monthLabel = document.getElementById('calendar-month');
+      var calendarGrid = document.getElementById('slot-calendar-grid');
+      var slotList = document.getElementById('slot-list');
+      var slotSelectedDate = document.getElementById('slot-selected-date');
+
+      function toIsoDate(date) {
+        var y = date.getFullYear();
+        var m = String(date.getMonth() + 1).padStart(2, '0');
+        var d = String(date.getDate()).padStart(2, '0');
+        return y + '-' + m + '-' + d;
+      }
+
+      var today = new Date();
+      var slotsByDate = {};
+      [1, 2, 4, 6, 8, 10, 12].forEach(function (offset, idx) {
+        var d = new Date(today);
+        d.setDate(today.getDate() + offset);
+        var key = toIsoDate(d);
+        var options = [
+          ['10:00 AM', '11:30 AM', '03:30 PM'],
+          ['09:30 AM', '01:00 PM'],
+          ['11:00 AM', '04:00 PM', '05:30 PM'],
+          ['10:30 AM', '02:00 PM']
+        ];
+        slotsByDate[key] = options[idx % options.length];
+      });
+
+      function renderSlotsFor(dateKey) {
+        if (!slotList || !slotSelectedDate) return;
+        var slots = slotsByDate[dateKey] || [];
+        var displayDate = new Date(dateKey + 'T00:00:00');
+        slotSelectedDate.textContent = displayDate.toLocaleDateString(undefined, {
+          weekday: 'long', month: 'short', day: 'numeric'
+        });
+
+        slotList.innerHTML = '';
+        if (!slots.length) {
+          var noSlot = document.createElement('span');
+          noSlot.className = 'slot-chip empty';
+          noSlot.textContent = 'No slots available';
+          slotList.appendChild(noSlot);
+          return;
+        }
+
+        slots.forEach(function (slot) {
+          var chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'slot-chip';
+          chip.textContent = slot;
+          slotList.appendChild(chip);
+        });
+      }
+
+      function renderCalendar() {
+        if (!calendarGrid || !monthLabel) return;
+
+        var monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+        var monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        var firstWeekday = monthStart.getDay();
+        var totalDays = monthEnd.getDate();
+
+        monthLabel.textContent = monthStart.toLocaleDateString(undefined, {
+          month: 'long', year: 'numeric'
+        });
+
+        calendarGrid.innerHTML = '';
+        var activeDateKey = null;
+
+        for (var i = 0; i < firstWeekday; i += 1) {
+          var empty = document.createElement('span');
+          empty.className = 'day-cell empty';
+          calendarGrid.appendChild(empty);
+        }
+
+        for (var day = 1; day <= totalDays; day += 1) {
+          var dateObj = new Date(today.getFullYear(), today.getMonth(), day);
+          var dateKey = toIsoDate(dateObj);
+          var hasSlots = Object.prototype.hasOwnProperty.call(slotsByDate, dateKey);
+
+          var button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'day-cell';
+          if (hasSlots) button.classList.add('available');
+          button.textContent = String(day);
+          button.dataset.date = dateKey;
+
+          button.addEventListener('click', function (event) {
+            var selected = event.currentTarget.dataset.date;
+            Array.from(calendarGrid.querySelectorAll('.day-cell.selected')).forEach(function (el) {
+              el.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            renderSlotsFor(selected);
+          });
+
+          if (!activeDateKey && hasSlots) {
+            activeDateKey = dateKey;
+            button.classList.add('selected');
+          }
+
+          calendarGrid.appendChild(button);
+        }
+
+        if (activeDateKey) {
+          renderSlotsFor(activeDateKey);
+        } else if (slotSelectedDate) {
+          slotSelectedDate.textContent = 'No counselling slots this month';
+        }
+      }
+
+      renderCalendar();
+
+      var chatLog = document.getElementById('student-chat-log');
+      var chatInput = document.getElementById('student-chat-input');
+      var chatSend = document.getElementById('student-chat-send');
+      var chatStatus = document.getElementById('student-chat-status');
+      var chatFab = document.getElementById('student-chat-fab');
+      var openChatBtn = document.getElementById('open-student-chat-btn');
+      var chatModal = document.getElementById('student-chat-modal');
+      var chatClose = document.getElementById('student-chat-close');
+
+      function setChatModal(open) {
+        if (!chatModal) return;
+        chatModal.classList.toggle('open', !!open);
+        chatModal.setAttribute('aria-hidden', open ? 'false' : 'true');
+        if (open && chatInput) chatInput.focus();
+      }
+
+      function appendChat(role, text) {
+        if (!chatLog) return;
+        var msg = document.createElement('div');
+        msg.className = 'chat-msg ' + role;
+        msg.textContent = text;
+        chatLog.appendChild(msg);
+        chatLog.scrollTop = chatLog.scrollHeight;
+      }
+
+      async function sendStudentChat() {
+        if (!chatInput || !chatSend || !chatStatus) return;
+        var content = (chatInput.value || '').trim();
+        if (!content) return;
+
+        appendChat('user', content);
+        chatInput.value = '';
+        chatSend.disabled = true;
+        chatStatus.textContent = 'Thinking...';
+
+        try {
+          var response = await fetch('/api/student/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: content })
+          });
+
+          var data = await response.json();
+          if (!response.ok) throw new Error(data.error || 'Chat failed');
+
+          appendChat('bot', data.reply || 'I could not generate a reply.');
+          chatStatus.textContent = '';
+        } catch (err) {
+          chatStatus.textContent = err.message || 'Chat failed. Please try again.';
+        } finally {
+          chatSend.disabled = false;
+        }
+      }
+
+      if (chatSend) chatSend.addEventListener('click', sendStudentChat);
+      if (chatFab) chatFab.addEventListener('click', function () { setChatModal(true); });
+      if (openChatBtn) openChatBtn.addEventListener('click', function () { setChatModal(true); });
+      if (chatClose) chatClose.addEventListener('click', function () { setChatModal(false); });
+
+      if (chatModal) {
+        chatModal.addEventListener('click', function (event) {
+          if (event.target === chatModal) setChatModal(false);
+        });
+      }
+
+      if (chatInput) {
+        chatInput.addEventListener('keydown', function (event) {
+          if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            sendStudentChat();
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
