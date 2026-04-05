@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+<meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EqWell Login</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,10 +13,45 @@
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
   </style>
+  
   <link rel="stylesheet" href="/mobile-overrides.css" />
 </head>
-<body class="auth-atelier-page auth-login-page">
-  <section class="auth-atelier">
+<body class="mobile-new-page">
+  <div class="mobile-new-frame">
+    <header class="mobile-new-header">
+      <button type="button" class="mobile-new-icon-btn" data-mobile-open aria-label="Open menu">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <div class="mobile-new-brand">
+        <strong>EqWell</strong>
+        <span>Mobile Console</span>
+      </div>
+      <button type="button" class="mobile-new-icon-btn" aria-label="Notifications">
+        <span class="material-symbols-outlined">notifications</span>
+      </button>
+    </header>
+
+    <aside class="mobile-new-drawer" data-mobile-drawer aria-hidden="true">
+      <div class="mobile-new-drawer-head">
+        <strong>Navigation</strong>
+        <button type="button" class="mobile-new-icon-btn" data-mobile-close aria-label="Close menu">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="mobile-new-drawer-body">
+<nav class="mobile-new-nav-links">
+  <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span>Home</a>
+  <a href="{{ url_for('login') }}"><span class="material-symbols-outlined">login</span>Login</a>
+  <a href="{{ url_for('signup_showcase') }}"><span class="material-symbols-outlined">person_add</span>Sign up</a>
+  <a href="{{ url_for('install_extension_page') }}"><span class="material-symbols-outlined">extension</span>Extension</a>
+</nav>
+      </div>
+    </aside>
+
+    <button type="button" class="mobile-new-backdrop" data-mobile-close aria-label="Close navigation"></button>
+
+    <main class="mobile-new-main">
+<section class="auth-atelier">
     <div class="auth-orb auth-orb-a" aria-hidden="true"></div>
     <div class="auth-orb auth-orb-b" aria-hidden="true"></div>
 
@@ -30,78 +65,7 @@
       </header>
 
       <div class="auth-grid-main">
-        <aside class="auth-panel auth-panel-story">
-          <p class="auth-eyebrow">Mental Health Infrastructure</p>
-          <h1>Log in to your role-specific wellbeing dashboard.</h1>
-          <p class="auth-copy">
-            One coordinated platform for students, wardens, counsellors, developers, parents, and proctors.
-            Access exactly the signals and actions your role is designed for.
-          </p>
-
-          <div class="auth-role-card-grid" id="auth-role-cards" aria-label="Pick a role">
-            <button class="auth-role-card role-student" type="button" data-role="student">
-              <span class="auth-role-avatar" aria-hidden="true">
-                <img src="https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=eqwell-student&backgroundColor=dbeafe&radius=50" alt="Student avatar" loading="lazy" />
-              </span>
-              <span class="auth-role-meta"><strong>Student</strong><small>Pulse and check-ins</small></span>
-            </button>
-
-            <button class="auth-role-card role-warden" type="button" data-role="warden">
-              <span class="auth-role-avatar" aria-hidden="true">
-                <img src="https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=eqwell-warden&backgroundColor=fef3c7&radius=50" alt="Warden avatar" loading="lazy" />
-              </span>
-              <span class="auth-role-meta"><strong>Warden</strong><small>Alerts and blocks</small></span>
-            </button>
-
-            <button class="auth-role-card role-counsellor" type="button" data-role="counsellor">
-              <span class="auth-role-avatar" aria-hidden="true">
-                <img src="https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=eqwell-counsellor&backgroundColor=f3e8ff&radius=50" alt="Counsellor avatar" loading="lazy" />
-              </span>
-              <span class="auth-role-meta"><strong>Counsellor</strong><small>Sessions and care</small></span>
-            </button>
-
-            <button class="auth-role-card role-developer" type="button" data-role="developer">
-              <span class="auth-role-avatar" aria-hidden="true">
-                <img src="https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=eqwell-developer&backgroundColor=dcfce7&radius=50" alt="Developer avatar" loading="lazy" />
-              </span>
-              <span class="auth-role-meta"><strong>Developer</strong><small>Systems and logs</small></span>
-            </button>
-
-            <button class="auth-role-card role-parent" type="button" data-role="parent">
-              <span class="auth-role-avatar" aria-hidden="true">
-                <img src="https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=eqwell-parent&backgroundColor=ffe4e6&radius=50" alt="Parent avatar" loading="lazy" />
-              </span>
-              <span class="auth-role-meta"><strong>Parent</strong><small>Summaries and trends</small></span>
-            </button>
-
-            <button class="auth-role-card role-proctor" type="button" data-role="proctor">
-              <span class="auth-role-avatar" aria-hidden="true">
-                <img src="https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=eqwell-proctor&backgroundColor=e0e7ff&radius=50" alt="Proctor avatar" loading="lazy" />
-              </span>
-              <span class="auth-role-meta"><strong>Proctor</strong><small>Group risk view</small></span>
-            </button>
-          </div>
-
-          <div class="auth-stat-grid" aria-label="Platform overview">
-            <div class="auth-stat-card">
-              <h3>6</h3>
-              <p>Role portals</p>
-            </div>
-            <div class="auth-stat-card">
-              <h3>1</h3>
-              <p>Unified system</p>
-            </div>
-            <div class="auth-stat-card">
-              <h3>24/7</h3>
-              <p>Signal visibility</p>
-            </div>
-          </div>
-
-          <div class="auth-trust-inline">
-            <span class="material-symbols-outlined">encrypted</span>
-            Privacy-first access with role-restricted views.
-          </div>
-        </aside>
+        
 
         <article class="auth-panel auth-panel-form">
           <p class="auth-eyebrow">Secure Sign In</p>
@@ -211,6 +175,8 @@
       </div>
     </div>
   </section>
+    </main>
+  </div>
 
   <script>
     (function () {
@@ -298,6 +264,3 @@
   <script defer src="/mobile-drawer.js"></script>
 </body>
 </html>
-
-
-

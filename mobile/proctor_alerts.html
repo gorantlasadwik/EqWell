@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+<meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{ page_title }} | EqWell</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
@@ -11,11 +11,33 @@
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
   </style>
+  
   <link rel="stylesheet" href="/mobile-overrides.css" />
 </head>
-<body class="bg-[#ece8e2] font-['Inter'] text-[#1a1c22] antialiased">
-  <aside class="fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-40">
-    <div class="mb-12 px-4"><h1 class="text-2xl font-black text-[#f4f6fa] font-['Plus_Jakarta_Sans']">EqWell</h1><p class="text-xs tracking-widest uppercase text-[#a7afc2] mt-1">Proctor Console</p></div>
+<body class="mobile-new-page">
+  <div class="mobile-new-frame">
+    <header class="mobile-new-header">
+      <button type="button" class="mobile-new-icon-btn" data-mobile-open aria-label="Open menu">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <div class="mobile-new-brand">
+        <strong>EqWell</strong>
+        <span>Mobile Console</span>
+      </div>
+      <button type="button" class="mobile-new-icon-btn" aria-label="Notifications">
+        <span class="material-symbols-outlined">notifications</span>
+      </button>
+    </header>
+
+    <aside class="mobile-new-drawer" data-mobile-drawer aria-hidden="true">
+      <div class="mobile-new-drawer-head">
+        <strong>Navigation</strong>
+        <button type="button" class="mobile-new-icon-btn" data-mobile-close aria-label="Close menu">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="mobile-new-drawer-body">
+<div class="mb-12 px-4"><h1 class="text-2xl font-black text-[#f4f6fa] font-['Plus_Jakarta_Sans']">EqWell</h1><p class="text-xs tracking-widest uppercase text-[#a7afc2] mt-1">Proctor Console</p></div>
     <nav class="flex-1 space-y-3">
       <a class="{% if active_nav == 'overview' %}rounded-full px-6 py-3.5 font-bold bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('proctor_overview_page') }}"><span class="material-symbols-outlined">space_dashboard</span>Overview</a>
       <a class="{% if active_nav == 'students' %}rounded-full px-6 py-3.5 font-bold bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('proctor_students_page') }}"><span class="material-symbols-outlined">group</span>Students</a>
@@ -24,10 +46,13 @@
       <a class="{% if active_nav == 'contact' %}rounded-full px-6 py-3.5 font-bold bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('proctor_contact_page') }}"><span class="material-symbols-outlined">contacts</span>Contact</a>
       <form method="post" action="{{ url_for('logout') }}" class="pt-2"><button type="submit" class="w-full text-left text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4"><span class="material-symbols-outlined">logout</span>Logout</button></form>
     </nav>
-  </aside>
+      </div>
+    </aside>
 
-  <main class="ml-72 min-h-screen px-10 py-8">
-    <header class="mb-7">
+    <button type="button" class="mobile-new-backdrop" data-mobile-close aria-label="Close navigation"></button>
+
+    <main class="mobile-new-main">
+<header class="mb-7">
       <p class="text-xs uppercase tracking-widest text-stone-500 font-black">Proctor Alerts</p>
       <h2 class="text-4xl font-black font-['Plus_Jakarta_Sans'] mt-1">Risk Alerts And Intervention Queue</h2>
       <p class="text-sm text-stone-500 mt-2">Action-focused alert board for fast follow-up.</p>
@@ -65,9 +90,10 @@
         {% endfor %}
       </div>
     </section>
-  </main>
+    </main>
+  </div>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
   <script defer src="/mobile-drawer.js"></script>
 </body>
 </html>
-
-

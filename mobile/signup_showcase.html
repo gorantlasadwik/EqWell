@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+<meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EqWell | Sign Up</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,10 +13,45 @@
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
   </style>
+  
   <link rel="stylesheet" href="/mobile-overrides.css" />
 </head>
-<body class="auth-atelier-page auth-signup-page">
-  <section class="auth-atelier">
+<body class="mobile-new-page">
+  <div class="mobile-new-frame">
+    <header class="mobile-new-header">
+      <button type="button" class="mobile-new-icon-btn" data-mobile-open aria-label="Open menu">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <div class="mobile-new-brand">
+        <strong>EqWell</strong>
+        <span>Mobile Console</span>
+      </div>
+      <button type="button" class="mobile-new-icon-btn" aria-label="Notifications">
+        <span class="material-symbols-outlined">notifications</span>
+      </button>
+    </header>
+
+    <aside class="mobile-new-drawer" data-mobile-drawer aria-hidden="true">
+      <div class="mobile-new-drawer-head">
+        <strong>Navigation</strong>
+        <button type="button" class="mobile-new-icon-btn" data-mobile-close aria-label="Close menu">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="mobile-new-drawer-body">
+<nav class="mobile-new-nav-links">
+  <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span>Home</a>
+  <a href="{{ url_for('login') }}"><span class="material-symbols-outlined">login</span>Login</a>
+  <a href="{{ url_for('signup_showcase') }}"><span class="material-symbols-outlined">person_add</span>Sign up</a>
+  <a href="{{ url_for('install_extension_page') }}"><span class="material-symbols-outlined">extension</span>Extension</a>
+</nav>
+      </div>
+    </aside>
+
+    <button type="button" class="mobile-new-backdrop" data-mobile-close aria-label="Close navigation"></button>
+
+    <main class="mobile-new-main">
+<section class="auth-atelier">
     <div class="auth-orb auth-orb-a" aria-hidden="true"></div>
     <div class="auth-orb auth-orb-c" aria-hidden="true"></div>
 
@@ -30,43 +65,7 @@
       </header>
 
       <div class="auth-grid-main auth-grid-signup">
-        <aside class="auth-panel auth-panel-story">
-          <p class="auth-eyebrow">Guided Onboarding</p>
-          <h1>Create your role profile and request access.</h1>
-          <p class="auth-copy">
-            Signup requests are reviewed before credentials are activated. This helps keep sensitive wellbeing tools
-            secure and role-appropriate.
-          </p>
-
-          <div class="signup-step-list" aria-label="Signup process">
-            <div class="signup-step">
-              <span class="material-symbols-outlined">person_add</span>
-              <div>
-                <h3>Share role details</h3>
-                <p>Provide your institutional identity and preferred portal.</p>
-              </div>
-            </div>
-            <div class="signup-step">
-              <span class="material-symbols-outlined">policy</span>
-              <div>
-                <h3>Get verified</h3>
-                <p>Developer review validates account scope and access rights.</p>
-              </div>
-            </div>
-            <div class="signup-step">
-              <span class="material-symbols-outlined">login</span>
-              <div>
-                <h3>Enter your dashboard</h3>
-                <p>Use login to access the approved role workspace.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="auth-trust-inline">
-            <span class="material-symbols-outlined">encrypted</span>
-            Privacy-first access with role-restricted views.
-          </div>
-        </aside>
+        
 
         <article class="auth-panel auth-panel-form">
           <p class="auth-eyebrow">Secure Sign Up</p>
@@ -141,6 +140,8 @@
       </div>
     </div>
   </section>
+    </main>
+  </div>
 
   <script>
     (function () {
@@ -198,6 +199,3 @@
   <script defer src="/mobile-drawer.js"></script>
 </body>
 </html>
-
-
-

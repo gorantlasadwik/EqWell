@@ -1,15 +1,49 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+<meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>EqWell Mobile | Page Index</title>
   <link rel="stylesheet" href="styles.css" />
+  
   <link rel="stylesheet" href="/mobile-overrides.css" />
 </head>
-<body>
-  <main class="app-shell">
-    <header class="page-head">
+<body class="mobile-new-page">
+  <div class="mobile-new-frame">
+    <header class="mobile-new-header">
+      <button type="button" class="mobile-new-icon-btn" data-mobile-open aria-label="Open menu">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <div class="mobile-new-brand">
+        <strong>EqWell</strong>
+        <span>Mobile Console</span>
+      </div>
+      <button type="button" class="mobile-new-icon-btn" aria-label="Notifications">
+        <span class="material-symbols-outlined">notifications</span>
+      </button>
+    </header>
+
+    <aside class="mobile-new-drawer" data-mobile-drawer aria-hidden="true">
+      <div class="mobile-new-drawer-head">
+        <strong>Navigation</strong>
+        <button type="button" class="mobile-new-icon-btn" data-mobile-close aria-label="Close menu">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="mobile-new-drawer-body">
+<nav class="mobile-new-nav-links">
+  <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span>Home</a>
+  <a href="{{ url_for('login') }}"><span class="material-symbols-outlined">login</span>Login</a>
+  <a href="{{ url_for('signup_showcase') }}"><span class="material-symbols-outlined">person_add</span>Sign up</a>
+  <a href="{{ url_for('install_extension_page') }}"><span class="material-symbols-outlined">extension</span>Extension</a>
+</nav>
+      </div>
+    </aside>
+
+    <button type="button" class="mobile-new-backdrop" data-mobile-close aria-label="Close navigation"></button>
+
+    <main class="mobile-new-main">
+<header class="page-head">
       <p class="page-eyebrow wrap-safe">EqWell Mobile Folder</p>
       <h1 class="page-title wrap-safe">Mobile Versions of All Main Pages</h1>
       <p class="page-subtitle wrap-safe">This folder contains mobile-first HTML screens with text-safe wrapping and compact card-based structure for smaller displays.</p>
@@ -68,10 +102,9 @@
       <a href="student_dashboard.html">Student</a>
       <a href="install_extension.html">Install</a>
     </nav>
-  </main>
+    </main>
+  </div>
+
   <script defer src="/mobile-drawer.js"></script>
 </body>
 </html>
-
-
-

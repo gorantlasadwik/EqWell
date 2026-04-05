@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+<meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Install EqWell Extension</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -86,11 +86,45 @@
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
   </style>
+  
   <link rel="stylesheet" href="/mobile-overrides.css" />
 </head>
-<body>
-  <main class="wrap">
-    <h1>Install EqWell Extension to Continue</h1>
+<body class="mobile-new-page">
+  <div class="mobile-new-frame">
+    <header class="mobile-new-header">
+      <button type="button" class="mobile-new-icon-btn" data-mobile-open aria-label="Open menu">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <div class="mobile-new-brand">
+        <strong>EqWell</strong>
+        <span>Mobile Console</span>
+      </div>
+      <button type="button" class="mobile-new-icon-btn" aria-label="Notifications">
+        <span class="material-symbols-outlined">notifications</span>
+      </button>
+    </header>
+
+    <aside class="mobile-new-drawer" data-mobile-drawer aria-hidden="true">
+      <div class="mobile-new-drawer-head">
+        <strong>Navigation</strong>
+        <button type="button" class="mobile-new-icon-btn" data-mobile-close aria-label="Close menu">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="mobile-new-drawer-body">
+<nav class="mobile-new-nav-links">
+  <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span>Home</a>
+  <a href="{{ url_for('login') }}"><span class="material-symbols-outlined">login</span>Login</a>
+  <a href="{{ url_for('signup_showcase') }}"><span class="material-symbols-outlined">person_add</span>Sign up</a>
+  <a href="{{ url_for('install_extension_page') }}"><span class="material-symbols-outlined">extension</span>Extension</a>
+</nav>
+      </div>
+    </aside>
+
+    <button type="button" class="mobile-new-backdrop" data-mobile-close aria-label="Close navigation"></button>
+
+    <main class="mobile-new-main">
+<h1>Install EqWell Extension to Continue</h1>
     <p>Student portal access is protected by EqWell extension verification and consent heartbeat.</p>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -115,7 +149,8 @@
       <a class="btn ghost" href="{{ url_for('static', filename='downloads/eqwell-extension.zip') }}" download>Download Extension ZIP</a>
       <a class="btn ghost" href="chrome://extensions" target="_blank" rel="noopener noreferrer">Open Extensions</a>
     </div>
-  </main>
+    </main>
+  </div>
 
   <script>
     (function () {
@@ -130,6 +165,3 @@
   <script defer src="/mobile-drawer.js"></script>
 </body>
 </html>
-
-
-

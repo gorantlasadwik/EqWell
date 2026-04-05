@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+<meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{ page_title }} | EqWell</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
@@ -23,11 +23,33 @@
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
   </style>
+  
   <link rel="stylesheet" href="/mobile-overrides.css" />
 </head>
-<body class="bg-surface font-body text-on antialiased">
-  <aside class="fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-40">
-    <div class="mb-12 px-4">
+<body class="mobile-new-page">
+  <div class="mobile-new-frame">
+    <header class="mobile-new-header">
+      <button type="button" class="mobile-new-icon-btn" data-mobile-open aria-label="Open menu">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <div class="mobile-new-brand">
+        <strong>EqWell</strong>
+        <span>Mobile Console</span>
+      </div>
+      <button type="button" class="mobile-new-icon-btn" aria-label="Notifications">
+        <span class="material-symbols-outlined">notifications</span>
+      </button>
+    </header>
+
+    <aside class="mobile-new-drawer" data-mobile-drawer aria-hidden="true">
+      <div class="mobile-new-drawer-head">
+        <strong>Navigation</strong>
+        <button type="button" class="mobile-new-icon-btn" data-mobile-close aria-label="Close menu">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="mobile-new-drawer-body">
+<div class="mb-12 px-4">
       <h1 class="text-2xl font-black text-[#f4f6fa] font-headline">EqWell</h1>
       <p class="text-xs tracking-widest uppercase text-[#a7afc2] mt-1">Parent Console</p>
     </div>
@@ -39,10 +61,13 @@
       <a class="{% if active_nav == 'contact' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_contact_page') }}"><span class="material-symbols-outlined">contacts</span>Contact</a>
       <form class="pt-2" method="post" action="{{ url_for('logout') }}"><button class="w-full text-left text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4" type="submit"><span class="material-symbols-outlined">logout</span>Logout</button></form>
     </nav>
-  </aside>
+      </div>
+    </aside>
 
-  <main class="ml-72 min-h-screen px-10 py-8">
-    <header class="mb-7 flex items-center justify-between gap-3">
+    <button type="button" class="mobile-new-backdrop" data-mobile-close aria-label="Close navigation"></button>
+
+    <main class="mobile-new-main">
+<header class="mb-7 flex items-center justify-between gap-3">
       <div>
         <p class="text-xs tracking-widest uppercase text-stone-500 font-black">Parent Weekly Trend</p>
         <h2 class="font-headline text-4xl font-extrabold mt-1">Detailed Stress Analysis</h2>
@@ -76,8 +101,22 @@
         {% endfor %}
       </ul>
     </section>
-  </main>
+    </main>
+  </div>
 
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="{{ url_for('static', filename='figma_chart_theme.js') }}"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { surface: '#ece8e2', on: '#1a1c22' },
+          fontFamily: { headline: ['Plus Jakarta Sans', 'sans-serif'], body: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+  </script>
   <script id="parent-weekly-logs" type="application/json">{{ parent_weekly_logs | tojson }}</script>
   <script>
     (function () {
@@ -133,5 +172,3 @@
   <script defer src="/mobile-drawer.js"></script>
 </body>
 </html>
-
-
