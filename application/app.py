@@ -48,14 +48,18 @@ def should_use_mobile_templates():
     if not has_request_context():
         return False
 
+    user_agent = str(request.user_agent.string or "")
+    is_mobile_agent = bool(MOBILE_USER_AGENT_PATTERN.search(user_agent))
+    if is_mobile_agent:
+        return True
+
     forced_view = str(request.args.get("view", "")).strip().lower()
     if forced_view in {"mobile", "m"}:
         return True
     if forced_view in {"desktop", "web", "pc"}:
         return False
 
-    user_agent = str(request.user_agent.string or "")
-    return bool(MOBILE_USER_AGENT_PATTERN.search(user_agent))
+    return False
 
 
 def render_template(template_name_or_list, *args, **kwargs):

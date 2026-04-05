@@ -12,7 +12,6 @@
       --muted: #5b6678;
       --card: #ffffff;
       --border: rgba(26, 36, 56, 0.16);
-      --accent: #123f8a;
     }
 
     * {
@@ -60,20 +59,6 @@
       font-size: 15px;
     }
 
-    .cta {
-      margin-top: 16px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      text-decoration: none;
-      font-weight: 700;
-      color: #fff;
-      background: var(--accent);
-    }
-
     .meta {
       margin-top: 12px;
       font-size: 13px;
@@ -88,7 +73,6 @@
       <p>
         This portal is available only in desktop view right now. Please open this link from a laptop or PC browser.
       </p>
-      <a class="cta" href="/?view=desktop">Try Desktop View</a>
       {% if requested_template %}
       <p class="meta">Requested page: {{ requested_template }}</p>
       {% endif %}
