@@ -71,5 +71,8 @@
       </section>
     </main>
   </div>
+  {% if extension_bootstrap_payload %}
+  <script id="eqwell-extension-bootstrap" type="application/json">{{ extension_bootstrap_payload | tojson }}</script>
+  {% endif %}
 </body>
 </html>

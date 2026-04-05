@@ -8,6 +8,8 @@ const STORAGE_KEYS = Object.freeze({
 });
 
 const PROOF_REFRESH_INTERVAL_MS = 5000;
+const PORTAL_SYNC_INTERVAL_MS = 6000;
+const BOOTSTRAP_SCRIPT_ID = "eqwell-extension-bootstrap";
 let proofRequestInFlight = null;
 let submitReplayAllowed = false;
 let lastProofNonce = "";
@@ -61,6 +63,30 @@ function getStorageSnapshot(keys) {
       });
     } catch (_error) {
       resolve({});
+    }
+  });
+}
+
+function setStorageSnapshot(values) {
+  return new Promise((resolve) => {
+    try {
+      chrome.storage.local.set(values || {}, () => {
+        resolve(true);
+      });
+    } catch (_error) {
+      resolve(false);
+    }
+  });
+}
+
+function sendRuntimeMessageSafe(payload) {
+  return new Promise((resolve) => {
+    try {
+      chrome.runtime.sendMessage(payload, () => {
+        resolve(true);
+      });
+    } catch (_error) {
+      resolve(false);
     }
   });
 }
@@ -287,7 +313,69 @@ function installLoginProofBinding() {
   }, PROOF_REFRESH_INTERVAL_MS);
 }
 
+function parseBootstrapPayloadFromDom() {
+  const node = document.getElementById(BOOTSTRAP_SCRIPT_ID);
+  if (!node) {
+    return null;
+  }
+
+  try {
+    const payload = JSON.parse(String(node.textContent || "").trim() || "{}");
+    if (!payload || typeof payload !== "object") {
+      return null;
+    }
+    const token = String(payload.token || "").trim();
+    const student = payload.student && typeof payload.student === "object" ? payload.student : null;
+    const email = student ? String(student.email || "").trim().toLowerCase() : "";
+    if (!token || !student || !email) {
+      return null;
+    }
+    return {
+      token,
+      student: {
+        name: String(student.name || "Student").trim() || "Student",
+        email,
+        role: "student"
+      }
+    };
+  } catch (_error) {
+    return null;
+  }
+}
+
+async function syncExtensionSessionFromPortalBootstrap() {
+  const bootstrap = parseBootstrapPayloadFromDom();
+  if (!bootstrap) {
+    return false;
+  }
+
+  const existing = await getStorageSnapshot([STORAGE_KEYS.TOKEN, STORAGE_KEYS.STUDENT_PROFILE]);
+  const currentToken = String(existing[STORAGE_KEYS.TOKEN] || "").trim();
+  const currentProfile = existing[STORAGE_KEYS.STUDENT_PROFILE] || {};
+  const currentEmail = String((currentProfile && currentProfile.email) || "").trim().toLowerCase();
+
+  if (currentToken === bootstrap.token && currentEmail === bootstrap.student.email) {
+    return true;
+  }
+
+  const saved = await setStorageSnapshot({
+    [STORAGE_KEYS.TOKEN]: bootstrap.token,
+    [STORAGE_KEYS.STUDENT_PROFILE]: bootstrap.student
+  });
+
+  if (saved) {
+    await sendRuntimeMessageSafe({ type: "EQWELL_REFRESH" });
+  }
+
+  return Boolean(saved);
+}
+
 installLoginProofBinding();
+
+syncExtensionSessionFromPortalBootstrap().catch(() => {});
+window.setInterval(() => {
+  syncExtensionSessionFromPortalBootstrap().catch(() => {});
+}, PORTAL_SYNC_INTERVAL_MS);
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (!message || message.type !== "EQWELL_GET_SNIPPET") {

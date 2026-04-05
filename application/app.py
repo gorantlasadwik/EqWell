@@ -5706,12 +5706,26 @@ def inject_globals():
     display_name = session.get("name", "EqWell User")
     user_email = session.get("email", "")
     avatar_seed = str(user_email or display_name).strip() or "EqWell User"
+    extension_bootstrap_payload = None
+    if active_role == "student" and str(user_email or "").strip():
+        safe_email = str(user_email or "").strip().lower()
+        extension_bootstrap_payload = {
+            "token": issue_extension_token(safe_email, display_name, role="student"),
+            "student": {
+                "name": display_name,
+                "email": safe_email,
+                "role": "student",
+            },
+            "issued_at": utc_now().isoformat(timespec="seconds"),
+            "source": "portal-session",
+        }
     return {
         "active_role": active_role,
         "role_sidebar": sidebar,
         "display_name": display_name,
         "student_mood": session.get("student_mood"),
         "user_avatar_url": build_dicebear_avatar_url(avatar_seed),
+        "extension_bootstrap_payload": extension_bootstrap_payload,
     }
 
 
