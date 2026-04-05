@@ -13,45 +13,51 @@
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
   </style>
-  
   <link rel="stylesheet" href="/mobile-overrides.css" />
 </head>
-<body class="mobile-new-page">
-  <div class="mobile-new-frame">
-    <header class="mobile-new-header">
-      <button type="button" class="mobile-new-icon-btn" data-mobile-open aria-label="Open menu">
+<body class="mobile-shell-page folio-page">
+  <div class="mobile-shell-app">
+    <header class="mobile-shell-header">
+      <button type="button" class="mobile-shell-icon-btn" data-mobile-open aria-label="Open menu">
         <span class="material-symbols-outlined">menu</span>
       </button>
-      <div class="mobile-new-brand">
+      <div class="mobile-shell-brand">
         <strong>EqWell</strong>
-        <span>Mobile Console</span>
+        <span>Landing</span>
       </div>
-      <button type="button" class="mobile-new-icon-btn" aria-label="Notifications">
-        <span class="material-symbols-outlined">notifications</span>
-      </button>
+      <a class="mobile-shell-icon-btn" href="{{ url_for('home') }}" aria-label="Go home">
+        <span class="material-symbols-outlined">home</span>
+      </a>
     </header>
 
-    <aside class="mobile-new-drawer" data-mobile-drawer aria-hidden="true">
-      <div class="mobile-new-drawer-head">
+    <aside class="mobile-shell-drawer" data-mobile-drawer aria-hidden="true">
+      <div class="mobile-shell-drawer-head">
         <strong>Navigation</strong>
-        <button type="button" class="mobile-new-icon-btn" data-mobile-close aria-label="Close menu">
+        <button type="button" class="mobile-shell-icon-btn" data-mobile-close aria-label="Close menu">
           <span class="material-symbols-outlined">close</span>
         </button>
       </div>
-      <div class="mobile-new-drawer-body">
-<nav class="mobile-new-nav-links">
-  <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span>Home</a>
-  <a href="{{ url_for('login') }}"><span class="material-symbols-outlined">login</span>Login</a>
-  <a href="{{ url_for('signup_showcase') }}"><span class="material-symbols-outlined">person_add</span>Sign up</a>
-  <a href="{{ url_for('install_extension') }}"><span class="material-symbols-outlined">extension</span>Extension</a>
-</nav>
-      </div>
+      <nav class="mobile-shell-nav">
+        <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span>Home</a>
+        <a href="{{ url_for('login') }}"><span class="material-symbols-outlined">login</span>Login</a>
+        <a href="{{ url_for('signup_showcase') }}"><span class="material-symbols-outlined">person_add</span>Sign Up</a>
+        <a href="{{ url_for('install_extension') }}"><span class="material-symbols-outlined">extension</span>Extension</a>
+        <a href="{{ url_for('login', role='student') }}"><span class="material-symbols-outlined">school</span>Student</a>
+        <a href="{{ url_for('login', role='warden') }}"><span class="material-symbols-outlined">apartment</span>Warden</a>
+        <a href="{{ url_for('login', role='counsellor') }}"><span class="material-symbols-outlined">psychology</span>Counsellor</a>
+        <a href="{{ url_for('login', role='developer') }}"><span class="material-symbols-outlined">code</span>Developer</a>
+        <a href="{{ url_for('login', role='parent') }}"><span class="material-symbols-outlined">family_restroom</span>Parent</a>
+        <a href="{{ url_for('login', role='proctor') }}"><span class="material-symbols-outlined">admin_panel_settings</span>Proctor</a>
+        <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined">logout</span>Logout</a>
+      </nav>
     </aside>
 
-    <button type="button" class="mobile-new-backdrop" data-mobile-close aria-label="Close navigation"></button>
+    <button type="button" class="mobile-shell-backdrop" data-mobile-close aria-label="Close navigation"></button>
 
-    <main class="mobile-new-main">
-<section class="folio-panel folio-hero-panel">
+    <main class="mobile-shell-main">
+      <section class="mobile-shell-content">
+<main class="folio-shell">
+    <section class="folio-panel folio-hero-panel">
       <header class="folio-topbar">
         <nav class="folio-social-links" aria-label="Quick links">
           <a href="{{ url_for('login', role='student') }}">Student</a>
@@ -135,13 +141,15 @@
     </section>
 
     <footer class="folio-footer-row">
-      <p>&copy; 2026 EqWell. All rights reserved.</p>
+      <p>© 2026 EqWell. All rights reserved.</p>
       <nav aria-label="Footer links">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('login') }}">Login</a>
         <a href="{{ url_for('signup_showcase') }}">Signup</a>
       </nav>
     </footer>
+  </main>
+      </section>
     </main>
   </div>
 

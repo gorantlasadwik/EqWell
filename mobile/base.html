@@ -13,45 +13,83 @@
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
   </style>
-  
   <link rel="stylesheet" href="/mobile-overrides.css" />
 </head>
-<body class="mobile-new-page">
-  <div class="mobile-new-frame">
-    <header class="mobile-new-header">
-      <button type="button" class="mobile-new-icon-btn" data-mobile-open aria-label="Open menu">
+<body class="mobile-shell-page">
+  <div class="mobile-shell-app">
+    <header class="mobile-shell-header">
+      <button type="button" class="mobile-shell-icon-btn" data-mobile-open aria-label="Open menu">
         <span class="material-symbols-outlined">menu</span>
       </button>
-      <div class="mobile-new-brand">
+      <div class="mobile-shell-brand">
         <strong>EqWell</strong>
-        <span>Mobile Console</span>
+        <span>Base</span>
       </div>
-      <button type="button" class="mobile-new-icon-btn" aria-label="Notifications">
-        <span class="material-symbols-outlined">notifications</span>
-      </button>
+      <a class="mobile-shell-icon-btn" href="{{ url_for('home') }}" aria-label="Go home">
+        <span class="material-symbols-outlined">home</span>
+      </a>
     </header>
 
-    <aside class="mobile-new-drawer" data-mobile-drawer aria-hidden="true">
-      <div class="mobile-new-drawer-head">
+    <aside class="mobile-shell-drawer" data-mobile-drawer aria-hidden="true">
+      <div class="mobile-shell-drawer-head">
         <strong>Navigation</strong>
-        <button type="button" class="mobile-new-icon-btn" data-mobile-close aria-label="Close menu">
+        <button type="button" class="mobile-shell-icon-btn" data-mobile-close aria-label="Close menu">
           <span class="material-symbols-outlined">close</span>
         </button>
       </div>
-      <div class="mobile-new-drawer-body">
-<nav class="mobile-new-nav-links">
-  <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span>Home</a>
-  <a href="{{ url_for('login') }}"><span class="material-symbols-outlined">login</span>Login</a>
-  <a href="{{ url_for('signup_showcase') }}"><span class="material-symbols-outlined">person_add</span>Sign up</a>
-  <a href="{{ url_for('install_extension') }}"><span class="material-symbols-outlined">extension</span>Extension</a>
-</nav>
+      <nav class="mobile-shell-nav">
+        <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span>Home</a>
+        <a href="{{ url_for('login') }}"><span class="material-symbols-outlined">login</span>Login</a>
+        <a href="{{ url_for('signup_showcase') }}"><span class="material-symbols-outlined">person_add</span>Sign Up</a>
+        <a href="{{ url_for('install_extension') }}"><span class="material-symbols-outlined">extension</span>Extension</a>
+        <a href="{{ url_for('login', role='student') }}"><span class="material-symbols-outlined">school</span>Student</a>
+        <a href="{{ url_for('login', role='warden') }}"><span class="material-symbols-outlined">apartment</span>Warden</a>
+        <a href="{{ url_for('login', role='counsellor') }}"><span class="material-symbols-outlined">psychology</span>Counsellor</a>
+        <a href="{{ url_for('login', role='developer') }}"><span class="material-symbols-outlined">code</span>Developer</a>
+        <a href="{{ url_for('login', role='parent') }}"><span class="material-symbols-outlined">family_restroom</span>Parent</a>
+        <a href="{{ url_for('login', role='proctor') }}"><span class="material-symbols-outlined">admin_panel_settings</span>Proctor</a>
+        <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined">logout</span>Logout</a>
+      </nav>
+    </aside>
+
+    <button type="button" class="mobile-shell-backdrop" data-mobile-close aria-label="Close navigation"></button>
+
+    <main class="mobile-shell-main">
+      <section class="mobile-shell-content">
+<div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-badge">
+          <span class="material-symbols-outlined">{{ role_sidebar.badge_icon }}</span>
+        </div>
+        <div>
+          <p class="brand-title">EqWell</p>
+          <p class="brand-subtitle">{{ role_sidebar.subtitle }}</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        {% for item in role_sidebar.menu %}
+        <a class="nav-link {% if item.key == active_nav %}active{% endif %}" href="{{ item.href }}">
+          <span class="material-symbols-outlined">{{ item.icon }}</span>
+          {{ item.label }}
+        </a>
+        {% endfor %}
+      </nav>
+
+      <a class="sidebar-action" href="{{ role_sidebar.action_href }}">{{ role_sidebar.action }}</a>
+
+      <div class="profile-box">
+        <div class="profile-avatar">{{ display_name[:2] | upper }}</div>
+        <div>
+          <div style="font-weight: 700; font-size: 14px;">{{ display_name }}</div>
+          <div style="font-size: 12px; color: #a8afc0;">{{ session.get('email', 'user@eqwell.app') }}</div>
+        </div>
       </div>
     </aside>
 
-    <button type="button" class="mobile-new-backdrop" data-mobile-close aria-label="Close navigation"></button>
-
-    <main class="mobile-new-main">
-<div class="privacy-strip">
+    <main class="main">
+      <div class="privacy-strip">
         <span class="material-symbols-outlined" style="font-size: 18px;">lock</span>
         We do not track students. We track wellbeing signals.
       </div>
@@ -74,8 +112,13 @@
       </section>
     </main>
   </div>
-
+  {% if extension_bootstrap_payload %}
   <script id="eqwell-extension-bootstrap" type="application/json">{{ extension_bootstrap_payload | tojson }}</script>
+  {% endif %}
+      </section>
+    </main>
+  </div>
+
   <script defer src="/mobile-drawer.js"></script>
 </body>
 </html>

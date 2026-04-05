@@ -1,11 +1,8 @@
-﻿# EqWell Mobile Pages
+# EqWell Mobile Templates
 
-This folder contains mobile-first HTML pages for all major EqWell screens.
+These files are dedicated mobile templates used by Flask when a mobile user agent is detected.
+They are generated from application/templates and wrapped in a mobile app shell (header + drawer + content container).
 
-## What is included
-- Dedicated mobile page per main template route
-- Shared mobile stylesheet in styles.css
-- Text wrapping safety via overflow-wrap:anywhere and hyphens:auto
-- Compact card layout for narrow screens
-
-Open index.html to navigate all mobile pages.
+Shared assets:
+- mobile-overrides.css
+- mobile-drawer.js
