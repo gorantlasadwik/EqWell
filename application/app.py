@@ -83,6 +83,18 @@ def mobile_overrides_css():
     return send_from_directory(MOBILE_TEMPLATE_DIR, "mobile-overrides.css", mimetype="text/css")
 
 
+@app.route("/mobile-drawer.js")
+def mobile_drawer_js():
+    if MOBILE_TEMPLATE_DIR is None:
+        return "", 404
+
+    script_file = MOBILE_TEMPLATE_DIR / "mobile-drawer.js"
+    if not script_file.exists():
+        return "", 404
+
+    return send_from_directory(MOBILE_TEMPLATE_DIR, "mobile-drawer.js", mimetype="application/javascript")
+
+
 def read_env_int(name, default):
     raw = str(os.getenv(name, "")).strip()
     if not raw:
