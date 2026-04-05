@@ -1,5 +1,5 @@
 export const EQWELL_CONFIG = Object.freeze({
-  AUTH_BASE_URL: "http://127.0.0.1:5000",
+  AUTH_BASE_URL: "https://eq-well.vercel.app",
   AUTH_LOGIN_PATH: "/api/extension/student/login",
   AUTH_ME_PATH: "/api/extension/student/me",
   AUTH_PRESENCE_PATH: "/api/extension/student/presence",

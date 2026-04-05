@@ -72,6 +72,44 @@ if read_env_bool("EQWELL_TRUST_PROXY", IS_PRODUCTION):
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
 
 
+def is_extension_api_path(path):
+    return str(path or "").startswith("/api/extension/")
+
+
+def is_allowed_extension_origin(origin):
+    value = str(origin or "").strip()
+    if not value:
+        return False
+    return value.startswith("chrome-extension://")
+
+
+def apply_extension_cors_headers(response):
+    if not is_extension_api_path(request.path):
+        return response
+
+    origin = str(request.headers.get("Origin", "")).strip()
+    if is_allowed_extension_origin(origin):
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Vary"] = "Origin"
+
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type"
+    response.headers["Access-Control-Max-Age"] = "86400"
+    return response
+
+
+@app.before_request
+def handle_extension_preflight_request():
+    if request.method == "OPTIONS" and is_extension_api_path(request.path):
+        return apply_extension_cors_headers(app.make_default_options_response())
+    return None
+
+
+@app.after_request
+def add_extension_cors_headers(response):
+    return apply_extension_cors_headers(response)
+
+
 def normalize_avatar_style(style):
     cleaned = str(style or "").strip().lower()
     if cleaned in DICEBEAR_ALLOWED_STYLES:
