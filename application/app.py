@@ -5242,11 +5242,15 @@ def evaluate_student_extension_access(email, request_obj=None, required_since=No
 
     required_since_dt = parse_iso_datetime(required_since) if required_since else None
     if required_since_dt and (last_seen_at + timedelta(seconds=3)) < required_since_dt:
-        return (
-            False,
-            "Extension verification for this login session is missing. Open EqWell extension and sign in again.",
-            False,
-        )
+        # In Vercel serverless, extension heartbeat writes can land on a different
+        # ephemeral instance than the one serving this request. Keep strict
+        # per-login-session enforcement for local/non-serverless deployments.
+        if not is_vercel_runtime:
+            return (
+                False,
+                "Extension verification for this login session is missing. Open EqWell extension and sign in again.",
+                False,
+            )
 
     stored_user_agent = str(status.get("last_user_agent", "")).strip().lower()
     if not stored_user_agent:
