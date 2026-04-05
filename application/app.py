@@ -297,7 +297,11 @@ EXTENSION_SAFE_STREAK_HOURS_STEP_1 = max(0.5, read_env_float("EXTENSION_SAFE_STR
 EXTENSION_SAFE_STREAK_HOURS_STEP_2 = max(EXTENSION_SAFE_STREAK_HOURS_STEP_1, read_env_float("EXTENSION_SAFE_STREAK_HOURS_STEP_2", 3.0))
 EXTENSION_SAFE_STREAK_HOURS_STEP_3 = max(EXTENSION_SAFE_STREAK_HOURS_STEP_2, read_env_float("EXTENSION_SAFE_STREAK_HOURS_STEP_3", 8.0))
 
-EXTENSION_HEARTBEAT_MAX_AGE_SECONDS = max(10, read_env_int("EXTENSION_HEARTBEAT_MAX_AGE_SECONDS", 75))
+EXTENSION_HEARTBEAT_MAX_AGE_SECONDS = max(10, read_env_int("EXTENSION_HEARTBEAT_MAX_AGE_SECONDS", 180))
+EXTENSION_HEARTBEAT_VERCEL_GRACE_SECONDS = max(
+    EXTENSION_HEARTBEAT_MAX_AGE_SECONDS,
+    read_env_int("EXTENSION_HEARTBEAT_VERCEL_GRACE_SECONDS", 360),
+)
 EXTENSION_MIN_INSTALL_AGE_SECONDS = max(0, read_env_int("EXTENSION_MIN_INSTALL_AGE_SECONDS", 12))
 EXTENSION_MIN_CONSENT_AGE_SECONDS = max(0, read_env_int("EXTENSION_MIN_CONSENT_AGE_SECONDS", 8))
 EXTENSION_REPEAT_WINDOW_SECONDS = max(30, read_env_int("EXTENSION_REPEAT_WINDOW_SECONDS", 120))
@@ -5256,8 +5260,11 @@ def evaluate_student_extension_access(email, request_obj=None, required_since=No
     if not stored_user_agent:
         return False, "Extension verification session is missing. Please reconnect extension.", False
 
-    if (now - last_seen_at).total_seconds() > EXTENSION_HEARTBEAT_MAX_AGE_SECONDS:
-        return False, "EqWell extension looks offline. Open extension and keep monitoring enabled.", False
+    heartbeat_age_seconds = (now - last_seen_at).total_seconds()
+    if heartbeat_age_seconds > EXTENSION_HEARTBEAT_MAX_AGE_SECONDS:
+        # Vercel serverless can occasionally delay heartbeat visibility across instances.
+        if not (is_vercel_runtime and heartbeat_age_seconds <= EXTENSION_HEARTBEAT_VERCEL_GRACE_SECONDS):
+            return False, "EqWell extension looks offline. Open extension and keep monitoring enabled.", False
 
     if request_obj is not None:
         current_fp = get_request_client_fingerprint(request_obj)

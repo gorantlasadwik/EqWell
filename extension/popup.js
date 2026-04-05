@@ -306,8 +306,13 @@ async function refreshUi() {
     }
   }
 
+  if (!isConnected && verificationDegraded && token) {
+    // Keep local extension session active while /me verification is temporarily unavailable.
+    isConnected = true;
+  }
+
   isServerVerifiedConnected = isConnected;
-  if (!isConnected && consent) {
+  if (sessionInvalidated && consent) {
     consent = false;
     await chrome.storage.local.set({ [STORAGE_KEYS.CONSENT]: false });
   }
