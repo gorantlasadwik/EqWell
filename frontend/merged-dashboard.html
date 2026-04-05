@@ -1,0 +1,412 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EqWell Unified UI</title>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #111827;
+      --accent-2: #fdc003;
+      --line: #e5e7eb;
+      --radius: 18px;
+      --shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(253, 192, 3, 0.15), transparent 35%),
+        radial-gradient(circle at 90% 90%, rgba(17, 24, 39, 0.08), transparent 40%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    .login-wrap {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: min(960px, 100%);
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+    }
+
+    .card-left {
+      background: linear-gradient(155deg, #0f172a 0%, #1f2937 55%, #374151 100%);
+      color: #fff;
+      padding: 40px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      margin-bottom: 16px;
+    }
+
+    .card-left h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      line-height: 1.08;
+      font-weight: 800;
+    }
+
+    .card-left p {
+      color: #d1d5db;
+      line-height: 1.6;
+      margin: 14px 0 0;
+      max-width: 42ch;
+    }
+
+    .points {
+      margin-top: 26px;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 12px;
+      color: #f3f4f6;
+      font-size: 14px;
+    }
+
+    .points li::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-right: 10px;
+      background: var(--accent-2);
+      vertical-align: middle;
+    }
+
+    .card-right {
+      padding: 36px;
+    }
+
+    .head {
+      margin-bottom: 22px;
+    }
+
+    .head h2 {
+      margin: 0;
+      font-size: 1.45rem;
+      font-weight: 800;
+    }
+
+    .head p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+      color: #4b5563;
+      font-weight: 600;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      padding: 12px 13px;
+      outline: none;
+      font-size: 14px;
+      transition: 160ms ease;
+      background: #fff;
+    }
+
+    input:focus, select:focus {
+      border-color: #9ca3af;
+      box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.08);
+    }
+
+    .btn {
+      border: 0;
+      background: linear-gradient(135deg, #111827, #1f2937);
+      color: #fff;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 120ms ease, opacity 120ms ease;
+    }
+
+    .btn:hover { opacity: 0.94; }
+    .btn:active { transform: translateY(1px); }
+
+    .creds {
+      margin-top: 14px;
+      border: 1px dashed #d1d5db;
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: #4b5563;
+    }
+
+    .creds b { color: #111827; }
+
+    .shell {
+      display: none;
+      min-height: 100vh;
+      grid-template-rows: auto 1fr;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .title {
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      border: 1px solid #d1d5db;
+      background: #fff;
+      color: #111827;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: var(--accent-2);
+      border-color: var(--accent-2);
+    }
+
+    .status {
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #f9fafb;
+      padding: 6px 10px;
+      font-size: 12px;
+      color: #374151;
+      font-weight: 600;
+    }
+
+    .logout {
+      border: 1px solid #d1d5db;
+      background: #fff;
+      border-radius: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .frame {
+      width: 100%;
+      height: calc(100vh - 63px);
+      border: 0;
+      background: #fff;
+    }
+
+    @media (max-width: 900px) {
+      .card {
+        grid-template-columns: 1fr;
+      }
+
+      .card-left {
+        padding: 28px;
+      }
+
+      .card-right {
+        padding: 24px;
+      }
+
+      .frame {
+        height: calc(100vh - 118px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="login-wrap" id="loginView">
+    <div class="card">
+      <div class="card-left">
+        <span class="tag">EqWell Unified Experience</span>
+        <h1>Single HTML merge of all role dashboards</h1>
+        <p>This launcher keeps the original role UIs exactly as they are in your frontend folder and lets you access them from one page.</p>
+        <ul class="points">
+          <li>Student dashboard UI (student og)</li>
+          <li>Warden dashboard UI (warden og)</li>
+          <li>Counsellor dashboard UI (counsellor og)</li>
+          <li>Admin dashboard UI (admin og)</li>
+        </ul>
+      </div>
+      <div class="card-right">
+        <div class="head">
+          <h2>Login to Continue</h2>
+          <p>Select a role and use the matching demo credentials.</p>
+        </div>
+        <form id="loginForm">
+          <label>
+            Role
+            <select id="role" required>
+              <option value="student">Student</option>
+              <option value="warden">Warden</option>
+              <option value="counsellor">Counsellor</option>
+              <option value="admin">Admin</option>
+            </select>
+          </label>
+          <label>
+            Email
+            <input id="email" type="email" placeholder="student@eqwell.app" required />
+          </label>
+          <label>
+            Password
+            <input id="password" type="password" placeholder="Enter password" required />
+          </label>
+          <button class="btn" type="submit">Open Dashboard</button>
+        </form>
+        <div class="creds">
+          <div><b>Student:</b> student@eqwell.app / student123</div>
+          <div><b>Warden:</b> warden@eqwell.app / warden123</div>
+          <div><b>Counsellor:</b> counsellor@eqwell.app / counsellor123</div>
+          <div><b>Admin:</b> admin@eqwell.app / admin123</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shell" id="appView">
+    <header class="topbar">
+      <div class="title">EqWell Merged UI Launcher</div>
+      <div class="controls">
+        <button class="chip" data-role="student">Student</button>
+        <button class="chip" data-role="warden">Warden</button>
+        <button class="chip" data-role="counsellor">Counsellor</button>
+        <button class="chip" data-role="admin">Admin</button>
+        <span class="status" id="statusTag">Role: Student</span>
+        <button class="logout" id="logoutBtn" type="button">Logout</button>
+      </div>
+    </header>
+    <iframe id="dashboardFrame" class="frame" title="Merged role dashboard"></iframe>
+  </section>
+
+  <script>
+    const credentials = {
+      student: { email: "student@eqwell.app", password: "student123" },
+      warden: { email: "warden@eqwell.app", password: "warden123" },
+      counsellor: { email: "counsellor@eqwell.app", password: "counsellor123" },
+      admin: { email: "admin@eqwell.app", password: "admin123" }
+    };
+
+    const rolePages = {
+      student: "student og/code.html",
+      warden: "warden og/code.html",
+      counsellor: "counsellor og/code.html",
+      admin: "admin og/code.html"
+    };
+
+    const loginView = document.getElementById("loginView");
+    const appView = document.getElementById("appView");
+    const frame = document.getElementById("dashboardFrame");
+    const statusTag = document.getElementById("statusTag");
+    const chips = Array.from(document.querySelectorAll(".chip"));
+
+    function formatRole(role) {
+      return role.charAt(0).toUpperCase() + role.slice(1);
+    }
+
+    function setActiveChip(role) {
+      chips.forEach((chip) => chip.classList.toggle("active", chip.dataset.role === role));
+    }
+
+    function loadRole(role) {
+      const target = rolePages[role];
+      if (!target) return;
+      frame.src = target;
+      statusTag.textContent = "Role: " + formatRole(role);
+      setActiveChip(role);
+      localStorage.setItem("eqwellMergedRole", role);
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const role = document.getElementById("role").value;
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value;
+      const valid = credentials[role];
+
+      if (!valid || email !== valid.email || password !== valid.password) {
+        alert("Invalid credentials for selected role.");
+        return;
+      }
+
+      loginView.style.display = "none";
+      appView.style.display = "grid";
+      loadRole(role);
+    });
+
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => loadRole(chip.dataset.role));
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      frame.src = "about:blank";
+      appView.style.display = "none";
+      loginView.style.display = "grid";
+      localStorage.removeItem("eqwellMergedRole");
+      document.getElementById("password").value = "";
+    });
+
+    const rememberedRole = localStorage.getItem("eqwellMergedRole");
+    if (rememberedRole && rolePages[rememberedRole]) {
+      loginView.style.display = "none";
+      appView.style.display = "grid";
+      loadRole(rememberedRole);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WellNest Developer Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <section class="login-screen" id="login-screen">
+        <div class="blob right-ring"></div>
+        <div class="blob bottom-dot"></div>
+        <div class="blob top-soft"></div>
+
+        <div class="login-grid">
+          <div class="login-card animate-fade-rise">
+            <div class="login-top">
+              <div>
+                <p class="login-kicker">Developer Control Center</p>
+                <h1 class="login-title">Ship care with clarity.</h1>
+                <p class="login-subtitle">
+                  Manage students, counsellors, wardens, and wellness quizzes
+                  from one calm, responsive workspace.
+                </p>
+              </div>
+              <div class="shield">
+                <span class="material-symbols-outlined">verified_user</span>
+              </div>
+            </div>
+
+            <form id="login-form" novalidate>
+              <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <input class="input" id="username" name="username" type="text" placeholder="Enter developer username" autocomplete="username" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input class="input" id="password" name="password" type="password" placeholder="Enter secure password" autocomplete="current-password" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="environment">Environment</label>
+                <div class="select-wrap">
+                  <select class="select" id="environment" name="environment">
+                    <option value="production">Production</option>
+                    <option value="staging">Staging</option>
+                    <option value="sandbox">Sandbox</option>
+                  </select>
+                  <span class="material-symbols-outlined">expand_more</span>
+                </div>
+              </div>
+              <div class="login-actions">
+                <button class="btn-dark" type="submit">Enter Dashboard</button>
+              </div>
+              <p class="notice" id="login-error" hidden></p>
+            </form>
+
+            <div class="demo-box">
+              <h4>Demo credentials</h4>
+              <p><strong>Username:</strong> `developer@wellnest`</p>
+              <p><strong>Password:</strong> `WellNest2026`</p>
+            </div>
+          </div>
+
+          <aside class="info-card animate-fade-rise-delay">
+            <div>
+              <p class="info-kicker">Student Well-being Platform</p>
+              <h2>WellNest Ops Studio</h2>
+              <p class="desc">
+                A developer-first cockpit for safeguarding campus wellness
+                programs, triaging support staff, and shaping intervention
+                content at scale.
+              </p>
+            </div>
+
+            <div>
+              <div class="portal-grid">
+                <article class="portal student">
+                  <span class="material-symbols-outlined">school</span>
+                  <h5>Students</h5>
+                  <p>Monitor engagement and support risk bands.</p>
+                </article>
+                <article class="portal counsellor">
+                  <span class="material-symbols-outlined">psychology</span>
+                  <h5>Counsellors</h5>
+                  <p>Balance case loads and response capacity.</p>
+                </article>
+                <article class="portal warden">
+                  <span class="material-symbols-outlined">apartment</span>
+                  <h5>Wardens</h5>
+                  <p>Coordinate residential support and alerts.</p>
+                </article>
+                <article class="portal admin">
+                  <span class="material-symbols-outlined">quiz</span>
+                  <h5>Quizzes</h5>
+                  <p>Shape assessments and preventive screening.</p>
+                </article>
+              </div>
+              <div class="trust-strip">
+                <span class="material-symbols-outlined">lock</span>
+                Secure mock environment, role validation, and API-ready data hooks built in.
+              </div>
+              <p class="footer-note">
+                Designed for desktop, tablet, and mobile handoff without changing the information architecture.
+              </p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="app-shell" id="dashboard-shell" hidden>
+        <aside class="sidebar">
+          <div class="brand">
+            <div class="brand-badge">
+              <span class="material-symbols-outlined">monitoring</span>
+            </div>
+            <div>
+              <p class="brand-title">WellNest</p>
+              <p class="brand-subtitle">Developer Dashboard</p>
+            </div>
+          </div>
+          <nav class="nav" id="sidebar-nav">
+            <a class="nav-link active" href="#" data-view="overview"><span class="material-symbols-outlined">dashboard</span>Overview</a>
+            <a class="nav-link" href="#" data-view="users"><span class="material-symbols-outlined">groups</span>Users</a>
+            <a class="nav-link" href="#" data-view="quizzes"><span class="material-symbols-outlined">quiz</span>Quizzes</a>
+            <a class="nav-link" href="#" data-view="analytics"><span class="material-symbols-outlined">insights</span>Analytics</a>
+          </nav>
+          <div class="profile-box">
+            <div class="profile-avatar" id="profile-avatar">AD</div>
+            <div>
+              <strong id="developer-name-sidebar">Aarav Dev</strong>
+              <div class="brand-subtitle">Platform Engineering Lead</div>
+            </div>
+          </div>
+        </aside>
+
+        <main class="main">
+          <div class="privacy-strip">
+            <span class="material-symbols-outlined">health_and_safety</span>
+            Mental wellness operations are in a protected developer demo mode.
+          </div>
+          <header class="topbar">
+            <div>
+              <h1 class="title" id="view-title">Overview</h1>
+              <p class="subtitle" id="view-subtitle">Track platform health, staffing balance, and content readiness.</p>
+            </div>
+            <div class="top-controls">
+              <div class="notification-bell" id="notification-bell" title="Notifications">
+                <span class="material-symbols-outlined">notifications</span>
+                <span class="notification-count" id="notification-count">3</span>
+              </div>
+              <div class="role-chip" id="developer-name-top">Aarav Dev</div>
+              <button class="logout-btn" id="logout-btn" type="button">Logout</button>
+            </div>
+          </header>
+
+          <div class="content">
+            <section class="view active" id="view-overview">
+              <div class="grid four">
+                <article class="card pastel-blue stat-card"><span class="mini">Total students</span><div class="metric" id="stat-students">0</div><div class="mini">Active across wellness programs</div></article>
+                <article class="card pastel-pink stat-card"><span class="mini">Counsellors</span><div class="metric" id="stat-counsellors">0</div><div class="mini">Case handling capacity live</div></article>
+                <article class="card pastel-yellow stat-card"><span class="mini">Wardens</span><div class="metric" id="stat-wardens">0</div><div class="mini">Residential support partners</div></article>
+                <article class="card pastel-green stat-card"><span class="mini">Quizzes</span><div class="metric" id="stat-quizzes">0</div><div class="mini">Assessment journeys deployed</div></article>
+              </div>
+
+              <div class="grid two">
+                <article class="card dark overview-hero">
+                  <div class="overview-hero-top">
+                    <div>
+                      <span class="pill info">Campus wellness pulse</span>
+                      <h3>Support operations are stable, with rising quiz engagement.</h3>
+                    </div>
+                    <span class="material-symbols-outlined">favorite</span>
+                  </div>
+                  <p>Use this dashboard to manage users, curate intervention quizzes, and keep developer visibility high without drowning teams in clutter.</p>
+                  <div class="overview-metrics">
+                    <div><strong id="overview-engagement">84%</strong><span>engagement</span></div>
+                    <div><strong id="overview-risk">12</strong><span>watchlist students</span></div>
+                    <div><strong id="overview-load">6.2</strong><span>avg counsellor load</span></div>
+                  </div>
+                </article>
+
+                <article class="card">
+                  <div class="section-head">
+                    <div>
+                      <h3>Notification center</h3>
+                      <p class="mini">Fresh platform events worth reviewing.</p>
+                    </div>
+                    <span class="pill dark">Live feed</span>
+                  </div>
+                  <div class="activity-list" id="activity-list"></div>
+                </article>
+              </div>
+
+              <div class="grid two">
+                <article class="card">
+                  <div class="section-head">
+                    <div>
+                      <h3>Distribution snapshot</h3>
+                      <p class="mini">Users and content volume at a glance.</p>
+                    </div>
+                  </div>
+                  <div class="analytics-bars" id="distribution-bars"></div>
+                </article>
+                <article class="card">
+                  <div class="section-head">
+                    <div>
+                      <h3>Recent records</h3>
+                      <p class="mini">Latest people and quiz content added.</p>
+                    </div>
+                  </div>
+                  <div id="recent-records" class="recent-records"></div>
+                </article>
+              </div>
+            </section>
+
+            <section class="view" id="view-users">
+              <div class="card">
+                <div class="section-head section-head-stack-mobile">
+                  <div>
+                    <h3>User Management</h3>
+                    <p class="mini">Search, filter, sort, and manage students, counsellors, and wardens with modal-based editing.</p>
+                  </div>
+                  <button class="btn-dark action-btn" id="add-user-btn" type="button">Add User</button>
+                </div>
+                <div class="toolbar">
+                  <div class="toolbar-group">
+                    <input class="input toolbar-input" id="user-search" type="search" placeholder="Search name, email, hostel, reg number..." />
+                    <div class="select-wrap toolbar-select">
+                      <select class="select" id="user-type-filter">
+                        <option value="all">Current tab</option>
+                        <option value="students">Students</option>
+                        <option value="counsellors">Counsellors</option>
+                        <option value="wardens">Wardens</option>
+                      </select>
+                      <span class="material-symbols-outlined">expand_more</span>
+                    </div>
+                    <div class="select-wrap toolbar-select">
+                      <select class="select" id="user-sort">
+                        <option value="name-asc">Name A-Z</option>
+                        <option value="name-desc">Name Z-A</option>
+                        <option value="type-asc">Role A-Z</option>
+                      </select>
+                      <span class="material-symbols-outlined">expand_more</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="user-type-tabs" id="user-tabs">
+                  <button class="type-tab active" data-user-view="students" type="button">Students</button>
+                  <button class="type-tab" data-user-view="counsellors" type="button">Counsellors</button>
+                  <button class="type-tab" data-user-view="wardens" type="button">Wardens</button>
+                </div>
+                <div class="table-shell">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role / Hostel</th>
+                        <th>Registration</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="user-table-body"></tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <section class="view" id="view-quizzes">
+              <div class="card">
+                <div class="section-head section-head-stack-mobile">
+                  <div>
+                    <h3>Quiz Management</h3>
+                    <p class="mini">Create wellness quizzes, preview questions, and refine content structure before connecting to a backend.</p>
+                  </div>
+                  <button class="btn-dark action-btn" id="add-quiz-btn" type="button">Add Quiz</button>
+                </div>
+                <div class="toolbar">
+                  <div class="toolbar-group">
+                    <input class="input toolbar-input" id="quiz-search" type="search" placeholder="Search quizzes by title or category..." />
+                    <div class="select-wrap toolbar-select">
+                      <select class="select" id="quiz-sort">
+                        <option value="title-asc">Title A-Z</option>
+                        <option value="title-desc">Title Z-A</option>
+                        <option value="questions-desc">Most questions</option>
+                      </select>
+                      <span class="material-symbols-outlined">expand_more</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="quiz-grid" id="quiz-grid"></div>
+              </div>
+            </section>
+
+            <section class="view" id="view-analytics">
+              <div class="grid two">
+                <article class="card">
+                  <div class="section-head">
+                    <div><h3>Entity totals</h3><p class="mini">Visual comparison across managed entities.</p></div>
+                  </div>
+                  <div class="analytics-bars tall" id="analytics-bars"></div>
+                </article>
+                <article class="card dark">
+                  <div class="section-head">
+                    <div><h3>Platform health</h3><p class="mini">Mock developer-facing readiness indicators.</p></div>
+                  </div>
+                  <div class="health-grid">
+                    <div class="health-card"><span class="pill info">Users synced</span><strong>98.4%</strong><p>Record schema consistency across role types.</p></div>
+                    <div class="health-card"><span class="pill warn">Quiz reviews</span><strong>5 pending</strong><p>Assessments awaiting copy or logic QA.</p></div>
+                    <div class="health-card"><span class="pill dark">API-ready</span><strong>4 endpoints</strong><p>CRUD contract placeholders already mapped.</p></div>
+                  </div>
+                </article>
+              </div>
+              <div class="grid two">
+                <article class="card">
+                  <div class="section-head">
+                    <div><h3>Role capacity mix</h3><p class="mini">Weighted operational footprint by group.</p></div>
+                  </div>
+                  <div class="donut-row" id="donut-row"></div>
+                </article>
+                <article class="card">
+                  <div class="section-head">
+                    <div><h3>Latest changes</h3><p class="mini">Recent write operations in this session.</p></div>
+                  </div>
+                  <div class="timeline" id="session-timeline"></div>
+                </article>
+              </div>
+            </section>
+
+          </div>
+        </main>
+      </section>
+    </div>
+
+    <div class="modal-overlay" id="user-modal">
+      <div class="modal-card">
+        <div class="modal-head">
+          <div><h3 id="user-modal-title">Add User</h3><p class="mini">Create or update a user record.</p></div>
+          <button class="icon-btn" data-close-modal="user-modal" type="button"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <form id="user-form" class="modal-form" novalidate>
+          <input type="hidden" id="user-id" />
+          <div class="grid two modal-grid">
+            <div class="form-group"><label class="form-label" for="user-name">Full Name</label><input class="input" id="user-name" type="text" /></div>
+            <div class="form-group"><label class="form-label" for="user-email">Email</label><input class="input" id="user-email" type="email" /></div>
+            <div class="form-group"><label class="form-label" for="user-category">Role Type</label><div class="select-wrap"><select class="select" id="user-category"><option value="students">Student</option><option value="counsellors">Counsellor</option><option value="wardens">Warden</option></select><span class="material-symbols-outlined">expand_more</span></div></div>
+            <div class="form-group"><label class="form-label" for="user-reg">Registration / Staff ID</label><input class="input" id="user-reg" type="text" /></div>
+            <div class="form-group"><label class="form-label" for="user-meta">Hostel / Specialization</label><input class="input" id="user-meta" type="text" /></div>
+            <div class="form-group"><label class="form-label" for="user-status">Status</label><div class="select-wrap"><select class="select" id="user-status"><option value="Active">Active</option><option value="Review">Review</option><option value="Offline">Offline</option></select><span class="material-symbols-outlined">expand_more</span></div></div>
+          </div>
+          <p class="notice" id="user-form-error" hidden></p>
+          <div class="modal-actions">
+            <button class="btn-secondary" data-close-modal="user-modal" type="button">Cancel</button>
+            <button class="btn-dark" type="submit">Save User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="quiz-modal">
+      <div class="modal-card">
+        <div class="modal-head">
+          <div><h3 id="quiz-modal-title">Add Quiz</h3><p class="mini">Build a new wellness quiz record.</p></div>
+          <button class="icon-btn" data-close-modal="quiz-modal" type="button"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <form id="quiz-form" class="modal-form" novalidate>
+          <input type="hidden" id="quiz-id" />
+          <div class="grid two modal-grid">
+            <div class="form-group"><label class="form-label" for="quiz-title-input">Quiz Title</label><input class="input" id="quiz-title-input" type="text" /></div>
+            <div class="form-group"><label class="form-label" for="quiz-category-input">Category</label><input class="input" id="quiz-category-input" type="text" /></div>
+            <div class="form-group"><label class="form-label" for="quiz-frequency-input">Frequency</label><input class="input" id="quiz-frequency-input" type="text" /></div>
+            <div class="form-group"><label class="form-label" for="quiz-badge-input">Badge</label><input class="input" id="quiz-badge-input" type="text" /></div>
+          </div>
+          <p class="notice" id="quiz-form-error" hidden></p>
+          <div class="modal-actions">
+            <button class="btn-secondary" data-close-modal="quiz-modal" type="button">Cancel</button>
+            <button class="btn-dark" type="submit">Save Quiz</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="question-modal">
+      <div class="modal-card">
+        <div class="modal-head">
+          <div><h3 id="question-modal-title">Add Question</h3><p class="mini">Attach a question to the selected quiz.</p></div>
+          <button class="icon-btn" data-close-modal="question-modal" type="button"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <form id="question-form" class="modal-form" novalidate>
+          <input type="hidden" id="question-quiz-id" />
+          <input type="hidden" id="question-id" />
+          <div class="form-group"><label class="form-label" for="question-text">Question</label><textarea class="input textarea" id="question-text" rows="4"></textarea></div>
+          <div class="form-group"><label class="form-label" for="question-type">Question Type</label><div class="select-wrap"><select class="select" id="question-type"><option value="Scale">Scale</option><option value="Multiple Choice">Multiple Choice</option><option value="Reflection">Reflection</option></select><span class="material-symbols-outlined">expand_more</span></div></div>
+          <p class="notice" id="question-form-error" hidden></p>
+          <div class="modal-actions">
+            <button class="btn-secondary" data-close-modal="question-modal" type="button">Cancel</button>
+            <button class="btn-dark" type="submit">Save Question</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

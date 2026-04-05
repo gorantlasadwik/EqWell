@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EqWell Warden Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#ebe8e3",
+                    "inverse-on-surface": "#f3f0eb",
+                    "surface-dim": "#dcdad5",
+                    "on-error-container": "#93000a",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#31302d",
+                    "on-tertiary-fixed": "#3f0300",
+                    "surface-container-highest": "#e5e2dd",
+                    "on-primary-fixed": "#1b1b1c",
+                    "tertiary-container": "#460300",
+                    "surface-container-low": "#f6f3ee",
+                    "surface-container": "#f0ede9",
+                    "on-secondary-container": "#6c5000",
+                    "on-surface": "#1c1c19",
+                    "on-tertiary-fixed-variant": "#842415",
+                    "surface": "#fcf9f4",
+                    "on-secondary-fixed-variant": "#5b4300",
+                    "on-primary-container": "#888686",
+                    "on-secondary-fixed": "#261a00",
+                    "primary-fixed-dim": "#c8c6c5",
+                    "on-secondary": "#ffffff",
+                    "secondary": "#785900",
+                    "error": "#ba1a1a",
+                    "primary-container": "#1f1f1f",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed-dim": "#fabd00",
+                    "primary": "#060607",
+                    "surface-bright": "#fcf9f4",
+                    "primary-fixed": "#e5e2e1",
+                    "on-surface-variant": "#444748",
+                    "on-background": "#1c1c19",
+                    "outline-variant": "#c4c7c7",
+                    "on-primary-fixed-variant": "#474746",
+                    "outline": "#747878",
+                    "on-tertiary-container": "#da624d",
+                    "surface-tint": "#5f5e5e",
+                    "surface-variant": "#e5e2dd",
+                    "tertiary-fixed-dim": "#ffb4a6",
+                    "secondary-container": "#fdc003",
+                    "background": "#fcf9f4",
+                    "tertiary-fixed": "#ffdad4",
+                    "inverse-primary": "#c8c6c5",
+                    "on-tertiary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "tertiary": "#170000",
+                    "secondary-fixed": "#ffdf9e",
+                    "error-container": "#ffdad6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcf9f4;
+        }
+        .editorial-gradient {
+            background: radial-gradient(circle at top left, #060607 0%, #1f1f1f 100%);
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.7);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-72 fixed left-0 flex flex-col p-6 gap-4 bg-[#fcf9f4] border-r-0 z-40 hidden md:flex">
+<div class="mb-8 px-2">
+<h1 class="text-xl font-black text-[#060607] tracking-tight">EqWell System</h1>
+<p class="text-xs text-stone-500 uppercase tracking-widest font-semibold mt-1">Wellbeing Curator</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 bg-[#fdc003] text-[#060607] rounded-full font-bold shadow-sm scale-102 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-headline tracking-wide text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-600 hover:bg-stone-100 rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-headline tracking-wide text-sm">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-600 hover:bg-stone-100 rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-headline tracking-wide text-sm">Students</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-600 hover:bg-stone-100 rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-headline tracking-wide text-sm">Sessions</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-600 hover:bg-stone-100 rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-headline tracking-wide text-sm">Reports</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 space-y-2 border-t border-stone-100">
+<a class="flex items-center gap-3 px-4 py-3 text-stone-600 hover:bg-stone-100 rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-headline tracking-wide text-sm">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-600 hover:bg-stone-100 rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-headline tracking-wide text-sm">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-30 md:pl-72 h-20 flex justify-between items-center px-8 bg-[#fcf9f4]/70 backdrop-blur-xl">
+<div class="flex items-center gap-4">
+<span class="text-stone-400 font-label text-xs tracking-widest uppercase font-bold">Warden Portal</span>
+<div class="h-1 w-1 bg-stone-300 rounded-full"></div>
+<h2 class="text-xl font-headline font-bold text-[#060607]">Campus Pulse</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-4 py-2 bg-surface-container-low rounded-full">
+<span class="material-symbols-outlined text-stone-500 text-sm" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface w-48 font-body" placeholder="Search insights..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-on-surface hover:scale-[1.02] transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface hover:scale-[1.02] transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden ml-2 ring-2 ring-surface">
+<img class="w-full h-full object-cover" data-alt="Close up portrait of a senior academic professional with a warm and approachable expression, studio lighting, professional attire." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRdDp3zX25QNgeZswcUw5ntG1skJt66-F4YJo7Xy8TUPUIanweJQChsvqRG7JYc0AyhSPwiwuiJLSCCkfEVdNlttGuXhVoOK7xKC26Om28VxSLKS59BXtyqGwQGRs_KgCEUS9vVg_1ZHjEbdlj49SSLUYNoOX2nFcdVIUc98SRz7ELJBSc3Bh-M8Iq-a1O3_Q6y81hHhAvaZcWQmn_3unQmeLEcSI-wXZS5laxLmoxK6OkXqR08VStHF4423vwwP0BV_xn4I7xaZ8"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="md:pl-72 pt-24 pb-12 px-8 min-h-screen">
+<!-- Welcome Hero Section -->
+<section class="mb-10">
+<div class="editorial-gradient rounded-xl p-12 text-white flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+<!-- Decorative Reflection Blob -->
+<div class="absolute -right-20 -bottom-20 w-96 h-96 bg-secondary-container/20 rounded-full blur-[100px]"></div>
+<div class="relative z-10 max-w-xl">
+<span class="text-xs uppercase tracking-[0.2em] font-bold text-secondary-container mb-4 block">Morning Overview</span>
+<h1 class="text-4xl md:text-5xl font-headline font-extrabold leading-tight mb-4">Hello, Warden Mitchell.</h1>
+<p class="text-stone-300 font-body text-lg leading-relaxed">The collective campus mood is <span class="text-white font-semibold italic">"Steady"</span> today. There is a slight uptick in stress reports from Block D2.</p>
+</div>
+<div class="relative z-10 flex gap-4">
+<button class="bg-secondary-container text-primary font-bold px-8 py-4 rounded-full shadow-lg hover:scale-[1.02] active:scale-95 transition-all">
+                        Hostel Heatmap
+                    </button>
+<button class="bg-surface/10 backdrop-blur-md text-white font-bold px-8 py-4 rounded-full border border-white/20 hover:bg-white/20 transition-all">
+                        View Alerts
+                    </button>
+</div>
+</div>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Hostel Heatmap (Large 8-col) -->
+<div class="md:col-span-8 bg-surface-container-lowest rounded-xl p-8 shadow-[0_12px_48px_0_rgba(28,28,25,0.06)]">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h3 class="text-2xl font-headline font-bold text-primary">Wellbeing Heatmap</h3>
+<p class="text-sm text-stone-500 font-body mt-1">Aggregated mood trends by residential block</p>
+</div>
+<div class="flex gap-2">
+<span class="flex items-center gap-1 text-xs font-semibold px-3 py-1 bg-green-100 text-green-700 rounded-full">Optimal</span>
+<span class="flex items-center gap-1 text-xs font-semibold px-3 py-1 bg-[#fdc003]/20 text-secondary rounded-full">Moderate</span>
+<span class="flex items-center gap-1 text-xs font-semibold px-3 py-1 bg-error-container text-on-tertiary-container rounded-full">Stress Zone</span>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+<!-- Block D1 -->
+<div class="bg-surface-container-low p-6 rounded-lg group hover:bg-surface-container-high transition-colors">
+<div class="flex justify-between items-start mb-4">
+<span class="text-lg font-bold">Block D1</span>
+<div class="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></div>
+</div>
+<div class="space-y-4">
+<div class="h-24 flex items-end gap-1 px-2">
+<div class="w-full bg-green-200 h-1/2 rounded-t-sm"></div>
+<div class="w-full bg-green-300 h-2/3 rounded-t-sm"></div>
+<div class="w-full bg-green-400 h-3/4 rounded-t-sm"></div>
+<div class="w-full bg-green-300 h-2/3 rounded-t-sm"></div>
+<div class="w-full bg-green-200 h-1/2 rounded-t-sm"></div>
+</div>
+<div class="flex justify-between text-[10px] text-stone-500 font-bold uppercase tracking-tighter">
+<span>Mon</span><span>Wed</span><span>Fri</span>
+</div>
+</div>
+</div>
+<!-- Block D2 -->
+<div class="bg-on-tertiary-container/5 p-6 rounded-lg border-2 border-on-tertiary-container/20">
+<div class="flex justify-between items-start mb-4">
+<span class="text-lg font-bold text-on-tertiary-container">Block D2</span>
+<span class="material-symbols-outlined text-on-tertiary-container animate-pulse" data-icon="warning">warning</span>
+</div>
+<div class="space-y-4">
+<div class="h-24 flex items-end gap-1 px-2">
+<div class="w-full bg-orange-200 h-1/3 rounded-t-sm"></div>
+<div class="w-full bg-orange-300 h-2/3 rounded-t-sm"></div>
+<div class="w-full bg-on-tertiary-container h-full rounded-t-sm"></div>
+<div class="w-full bg-on-tertiary-container/80 h-4/5 rounded-t-sm"></div>
+<div class="w-full bg-on-tertiary-container/60 h-3/4 rounded-t-sm"></div>
+</div>
+<p class="text-xs text-on-tertiary-container font-medium text-center">Spike detected (Exam Season)</p>
+</div>
+</div>
+<!-- Block C -->
+<div class="bg-surface-container-low p-6 rounded-lg">
+<div class="flex justify-between items-start mb-4">
+<span class="text-lg font-bold">Block C</span>
+<div class="w-3 h-3 rounded-full bg-secondary-container"></div>
+</div>
+<div class="h-24 flex items-center justify-center">
+<span class="text-stone-400 text-xs italic">Stability maintaining</span>
+</div>
+</div>
+<!-- Block A -->
+<div class="bg-surface-container-low p-6 rounded-lg">
+<span class="text-lg font-bold block mb-4">Block A</span>
+<div class="flex items-center gap-4">
+<div class="flex-1 h-3 bg-stone-200 rounded-full overflow-hidden">
+<div class="w-4/5 h-full bg-green-400"></div>
+</div>
+<span class="text-xs font-bold">82%</span>
+</div>
+</div>
+<!-- Block B -->
+<div class="bg-surface-container-low p-6 rounded-lg">
+<span class="text-lg font-bold block mb-4">Block B</span>
+<div class="flex items-center gap-4">
+<div class="flex-1 h-3 bg-stone-200 rounded-full overflow-hidden">
+<div class="w-1/2 h-full bg-secondary-container"></div>
+</div>
+<span class="text-xs font-bold">54%</span>
+</div>
+</div>
+<!-- Block E -->
+<div class="bg-surface-container-low p-6 rounded-lg">
+<span class="text-lg font-bold block mb-4">Block E</span>
+<div class="flex items-center gap-4">
+<div class="flex-1 h-3 bg-stone-200 rounded-full overflow-hidden">
+<div class="w-3/4 h-full bg-green-400"></div>
+</div>
+<span class="text-xs font-bold">75%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Counseling Demand (4-col) -->
+<div class="md:col-span-4 flex flex-col gap-8">
+<div class="bg-secondary-container text-primary p-8 rounded-xl flex-1 relative overflow-hidden group">
+<div class="relative z-10">
+<h3 class="text-xl font-headline font-extrabold mb-2">Counseling Demand</h3>
+<p class="text-primary/70 text-sm mb-6">Aggregate anonymized requests</p>
+<div class="text-6xl font-black mb-4">12</div>
+<p class="text-sm font-bold uppercase tracking-widest bg-primary text-white inline-block px-3 py-1 rounded-sm">High Demand</p>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[160px]" data-icon="psychology">psychology</span>
+</div>
+</div>
+<div class="bg-surface-container-highest p-8 rounded-xl">
+<h4 class="text-sm font-bold text-primary mb-4 uppercase tracking-widest">Active Alerts</h4>
+<div class="space-y-4">
+<div class="bg-surface p-4 rounded-lg flex items-center gap-4 shadow-sm">
+<div class="w-2 h-12 bg-on-tertiary-container rounded-full"></div>
+<div>
+<p class="text-sm font-bold">Block D2 Spike</p>
+<p class="text-xs text-stone-500 italic">Reported 2h ago</p>
+</div>
+</div>
+<div class="bg-surface p-4 rounded-lg flex items-center gap-4 shadow-sm opacity-60">
+<div class="w-2 h-12 bg-secondary-container rounded-full"></div>
+<div>
+<p class="text-sm font-bold">W-Gate Logins Low</p>
+<p class="text-xs text-stone-500 italic">Reported 6h ago</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Stress Factors (Full Width / Editorial Style) -->
+<div class="md:col-span-12 bg-primary text-white rounded-xl p-10 flex flex-col md:flex-row gap-12 overflow-hidden relative">
+<!-- Abstract Blur Background -->
+<div class="absolute top-0 right-0 w-full h-full opacity-30">
+<div class="absolute top-1/2 left-3/4 w-96 h-96 bg-on-tertiary-container blur-[120px] rounded-full"></div>
+</div>
+<div class="md:w-1/3 relative z-10">
+<h3 class="text-3xl font-headline font-bold mb-4">Root Stressors</h3>
+<p class="text-stone-400 font-body leading-relaxed">AI analysis of anonymized student journal sentiments identifies these primary environmental factors impacting wellbeing this week.</p>
+</div>
+<div class="md:w-2/3 grid grid-cols-1 sm:grid-cols-3 gap-6 relative z-10">
+<div class="bg-white/5 backdrop-blur-lg p-6 rounded-lg border border-white/10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-secondary-container" data-icon="school">school</span>
+<span class="text-sm font-bold uppercase tracking-wider">Academic</span>
+</div>
+<div class="text-4xl font-black mb-2">64%</div>
+<div class="h-1 bg-white/20 w-full rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container w-[64%]"></div>
+</div>
+<p class="text-[10px] text-stone-400 mt-4 leading-tight">Midterm preparations across engineering blocks.</p>
+</div>
+<div class="bg-white/5 backdrop-blur-lg p-6 rounded-lg border border-white/10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-on-tertiary-container" data-icon="restaurant">restaurant</span>
+<span class="text-sm font-bold uppercase tracking-wider">Social/Food</span>
+</div>
+<div class="text-4xl font-black mb-2">12%</div>
+<div class="h-1 bg-white/20 w-full rounded-full overflow-hidden">
+<div class="h-full bg-on-tertiary-container w-[12%]"></div>
+</div>
+<p class="text-[10px] text-stone-400 mt-4 leading-tight">High satisfaction with recent mess menu changes.</p>
+</div>
+<div class="bg-white/5 backdrop-blur-lg p-6 rounded-lg border border-white/10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-blue-400" data-icon="bedtime">bedtime</span>
+<span class="text-sm font-bold uppercase tracking-wider">Rest</span>
+</div>
+<div class="text-4xl font-black mb-2">24%</div>
+<div class="h-1 bg-white/20 w-full rounded-full overflow-hidden">
+<div class="h-full bg-blue-400 w-[24%]"></div>
+</div>
+<p class="text-[10px] text-stone-400 mt-4 leading-tight">Sleep hygiene reports declining in First Year wings.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Nav (Shown only on small screens) -->
+<footer class="fixed bottom-0 w-full bg-white/80 backdrop-blur-xl md:hidden z-50 flex justify-around items-center h-20 px-4">
+<button class="flex flex-col items-center gap-1 text-[#060607]">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Main</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-stone-400">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Heatmap</span>
+</button>
+<button class="bg-[#fdc003] w-14 h-14 rounded-full -mt-10 flex items-center justify-center shadow-lg border-4 border-surface">
+<span class="material-symbols-outlined text-[#060607]" data-icon="add">add</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-stone-400">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Alerts</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-stone-400">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Profile</span>
+</button>
+</footer>
+</body></html>

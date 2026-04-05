@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EqWell - Student Sanctuary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#a83836",
+                    "on-primary": "#eefbff",
+                    "on-tertiary-fixed-variant": "#50686f",
+                    "tertiary-dim": "#3f575d",
+                    "surface-container-highest": "#d2e4ff",
+                    "secondary-container": "#c1edd1",
+                    "surface-dim": "#c4dcff",
+                    "primary-fixed": "#aceaf9",
+                    "inverse-surface": "#000f21",
+                    "secondary-dim": "#345b46",
+                    "secondary-fixed-dim": "#b3dec3",
+                    "on-tertiary-container": "#465e64",
+                    "outline-variant": "#91b4e4",
+                    "primary-container": "#aceaf9",
+                    "outline": "#5a7da9",
+                    "error-container": "#fa746f",
+                    "on-secondary-fixed": "#204733",
+                    "inverse-on-surface": "#8e9eb7",
+                    "inverse-primary": "#aceaf9",
+                    "on-error": "#fff7f6",
+                    "surface-container-high": "#dce9ff",
+                    "on-secondary-container": "#335a44",
+                    "background": "#f8f9ff",
+                    "primary-dim": "#155b68",
+                    "surface-bright": "#f8f9ff",
+                    "on-surface": "#05345c",
+                    "on-secondary-fixed-variant": "#3d634e",
+                    "surface-tint": "#266774",
+                    "surface-container-low": "#eff4ff",
+                    "on-tertiary": "#eefbff",
+                    "on-error-container": "#6e0a12",
+                    "on-primary-fixed-variant": "#1f626f",
+                    "tertiary-container": "#dbf5fd",
+                    "surface-container": "#e5eeff",
+                    "surface-variant": "#d2e4ff",
+                    "on-primary-container": "#105865",
+                    "on-primary-fixed": "#00444f",
+                    "on-surface-variant": "#3d618c",
+                    "secondary-fixed": "#c1edd1",
+                    "on-tertiary-fixed": "#344c52",
+                    "surface": "#f8f9ff",
+                    "tertiary": "#4b6369",
+                    "error-dim": "#67040d",
+                    "on-background": "#05345c",
+                    "secondary": "#406751",
+                    "tertiary-fixed": "#dbf5fd",
+                    "tertiary-fixed-dim": "#cde7ee",
+                    "primary-fixed-dim": "#9edbeb",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#266774",
+                    "on-secondary": "#e6ffed"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pulse-orb {
+            filter: blur(40px);
+            opacity: 0.4;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen selection:bg-primary-container selection:text-on-primary-container">
+<aside class="fixed left-0 top-0 hidden md:flex flex-col h-screen w-72 bg-slate-50 dark:bg-slate-950 py-8 space-y-4">
+<div class="px-8 mb-8">
+<h1 class="text-2xl font-black text-[#266774] dark:text-[#aceaf9]">EqWell</h1>
+<p class="text-slate-500 dark:text-slate-400 font-manrope text-sm font-medium">Digital Sanctuary</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center space-x-3 text-[#266774] dark:text-[#aceaf9] font-bold border-l-4 border-[#266774] dark:border-[#aceaf9] pl-4 py-3 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="spa">spa</span>
+<span class="font-manrope text-sm font-medium">Sanctuary</span>
+</a>
+<a class="flex items-center space-x-3 text-slate-500 dark:text-slate-400 pl-5 py-3 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-xl mx-2 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-manrope text-sm font-medium">Insights</span>
+</a>
+<a class="flex items-center space-x-3 text-slate-500 dark:text-slate-400 pl-5 py-3 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-xl mx-2 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-manrope text-sm font-medium">Pulse Check</span>
+</a>
+<a class="flex items-center space-x-3 text-slate-500 dark:text-slate-400 pl-5 py-3 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-xl mx-2 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-manrope text-sm font-medium">Community</span>
+</a>
+<a class="flex items-center space-x-3 text-slate-500 dark:text-slate-400 pl-5 py-3 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-xl mx-2 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="library_books">library_books</span>
+<span class="font-manrope text-sm font-medium">Resources</span>
+</a>
+</nav>
+<div class="px-6 py-4">
+<button class="w-full py-4 bg-gradient-to-br from-primary to-primary-dim text-on-primary rounded-xl font-bold flex items-center justify-center space-x-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+<span>Quick Pulse</span>
+</button>
+</div>
+<div class="mt-auto px-4 space-y-1">
+<a class="flex items-center space-x-3 text-slate-500 dark:text-slate-400 pl-5 py-2 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-manrope text-sm font-medium">Support</span>
+</a>
+<a class="flex items-center space-x-3 text-slate-500 dark:text-slate-400 pl-5 py-2 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+<span class="font-manrope text-sm font-medium">Privacy</span>
+</a>
+</div>
+</aside>
+<header class="fixed top-0 right-0 left-0 md:left-72 z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl flex justify-between items-center px-8 py-4 transition-colors duration-300">
+<div class="flex items-center space-x-4">
+<h2 class="text-xl font-bold tracking-tighter text-[#266774] dark:text-[#aceaf9] md:hidden">EqWell</h2>
+<div class="hidden md:block">
+<h2 class="font-headline text-lg font-light tracking-tight text-on-surface">Welcome back, Sanctuary Space</h2>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<div class="hidden sm:flex items-center space-x-2 text-slate-500">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-xl" data-icon="settings">settings</span>
+</div>
+<div class="h-10 w-10 rounded-full bg-surface-container-high overflow-hidden border-2 border-primary-container">
+<img alt="User profile" class="h-full w-full object-cover" data-alt="close-up portrait of a serene young man with warm lighting and soft blue background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrf9hv23fmn8F0_QZ0Hmrikt1UtYmlbb6qVmfp6bWC8Ng-Y4P5nkAgf_uoMH3q6UI9sWrwb3LIH84e1B5tOleBGTJrlUDFYO1EbDd5skCTo59OpfUy2Ee284GCJuxIT73oPvAeWjhQQAUsJVs8Izy1OpqXKzfO_1N3lf1gwinAI0IoiGrNAymbA4A4eEmKRPj5NgEwsjxwUMY6NHhWqXCyYgwRZVVbKl4tEuFXZ99j6sU6QZhWDQZIcRfx5m4EJ523vytx-AfyCcj8"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-12 px-6 md:ml-72 lg:px-12 max-w-7xl">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<section class="lg:col-span-8 space-y-8">
+<div class="relative overflow-hidden p-8 rounded-3xl bg-surface-container-low min-h-[300px] flex flex-col justify-end">
+<div class="absolute -top-12 -right-12 w-64 h-64 bg-primary-fixed-dim pulse-orb rounded-full"></div>
+<div class="relative z-10">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block">Current Signal</span>
+<h3 class="text-4xl md:text-5xl font-headline font-bold text-on-surface mb-2">Mental Battery</h3>
+<p class="text-on-surface-variant max-w-md mb-8">Your wellbeing signals suggest you're operating at a restorative pace. Take a moment to breathe.</p>
+<div class="w-full space-y-2">
+<div class="flex justify-between items-end mb-1">
+<span class="text-3xl font-black text-primary">68%</span>
+<span class="text-sm font-medium text-primary-dim">Stable Energy</span>
+</div>
+<div class="h-4 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-primary-container w-[68%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-8 rounded-3xl bg-surface-container-lowest">
+<div class="flex justify-between items-center mb-10">
+<h3 class="text-2xl font-headline font-bold">Stress Trend</h3>
+<div class="flex space-x-2">
+<span class="px-4 py-1.5 rounded-full bg-surface-container text-primary text-xs font-bold">7 Days</span>
+<span class="px-4 py-1.5 rounded-full text-slate-400 text-xs font-medium">30 Days</span>
+</div>
+</div>
+<div class="h-64 flex items-end justify-between space-x-2 px-2">
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-surface-container group-hover:bg-primary-container transition-colors rounded-t-xl" style="height: 40%"></div>
+<span class="mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Mon</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-surface-container group-hover:bg-primary-container transition-colors rounded-t-xl" style="height: 65%"></div>
+<span class="mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Tue</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-primary/20 group-hover:bg-primary transition-colors rounded-t-xl" style="height: 85%"></div>
+<span class="mt-4 text-[10px] font-bold text-primary uppercase tracking-tighter">Wed</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-surface-container group-hover:bg-primary-container transition-colors rounded-t-xl" style="height: 50%"></div>
+<span class="mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Thu</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-surface-container group-hover:bg-primary-container transition-colors rounded-t-xl" style="height: 35%"></div>
+<span class="mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Fri</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-surface-container group-hover:bg-primary-container transition-colors rounded-t-xl" style="height: 45%"></div>
+<span class="mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Sat</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-surface-container group-hover:bg-primary-container transition-colors rounded-t-xl" style="height: 60%"></div>
+<span class="mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Sun</span>
+</div>
+</div>
+</div>
+</section>
+<aside class="lg:col-span-4 space-y-8">
+<div class="p-8 rounded-3xl bg-tertiary-container/30 backdrop-blur-sm border border-white/50">
+<h4 class="text-xl font-headline font-bold mb-2">Quick Pulse</h4>
+<p class="text-sm text-on-tertiary-container mb-6">How is your internal landscape today?</p>
+<div class="flex justify-between items-center bg-white/40 p-2 rounded-2xl">
+<button class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-all text-xl">😔</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-all text-xl">😐</button>
+<button class="w-12 h-12 flex items-center justify-center rounded-xl bg-primary text-on-primary shadow-lg shadow-primary/20 transition-all text-2xl">🙂</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-all text-xl">😊</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-all text-xl">🤩</button>
+</div>
+</div>
+<div class="p-8 rounded-3xl bg-surface-container-high relative group cursor-pointer overflow-hidden active:scale-[0.98] transition-all">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="forum">forum</span>
+</div>
+<div class="relative z-10">
+<h4 class="text-xl font-headline font-bold mb-2">AI Vent System</h4>
+<p class="text-sm text-on-surface-variant mb-6">Speak your mind in a safe, anonymous space. No logs, just listening.</p>
+<div class="inline-flex items-center space-x-2 text-primary font-bold text-sm">
+<span>Open Sanctuary Chat</span>
+<span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</div>
+<div class="p-8 rounded-3xl bg-secondary-container/20 border border-secondary-container/30">
+<h4 class="text-xl font-headline font-bold mb-6">Support Access</h4>
+<div class="space-y-4">
+<button class="w-full flex items-center justify-between p-4 bg-white rounded-2xl hover:shadow-md transition-all group">
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+</div>
+<div class="text-left">
+<p class="text-sm font-bold">Book Counselling</p>
+<p class="text-[10px] text-slate-500">Available: Tomorrow, 10am</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 bg-white rounded-2xl hover:shadow-md transition-all group">
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-container flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="emergency">emergency</span>
+</div>
+<div class="text-left">
+<p class="text-sm font-bold">Urgent Support</p>
+<p class="text-[10px] text-slate-500">24/7 Crisis Line</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-50/90 backdrop-blur-xl px-6 py-4 flex justify-between items-center z-50">
+<button class="flex flex-col items-center space-y-1 text-primary">
+<span class="material-symbols-outlined" data-icon="spa" style="font-variation-settings: 'FILL' 1;">spa</span>
+<span class="text-[10px] font-bold">Sanctuary</span>
+</button>
+<button class="flex flex-col items-center space-y-1 text-slate-400">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="text-[10px] font-medium">Insights</span>
+</button>
+<button class="flex flex-col items-center space-y-1 text-slate-400">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="text-[10px] font-medium">Pulse</span>
+</button>
+<button class="flex flex-col items-center space-y-1 text-slate-400">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="text-[10px] font-medium">Community</span>
+</button>
+</nav>
+<div class="fixed bottom-24 right-6 md:bottom-12 md:right-12 z-40">
+<button class="w-16 h-16 rounded-full bg-primary text-on-primary shadow-2xl flex items-center justify-center active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl" data-icon="forum" style="font-variation-settings: 'FILL' 1;">forum</span>
+</button>
+</div>
+</body></html>

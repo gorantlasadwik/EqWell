@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EqWell | Student Wellbeing Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f3f0eb",
+                        "primary-fixed": "#e5e2e1",
+                        "on-primary-fixed": "#1b1b1c",
+                        "tertiary-fixed": "#ffdad4",
+                        "surface-container": "#f0ede9",
+                        "primary-container": "#1f1f1f",
+                        "surface-container-highest": "#e5e2dd",
+                        "on-tertiary-fixed": "#3f0300",
+                        "on-background": "#1c1c19",
+                        "tertiary-fixed-dim": "#ffb4a6",
+                        "on-primary-fixed-variant": "#474746",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#6c5000",
+                        "surface-container-high": "#ebe8e3",
+                        "on-primary-container": "#888686",
+                        "inverse-primary": "#c8c6c5",
+                        "on-secondary-fixed": "#261a00",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f6f3ee",
+                        "outline-variant": "#c4c7c7",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#e5e2dd",
+                        "surface-dim": "#dcdad5",
+                        "inverse-surface": "#31302d",
+                        "secondary-container": "#fdc003",
+                        "secondary-fixed-dim": "#fabd00",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "on-surface": "#1c1c19",
+                        "surface-tint": "#5f5e5e",
+                        "tertiary-container": "#460300",
+                        "secondary-fixed": "#ffdf9e",
+                        "secondary": "#785900",
+                        "surface": "#fcf9f4",
+                        "surface-bright": "#fcf9f4",
+                        "tertiary": "#170000",
+                        "outline": "#747878",
+                        "on-surface-variant": "#444748",
+                        "background": "#fcf9f4",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#5b4300",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#842415",
+                        "primary": "#060607",
+                        "on-tertiary-container": "#da624d",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .reflection-blob {
+            filter: blur(80px);
+            opacity: 0.4;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased overflow-x-hidden">
+<!-- Sidebar Navigation Shell -->
+<aside class="fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#fcf9f4] dark:bg-stone-950 border-r border-stone-100 dark:border-stone-800 z-50">
+<div class="mb-12 px-4">
+<h1 class="text-2xl font-black text-[#060607] dark:text-white font-headline">EqWell</h1>
+<p class="text-xs font-medium tracking-widest uppercase text-stone-400 mt-1">Student Wellbeing</p>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Active Tab: Dashboard -->
+<a class="bg-[#fdc003] text-[#060607] rounded-full px-6 py-3 font-bold flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-headline tracking-tight">Dashboard</span>
+</a>
+<a class="text-stone-500 dark:text-stone-400 px-6 py-3 hover:text-[#060607] transition-colors flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="font-headline tracking-tight">Mood History</span>
+</a>
+<a class="text-stone-500 dark:text-stone-400 px-6 py-3 hover:text-[#060607] transition-colors flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-headline tracking-tight">Counselling</span>
+</a>
+<a class="text-stone-500 dark:text-stone-400 px-6 py-3 hover:text-[#060607] transition-colors flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-headline tracking-tight">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-stone-100 dark:border-stone-800 pt-6">
+<a class="text-stone-500 dark:text-stone-400 px-6 py-3 hover:text-[#060607] transition-colors flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-headline tracking-tight">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Shell -->
+<main class="ml-72 min-h-screen relative">
+<!-- Decorative Reflection Blobs -->
+<div class="reflection-blob absolute top-20 right-20 w-96 h-96 rounded-full bg-secondary-fixed"></div>
+<div class="reflection-blob absolute bottom-40 left-20 w-80 h-80 rounded-full bg-tertiary-fixed"></div>
+<!-- Top App Bar Shell -->
+<header class="flex justify-between items-center w-full px-12 py-6 sticky top-0 bg-white/70 backdrop-blur-[20px] z-40">
+<div class="flex flex-col">
+<h2 class="font-headline text-3xl font-bold tracking-tight text-[#060607]">Hi, Amanda!</h2>
+<p class="text-on-surface-variant font-medium mt-1">Let's take a look at your wellbeing today.</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<input class="bg-surface-container-low border-none rounded-full px-6 py-3 w-64 focus:ring-2 focus:ring-secondary-container transition-all text-sm font-medium" placeholder="Search resources..." type="text"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-stone-400">search</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container-high hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm">
+<img alt="Student profile avatar" class="w-full h-full object-cover" data-alt="portrait of a young smiling student woman with glasses in a soft lit studio setting with warm beige background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpTAHy0ezuUyR7Sct6LijbZ8X5Tv-0ffgUr0X412bm7SB4YTqXuKMotwNMXzi5rSImoEEY9gg66sXqOfxo3iOO3lpRDCx8xtaLJeBhnhzVvfMtj9M5A-UQXNXFwhUvF6tDdJnL4Kbl2GruP_1CXbPtKDVIVVdv96r4oJxYI0DZ-8P2XICPcnX8RKoAhJSO_7BzA47AKtW3WRhT6eqdVi8lC2YA6qADqiKmLNNGG7xsY1FZ3TJhC6pz3B-piyMlF4eqVeZVWuDoHCE"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="px-12 py-8 max-w-7xl mx-auto space-y-8 relative z-10">
+<!-- Hero Section: Mental Battery (Organic Bento) -->
+<section class="grid grid-cols-12 gap-8">
+<div class="col-span-12 bg-surface-container-lowest rounded-xl p-10 shadow-[0_12px_48px_rgba(28,28,25,0.06)] relative overflow-hidden group">
+<!-- Background Visuals -->
+<div class="absolute -right-20 -top-20 w-80 h-80 bg-secondary-container rounded-full blur-[100px] opacity-20"></div>
+<div class="absolute right-40 top-40 w-40 h-40 bg-on-tertiary-container rounded-full blur-[60px] opacity-10"></div>
+<div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+<div class="space-y-6">
+<span class="inline-block px-4 py-1.5 bg-surface-container text-xs font-black tracking-widest uppercase rounded-full">Vital Insight</span>
+<h3 class="text-5xl font-headline font-extrabold tracking-tight">Your Mental Battery</h3>
+<p class="text-xl text-on-surface-variant max-w-md leading-relaxed">You've maintained a steady pace this week. Remember to take a break after your next class.</p>
+<div class="flex items-center gap-4">
+<div class="px-6 py-3 bg-secondary-container rounded-full flex items-center gap-2 font-bold text-on-secondary-container">
+<span class="material-symbols-outlined">bolt</span>
+                                    Steady Flow
+                                </div>
+<div class="px-6 py-3 bg-surface-container rounded-full flex items-center gap-2 font-bold text-on-surface">
+                                    Mood: Balanced (4/5)
+                                </div>
+</div>
+</div>
+<!-- Circular Energy Visual -->
+<div class="relative w-72 h-72 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-low" cx="144" cy="144" fill="transparent" r="120" stroke="currentColor" stroke-width="24"></circle>
+<circle class="text-secondary-container transition-all duration-1000" cx="144" cy="144" fill="transparent" r="120" stroke="currentColor" stroke-dasharray="753.6" stroke-dashoffset="211" stroke-linecap="round" stroke-width="24"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-6xl font-headline font-black tracking-tighter">72%</span>
+<span class="text-sm font-bold text-on-secondary-container tracking-wider uppercase">Energy</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Content Grid -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Pulse & Stress -->
+<div class="lg:col-span-5 space-y-8">
+<!-- Quick Pulse Card -->
+<div class="bg-surface-container-lowest rounded-lg p-8 shadow-[0_12px_48px_rgba(28,28,25,0.06)] hover:scale-[1.01] transition-transform duration-300">
+<h4 class="font-headline text-xl font-bold mb-6">How are you feeling?</h4>
+<div class="flex justify-between items-center bg-surface-container-low rounded-xl p-4">
+<button class="w-14 h-14 text-2xl flex items-center justify-center hover:bg-surface-container-highest rounded-full transition-all">😞</button>
+<button class="w-14 h-14 text-2xl flex items-center justify-center hover:bg-surface-container-highest rounded-full transition-all">😐</button>
+<button class="w-14 h-14 text-2xl flex items-center justify-center bg-secondary-container shadow-md rounded-full transition-all ring-4 ring-white">🙂</button>
+<button class="w-14 h-14 text-2xl flex items-center justify-center hover:bg-surface-container-highest rounded-full transition-all">😊</button>
+<button class="w-14 h-14 text-2xl flex items-center justify-center hover:bg-surface-container-highest rounded-full transition-all">🤩</button>
+</div>
+</div>
+<!-- Stress Score Breakdown -->
+<div class="bg-surface-container-lowest rounded-lg p-8 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+<div class="flex justify-between items-end mb-6">
+<div>
+<p class="text-xs font-black tracking-widest uppercase text-stone-400 mb-1">Current State</p>
+<h4 class="font-headline text-2xl font-bold">Stress Score</h4>
+</div>
+<span class="text-3xl font-headline font-extrabold text-on-tertiary-container">35<span class="text-sm text-stone-400 font-bold">/100</span></span>
+</div>
+<div class="w-full h-4 bg-surface-container-low rounded-full overflow-hidden">
+<div class="h-full bg-on-tertiary-container w-[35%] rounded-full"></div>
+</div>
+<p class="mt-4 text-sm font-medium text-stone-500">Your stress level is <span class="text-green-600 font-bold">Low</span>. You're doing great!</p>
+</div>
+<!-- Weekly Mood Trend (Small Sparkline) -->
+<div class="bg-primary text-white rounded-lg p-8 shadow-[0_12px_48px_rgba(28,28,25,0.06)] flex items-center justify-between">
+<div>
+<h4 class="font-headline text-lg font-bold mb-1">Weekly Trend</h4>
+<p class="text-stone-400 text-sm">Consistent growth</p>
+</div>
+<div class="flex items-end gap-1.5 h-12">
+<div class="w-2 bg-stone-700 h-4 rounded-full"></div>
+<div class="w-2 bg-secondary-container h-6 rounded-full"></div>
+<div class="w-2 bg-stone-700 h-5 rounded-full"></div>
+<div class="w-2 bg-stone-700 h-8 rounded-full"></div>
+<div class="w-2 bg-secondary-container h-12 rounded-full"></div>
+<div class="w-2 bg-secondary-container h-10 rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Right Column: Habits & Sessions -->
+<div class="lg:col-span-7 bg-surface-container-lowest rounded-xl p-10 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+<div class="flex justify-between items-center mb-10">
+<h4 class="font-headline text-3xl font-extrabold tracking-tight">My Habits &amp; Sessions</h4>
+<button class="material-symbols-outlined text-stone-400 hover:text-primary transition-colors">more_horiz</button>
+</div>
+<div class="space-y-6">
+<!-- Stretching Session -->
+<div class="group flex items-center justify-between p-6 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-all">
+<div class="flex items-center gap-6">
+<div class="w-14 h-14 bg-white rounded-lg flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">self_improvement</span>
+</div>
+<div>
+<h5 class="font-bold text-lg">Stretching session</h5>
+<p class="text-sm font-medium text-stone-500">9/12 sessions completed</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-sm font-bold text-on-tertiary-container bg-tertiary-fixed px-3 py-1 rounded-full">+15 pts</span>
+<span class="material-symbols-outlined text-stone-300">chevron_right</span>
+</div>
+</div>
+<!-- Counselling Session -->
+<div class="group flex items-center justify-between p-6 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-all border-l-8 border-secondary-container">
+<div class="flex items-center gap-6">
+<div class="w-14 h-14 bg-white rounded-lg flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+</div>
+<div>
+<h5 class="font-bold text-lg">Counselling Session</h5>
+<p class="text-sm font-medium text-stone-500">Friday, 2:00 PM with Dr. Aris</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-5 py-2.5 bg-primary text-white rounded-full text-sm font-bold hover:scale-105 transition-transform">Prepare</button>
+</div>
+</div>
+<!-- AI Vent Session -->
+<div class="p-8 rounded-lg bg-secondary-fixed flex flex-col md:flex-row items-center justify-between gap-6 mt-4">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 bg-white/50 backdrop-blur-md rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">forum</span>
+</div>
+<div>
+<h5 class="font-bold text-xl text-on-secondary-container">Feeling overwhelmed?</h5>
+<p class="text-on-secondary-fixed-variant font-medium">Chat with EqWell AI to clear your mind.</p>
+</div>
+</div>
+<button class="w-full md:w-auto px-8 py-4 bg-primary text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]">
+                                AI Vent Session
+                            </button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Floating Contextual FAB (Dashboard relevant) -->
+<button class="fixed bottom-10 right-10 w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all z-50 group">
+<span class="material-symbols-outlined text-3xl group-hover:rotate-12 transition-transform">add</span>
+<div class="absolute right-20 bg-primary text-white px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap font-bold">
+                Log New Mood
+            </div>
+</button>
+</main>
+</body></html>

@@ -1,21 +1,28 @@
-# Secrets
-.env
-
 # Python
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-
-# Local venvs
 .venv/
 venv/
 env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
 
-# OS/editor noise
+# Node / frontend builds
+node_modules/
+dist/
+build/
+
+# OS / editor
 .DS_Store
 Thumbs.db
 .vscode/
 
-# Optional local prototype folder (not part of Flask app release)
-student-mood-react/
+# Logs and local env
+*.log
+.env
+.env.*
+
+# Temporary archives
+*.zip

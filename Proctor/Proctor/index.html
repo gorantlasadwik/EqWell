@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Proctor Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--primary:#4FA8B0;--secondary:#648DAE;--tertiary:#E9A07E;--neutral:#5F7C83;--bg:#F4F8F9;--bg2:#EAF3F5;--ink:#18353b;--line:rgba(95,124,131,.14);--danger:#d96f63;--warn:#e7a962;--ok:#68b28e;--shadow:0 24px 60px rgba(24,53,59,.12);--r1:32px;--r2:22px;--r3:16px}
+    *{box-sizing:border-box}body{margin:0;font-family:"Manrope",sans-serif;background:radial-gradient(circle at 0 0,rgba(79,168,176,.16),transparent 28%),radial-gradient(circle at 100% 100%,rgba(233,160,126,.18),transparent 26%),var(--bg);color:var(--ink)}button,input,select{font:inherit}[hidden]{display:none!important}
+    .login{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(160deg,#f8fcfd,#edf5f7)}
+    .login-wrap{width:min(1120px,100%);display:grid;grid-template-columns:1.05fr .95fr;gap:22px}
+    .panel{background:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.7);backdrop-filter:blur(14px);border-radius:var(--r1);box-shadow:var(--shadow);padding:32px}
+    .eyebrow{margin:0 0 10px;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--secondary)}
+    .title{font:700 clamp(42px,6vw,68px)/.92 "Fraunces",serif;letter-spacing:-.04em;margin:0 0 12px}
+    .muted{color:var(--neutral);line-height:1.6}
+    .badge{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(145deg,var(--primary),#78c5cb);color:#fff;font-weight:800;font-size:24px;box-shadow:0 14px 26px rgba(79,168,176,.26)}
+    .top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{margin-top:16px}.label{display:block;margin-bottom:8px;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--neutral)}
+    .input,.select,.search,.filter{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.9);border-radius:18px;padding:14px 16px;outline:none;transition:.16s}.input:focus,.select:focus,.search:focus,.filter:focus{border-color:rgba(79,168,176,.55);box-shadow:0 0 0 4px rgba(79,168,176,.15);transform:translateY(-1px)}
+    .row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.btn,.ghost,.nav-btn,.icon{border:0;cursor:pointer;transition:.18s}.btn{padding:14px 22px;border-radius:999px;background:linear-gradient(135deg,#448f97,#69bac0);color:#fff;font-weight:800;box-shadow:0 16px 28px rgba(79,168,176,.24)}.ghost{padding:14px 18px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:700}.btn:hover,.ghost:hover,.nav-btn:hover,.icon:hover{transform:translateY(-1px)}
+    .notice{margin-top:14px;padding:12px 14px;border-radius:16px;background:rgba(217,111,99,.12);color:#a1453d;font-weight:700}.success{background:rgba(104,178,142,.14);color:#2f734f}
+    .showcase{background:linear-gradient(160deg,#1b6670,#244e6d);color:#edf8f9;position:relative;overflow:hidden}.showcase:before,.showcase:after{content:"";position:absolute;border-radius:999px}.showcase:before{width:250px;height:250px;right:-80px;top:-80px;background:rgba(255,255,255,.1)}.showcase:after{width:210px;height:210px;left:-50px;bottom:-90px;background:rgba(233,160,126,.16)}
+    .showcase h2{font:700 clamp(36px,5vw,58px)/.95 "Fraunces",serif;letter-spacing:-.04em;margin:0 0 12px;max-width:8ch}.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}.mini{padding:16px;border-radius:18px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12)}.mini strong{display:block;font-size:28px;margin-top:10px}.mini span,.showcase .muted{color:rgba(237,248,249,.8)}
+    .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}.sidebar{background:linear-gradient(180deg,#123e44,#102c34);color:#edf8f9;padding:18px 16px;display:flex;flex-direction:column;gap:18px}.brand,.profile,.watch{padding:14px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08)}.brand{display:flex;gap:12px;align-items:center}.mark{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#77c4ca,var(--primary));color:#fff;font-weight:800}
+    .nav{display:grid;gap:8px}.nav-btn{padding:14px 16px;border-radius:18px;background:transparent;color:rgba(237,248,249,.8);text-align:left;border:1px solid transparent;font-weight:700}.nav-btn.active,.nav-btn:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.08)}
+    .watch strong{display:block;font-size:30px;margin-top:8px}.profile{display:flex;gap:12px;align-items:center;margin-top:auto}.avatar{width:50px;height:50px;border-radius:16px;background:linear-gradient(145deg,#91bad7,var(--secondary));display:grid;place-items:center;font-weight:800}
+    .main{padding:20px}.bar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px}.menu{display:none}.headline h1{font:700 clamp(28px,4vw,44px)/.98 "Fraunces",serif;letter-spacing:-.03em;margin:0}.headline p{margin:8px 0 0;color:var(--neutral)}.actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.chip{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.8);border:1px solid var(--line);font-weight:700;color:var(--neutral)}.icon{width:46px;height:46px;border-radius:999px;border:1px solid var(--line);background:#fff}
+    .content{display:grid;gap:18px}.cards4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.hero-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:16px}.split{display:grid;grid-template-columns:1.45fr 1fr;gap:16px}.card{padding:22px;border-radius:var(--r2);background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.8);box-shadow:0 16px 38px rgba(24,53,59,.08)}
+    .stat{position:relative;overflow:hidden;min-height:164px}.stat:after{content:"";position:absolute;right:-34px;top:-24px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.18)}.teal{background:linear-gradient(145deg,var(--primary),#72c1c7);color:#fff}.blue{background:linear-gradient(145deg,var(--secondary),#89abc8);color:#fff}.orange{background:linear-gradient(145deg,var(--tertiary),#efb695);color:#51362f}.metric{font-size:40px;font-weight:800;margin:18px 0 6px}.hero{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;overflow:hidden;position:relative}.hero p{color:rgba(255,255,255,.84)}.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}.hero-box{padding:14px;border-radius:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12)}.hero-box strong{display:block;font-size:28px;margin-top:8px}
+    .section{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}.tools{display:flex;gap:12px;flex-wrap:wrap}.search{min-width:240px;flex:1 1 260px}.filter{min-width:160px}.pill{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}.vul{background:rgba(217,111,99,.14);color:#a44840}.wat{background:rgba(231,169,98,.16);color:#8e631d}.sta{background:rgba(104,178,142,.14);color:#2e724d}
+    .list{display:grid;gap:12px}.list-item{padding:16px;border-radius:18px;border:1px solid rgba(95,124,131,.1);background:linear-gradient(180deg,#fff,#f3f8f9);cursor:pointer;text-align:left}.list-top,.modal-head,.parent-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.list-item p{margin:8px 0 0;color:var(--neutral);line-height:1.5}
+    .table-wrap{overflow:auto;border-radius:20px;border:1px solid rgba(95,124,131,.1)}table{width:100%;border-collapse:collapse;min-width:980px}th,td{text-align:left;padding:14px 16px;border-bottom:1px solid rgba(95,124,131,.1);vertical-align:middle}th{font-size:12px;color:var(--neutral);text-transform:uppercase;letter-spacing:.1em;cursor:pointer;white-space:nowrap}tbody tr:hover{background:rgba(79,168,176,.06)}tbody tr.vrow{background:linear-gradient(90deg,rgba(233,160,126,.12),rgba(217,111,99,.04))}
+    .student strong,.session strong{display:block;font-size:15px}.student span,.session span,.sub{color:var(--neutral);font-size:13px}.ring{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--v)*1%),rgba(95,124,131,.12) 0)}.ring span{width:46px;height:46px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:12px;font-weight:800}.score{font-weight:800}.line{width:100%;height:10px;border-radius:999px;background:rgba(95,124,131,.12);overflow:hidden;margin-top:8px}.line span{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:999px}.feedback{max-width:25ch;line-height:1.5}
+    .chart{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;align-items:end;min-height:220px;margin-top:20px}.col{display:grid;gap:10px;justify-items:center}.bars{height:170px;display:flex;gap:8px;align-items:flex-end}.b{width:18px;border-radius:999px 999px 10px 10px}.stress{background:linear-gradient(180deg,var(--tertiary),var(--danger))}.happy{background:linear-gradient(180deg,var(--primary),var(--secondary))}.legend{display:flex;gap:16px;flex-wrap:wrap;color:var(--neutral);font-size:13px;margin-top:12px}.legend span:before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px}.legend .s:before{background:var(--tertiary)}.legend .h:before{background:var(--primary)}
+    .parent-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}.tile{padding:16px;border-radius:18px;background:linear-gradient(180deg,var(--bg2),#fff);border:1px solid rgba(95,124,131,.1)}.tile strong{display:block;margin-bottom:6px;font-size:12px;color:var(--neutral);text-transform:uppercase;letter-spacing:.08em}.contact{display:inline-flex;align-items:center;justify-content:center;padding:12px 16px;border-radius:14px;text-decoration:none;background:rgba(79,168,176,.12);color:#2a7b83;font-weight:800}
+    .view{display:none}.view.active{display:block;animation:rise .24s ease}.overlay{position:fixed;inset:0;background:rgba(16,42,47,.48);display:none;place-items:center;padding:18px;z-index:20}.overlay.active{display:grid}.modal{width:min(620px,100%);padding:24px;border-radius:28px;background:rgba(255,255,255,.98);box-shadow:0 30px 70px rgba(18,61,69,.22)}.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}.foot{color:var(--neutral);font-size:13px}
+    @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+    @media (max-width:1120px){.cards4,.hero-grid,.split,.login-wrap,.app{grid-template-columns:1fr}.sidebar{position:fixed;left:16px;top:16px;bottom:16px;width:min(320px,calc(100vw - 32px));transform:translateX(-120%);transition:.22s;z-index:10;border-radius:28px;box-shadow:0 28px 60px rgba(18,61,69,.22)}.app.open .sidebar{transform:none}.menu{display:grid;width:46px;height:46px;border-radius:999px;border:1px solid var(--line);background:#fff;place-items:center;cursor:pointer}}
+    @media (max-width:760px){.panel,.card,.modal{padding:20px}.grid2,.mini-grid,.hero-stats,.parent-grid,.modal-grid,.chart{grid-template-columns:1fr}.top,.bar,.section,.list-top,.modal-head,.parent-head,.row{flex-direction:column;align-items:flex-start}.actions,.tools{width:100%}.search,.filter{width:100%}}
+  </style>
+</head>
+<body>
+  <section class="login" id="loginView">
+    <div class="login-wrap">
+      <div class="panel">
+        <p class="eyebrow">Secure Proctor Login</p>
+        <div class="top">
+          <div>
+            <h1 class="title">Care-led student monitoring.</h1>
+            <p class="muted">A modern proctor workspace for monitoring assigned proctees, counselling feedback, wellbeing risk, and parent escalation readiness.</p>
+          </div>
+          <div class="badge">P</div>
+        </div>
+        <form id="loginForm">
+          <div class="field"><label class="label" for="email">Institution Email</label><input class="input" id="email" name="email" type="email" placeholder="proctor@campus.edu" required></div>
+          <div class="grid2">
+            <div class="field"><label class="label" for="pid">Proctor ID</label><input class="input" id="pid" name="pid" type="text" placeholder="PR-2048" required></div>
+            <div class="field"><label class="label" for="hostel">Assigned Hostel</label><select class="select" id="hostel" name="hostel" required><option value="">Select hostel group</option><option>Maple Block</option><option>Orchid House</option><option>Cedar Residence</option><option>Ash Hall</option></select></div>
+          </div>
+          <div class="field"><label class="label" for="password">Password</label><input class="input" id="password" name="password" type="password" minlength="8" placeholder="Enter password" required></div>
+          <div class="row" style="margin-top:18px"><button class="btn" type="submit">Enter Dashboard</button><button class="ghost" id="demoBtn" type="button">Use Demo Credentials</button></div>
+          <div class="notice" id="loginNotice" hidden></div>
+        </form>
+      </div>
+      <div class="panel showcase">
+        <div>
+          <p class="eyebrow" style="color:rgba(237,248,249,.78)">Mindful Campus</p>
+          <h2>Early signals. Faster support.</h2>
+          <p class="muted">Built for proctors to identify vulnerable students, inspect counselling trends, and open parent details from risk-aware workflows.</p>
+        </div>
+        <div>
+          <div class="mini-grid">
+            <div class="mini"><span>Assigned proctees</span><strong>30</strong></div>
+            <div class="mini"><span>High-risk flagged</span><strong>6</strong></div>
+            <div class="mini"><span>Tracked sessions</span><strong>18</strong></div>
+            <div class="mini"><span>Backend ready</span><strong>100%</strong></div>
+          </div>
+          <p class="muted" style="margin:18px 0 0">Responsive layout, dynamic mock JSON, sortable data, conditional highlighting, charts, and parent contact actions are included in one production-ready file.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="app" id="appView" hidden>
+    <aside class="sidebar">
+      <div class="brand"><div class="mark">MC</div><div><strong>Proctor Desk</strong><div class="sub">Mental well-being operations</div></div></div>
+      <nav class="nav">
+        <button class="nav-btn active" data-view="overview">Proctees Overview</button>
+        <button class="nav-btn" data-view="insights">Counselling Insights</button>
+        <button class="nav-btn" data-view="parent">Parent Info</button>
+        <button class="nav-btn" id="logoutBtn">Logout</button>
+      </nav>
+      <div class="watch"><div class="sub">Vulnerability Watch</div><strong id="flagCount">0</strong><div class="sub">Students crossing risk thresholds and ready for escalation.</div></div>
+      <div class="profile"><div class="avatar" id="avatar">AR</div><div><strong id="pname">Dr. Aditi Rao</strong><div class="sub" id="pmeta">Lead Proctor</div></div></div>
+    </aside>
+    <main class="main">
+      <div class="bar">
+        <div style="display:flex;align-items:center;gap:12px"><button class="menu" id="menuBtn">☰</button><div class="headline"><h1 id="pageTitle">Assigned Proctee Well-being</h1><p id="pageSub">Monitor proctees, counselling signals, and escalation-ready parent information.</p></div></div>
+        <div class="actions"><div class="chip">Live mock data</div><button class="icon" id="refreshBtn" type="button">↻</button><button class="ghost" id="topParentBtn" type="button">Highest-Risk Parent Info</button></div>
+      </div>
+      <div class="content">
+        <section class="view active" id="overview"></section>
+        <section class="view" id="insights"></section>
+        <section class="view" id="parent"></section>
+      </div>
+    </main>
+  </section>
+  <div class="overlay" id="modalWrap">
+    <div class="modal">
+      <div class="modal-head">
+        <div><p class="eyebrow">Parent Escalation Card</p><h3 id="mStudent">Selected Student</h3><p class="muted" id="mMeta" style="margin:8px 0 0"></p></div>
+        <button class="icon" id="closeModal" type="button">✕</button>
+      </div>
+      <div class="modal-grid" id="modalGrid"></div>
+      <div class="row" style="margin-top:18px"><a class="contact" id="mEmail" href="#">Send Email</a><a class="contact" id="mCall" href="#">Place Call</a></div>
+    </div>
+  </div>
+  <script>
+    const proctor={name:"Dr. Aditi Rao",id:"PR-2048",email:"aditi.rao@campus.edu",hostel:"Maple Block Cluster",role:"Lead Proctor"};
+    const students=[
+      ["Aarav Menon","22BCS101","Maple Block",38,79,74,81,69,73,77,"Engaged well in peer group and reports better academic control.","positive",18,1,"Mood has improved after study schedule support.","Raghav Menon","Father","raghav.menon@example.com","+91 90000 10001"],
+      ["Diya Kapoor","22BBA102","Orchid House",82,44,42,53,39,48,51,"Counsellor noted burnout signs and social withdrawal after midterms.","critical",91,3,"Requires parent update and closer hostel check-ins this week.","Neha Kapoor","Mother","neha.kapoor@example.com","+91 90000 10002"],
+      ["Kiran Sethi","22MEC103","Cedar Residence",67,58,61,64,56,60,66,"Academic pressure visible but student remains responsive to mentoring.","moderate",49,1,"Continue weekly check-ins until attendance stabilizes.","Amit Sethi","Father","amit.sethi@example.com","+91 90000 10003"],
+      ["Meera Nair","22ECE104","Ash Hall",74,62,63,70,58,67,69,"Reported exam fatigue but accepts campus support resources.","moderate",52,2,"Encourage sleep routine before finals window.","Anita Nair","Mother","anita.nair@example.com","+91 90000 10004"],
+      ["Rohan Das","22BCE105","Maple Block",29,84,82,86,80,74,83,"Good peer connection and consistent wellness activity scores.","positive",14,0,"No intervention currently required.","Soma Das","Mother","soma.das@example.com","+91 90000 10005"],
+      ["Ishita Verma","22CSE106","Orchid House",77,51,48,59,44,52,57,"Persistent stress and low sleep quality affecting class engagement.","concern",78,2,"Flag for proctor-parent call if scores do not recover.","Rajeev Verma","Father","rajeev.verma@example.com","+91 90000 10006"],
+      ["Nikhil Joseph","22EEE107","Cedar Residence",54,68,70,72,63,66,69,"Student is coping adequately and attends support sessions when needed.","positive",28,1,"Stable, with mild academic worries.","Lydia Joseph","Mother","lydia.joseph@example.com","+91 90000 10007"],
+      ["Tanya Bedi","22BDS108","Ash Hall",83,41,39,46,35,49,45,"Counselling notes indicate isolation and repeated missed meal patterns.","critical",94,4,"Urgent outreach advised with parent awareness.","Sanjay Bedi","Father","sanjay.bedi@example.com","+91 90000 10008"],
+      ["Arjun Patel","22CIV109","Maple Block",61,63,65,67,55,62,71,"Moderate concern, mostly linked to project deadlines.","moderate",42,1,"Monitor through the next assessment cycle.","Priya Patel","Mother","priya.patel@example.com","+91 90000 10009"],
+      ["Sana Ali","22ARC110","Orchid House",46,76,78,74,70,72,75,"Student is responsive and demonstrates healthy coping strategies.","positive",21,0,"Wellness indicators remain strong.","Farah Ali","Mother","farah.ali@example.com","+91 90000 10010"],
+      ["Kabir Singh","22BME111","Cedar Residence",79,47,45,54,43,58,52,"Reports high workload stress and reduced social contact.","concern",83,3,"Potential parent touchpoint if stress remains elevated.","Harpreet Singh","Father","harpreet.singh@example.com","+91 90000 10011"],
+      ["Lavanya Iyer","22CHE112","Ash Hall",34,81,79,84,76,74,80,"Consistently balanced indicators with good hostel engagement.","positive",17,0,"No current action needed.","Sridhar Iyer","Father","sridhar.iyer@example.com","+91 90000 10012"],
+      ["Rahul Khanna","22LAW113","Maple Block",71,59,57,63,54,60,65,"Some anxiety signs but responding positively to structured support.","moderate",55,2,"Review after the next moot court deadline.","Pooja Khanna","Mother","pooja.khanna@example.com","+91 90000 10013"],
+      ["Ananya Ghosh","22PSY114","Orchid House",58,67,69,66,61,64,72,"Self-awareness is good and the student follows coping plans.","positive",31,1,"Maintain optional sessions.","Subho Ghosh","Father","subho.ghosh@example.com","+91 90000 10014"],
+      ["Dev Malhotra","22BPH115","Cedar Residence",86,38,35,49,32,41,47,"Low energy, missed classes, and strong counsellor concern markers.","critical",96,4,"Immediate multidisciplinary support recommended.","Maya Malhotra","Mother","maya.malhotra@example.com","+91 90000 10015"],
+      ["Priyanshi Jain","22BFT116","Ash Hall",52,71,70,73,64,69,74,"Moderate academic stress but stable social and behavioral indicators.","positive",26,0,"Stable and proactive in wellbeing routine.","Mahesh Jain","Father","mahesh.jain@example.com","+91 90000 10016"],
+      ["Yash Arora","22MED117","Maple Block",76,49,47,58,45,50,56,"Clinical workload is affecting rest and mood recovery.","concern",80,2,"Watch closely; parent contact may help routine reset.","Ritu Arora","Mother","ritu.arora@example.com","+91 90000 10017"],
+      ["Sneha Pillai","22ECO118","Orchid House",43,78,76,79,73,71,77,"Balanced indicators and constructive use of support circles.","positive",19,0,"Stable with healthy participation.","Ramesh Pillai","Father","ramesh.pillai@example.com","+91 90000 10018"],
+      ["Aisha Thomas","22BCH119","Cedar Residence",69,60,58,66,57,63,68,"Needs light supervision due to moderate stress increase.","moderate",47,1,"Continue hostel-level encouragement.","George Thomas","Father","george.thomas@example.com","+91 90000 10019"],
+      ["Vikram Chawla","22MTH120","Ash Hall",32,83,81,85,78,75,82,"Healthy routine and positive faculty feedback.","positive",12,0,"No active concerns.","Kavita Chawla","Mother","kavita.chawla@example.com","+91 90000 10020"],
+      ["Pooja Reddy","22BTT121","Maple Block",81,46,43,52,38,47,50,"Reports homesickness and growing reluctance to engage socially.","critical",89,3,"Parent reassurance may support recovery.","Suresh Reddy","Father","suresh.reddy@example.com","+91 90000 10021"],
+      ["Ritwik Bose","22DES122","Orchid House",57,66,68,62,59,65,70,"Creative workload spikes but general functioning remains healthy.","positive",34,1,"Watch project submission period.","Arpita Bose","Mother","arpita.bose@example.com","+91 90000 10022"],
+      ["Nandini Kulkarni","22BLS123","Cedar Residence",48,73,71,75,66,70,76,"Functioning well with mild fluctuations in sleep.","positive",24,0,"Stable overall.","Minal Kulkarni","Mother","minal.kulkarni@example.com","+91 90000 10023"],
+      ["Harsh Vardhan","22BSA124","Ash Hall",73,55,54,61,52,57,60,"Showing mounting fatigue and lower social energy.","concern",69,2,"Place on watchlist for two weeks.","Sonal Vardhan","Mother","sonal.vardhan@example.com","+91 90000 10024"],
+      ["Mitali Shah","22LLB125","Maple Block",41,77,76,78,72,71,79,"Strong overall profile and supportive hostel network.","positive",20,0,"No interventions required.","Jayesh Shah","Father","jayesh.shah@example.com","+91 90000 10025"],
+      ["Omkar Deshmukh","22BSC126","Orchid House",65,61,60,65,58,62,67,"Mild emotional strain, but student is cooperative.","moderate",44,1,"Reassess after lab submissions.","Seema Deshmukh","Mother","seema.deshmukh@example.com","+91 90000 10026"],
+      ["Zara Khan","22BPH127","Cedar Residence",84,40,37,48,34,42,46,"Critical emotional fatigue with repeated counsellor escalation notes.","critical",95,4,"High priority case for parent and welfare coordination.","Imran Khan","Father","imran.khan@example.com","+91 90000 10027"],
+      ["Aditya Roy","22ENG128","Ash Hall",36,80,78,82,75,73,81,"Well-adjusted and socially connected.","positive",16,0,"Stable indicators.","Swati Roy","Mother","swati.roy@example.com","+91 90000 10028"],
+      ["Rhea Narang","22MGT129","Maple Block",78,50,49,57,46,51,58,"Anxiety levels remain high despite support attempts.","concern",82,3,"Parent outreach may reinforce care plan.","Alok Narang","Father","alok.narang@example.com","+91 90000 10029"],
+      ["Manav Gupta","22BCA130","Orchid House",45,74,72,76,68,69,73,"Healthy functioning with minor stress around submissions.","positive",23,0,"No escalation needed.","Preeti Gupta","Mother","preeti.gupta@example.com","+91 90000 10030"]
+    ].map(([name,reg,hostel,stress,happy,mood,behavior,sleep,fitness,quiz,feedback,level,concern,attendance,note,pname,relation,email,phone])=>{
+      const overall=Math.round((mood+behavior+sleep+fitness+quiz)/5);
+      const risk=Math.round(stress*.45+(100-happy)*.15+concern*.25+(100-overall)*.15);
+      const status=stress>75||concern>80||overall<55||level==="critical"?"vulnerable":stress>=65||concern>=55||overall<68||level==="concern"?"watch":"stable";
+      return {name,reg,hostel,stress,happy,mood,behavior,sleep,fitness,quiz,feedback,level,concern,attendance,note,parent:{name:pname,relation,email,phone},overall,risk,status};
+    });
+    const sessions=[
+      ["CS-7001","Diya Kapoor","Dr. R. Sen","2026-04-03T10:00:00","Burnout indicators and persistent withdrawal from peers.","Recommended urgent family awareness and reduced overload schedule.","critical"],
+      ["CS-7002","Tanya Bedi","Dr. Meenal Shah","2026-04-03T14:30:00","Food and sleep pattern concerns escalating.","Hostel and parent follow-up advised within 48 hours.","critical"],
+      ["CS-7003","Dev Malhotra","Dr. R. Sen","2026-04-02T11:15:00","Low attendance and depleted energy observed.","Immediate wellbeing case coordination requested.","critical"],
+      ["CS-7004","Ishita Verma","Dr. A. Bose","2026-04-02T16:00:00","Sleep debt impacting academic focus.","Monitor for one week and escalate if no recovery.","concern"],
+      ["CS-7005","Kabir Singh","Dr. Meenal Shah","2026-04-01T12:00:00","Student reports overload and poor social support.","Encourage structured social re-entry and parent briefing if needed.","concern"],
+      ["CS-7006","Pooja Reddy","Dr. A. Bose","2026-04-01T09:30:00","Homesickness and emotional strain persist.","Family reassurance may improve emotional regulation.","critical"],
+      ["CS-7007","Yash Arora","Dr. R. Sen","2026-03-31T15:45:00","Clinical rotation stress affecting rest quality.","Schedule check-ins around rotation days.","concern"],
+      ["CS-7008","Rhea Narang","Dr. Meenal Shah","2026-03-31T13:00:00","Anxiety still elevated though student is cooperative.","Parent consultation may support care adherence.","concern"],
+      ["CS-7009","Harsh Vardhan","Dr. A. Bose","2026-03-30T10:30:00","Fatigue and reduced energy noted.","Maintain watchlist placement for two weeks.","concern"],
+      ["CS-7010","Meera Nair","Dr. R. Sen","2026-03-29T14:00:00","Exam fatigue, but student remains engaged.","Promote sleep routine and hydration check-ins.","moderate"],
+      ["CS-7011","Kiran Sethi","Dr. Meenal Shah","2026-03-29T11:00:00","Stress around coursework remains moderate.","Continue mentoring; no immediate escalation.","moderate"],
+      ["CS-7012","Rahul Khanna","Dr. A. Bose","2026-03-28T16:15:00","Anxiety manageable with structured support.","Review after next major assessment.","moderate"],
+      ["CS-7013","Aisha Thomas","Dr. R. Sen","2026-03-27T12:45:00","Mild concern with improving coping.","Support through hostel engagement.","moderate"],
+      ["CS-7014","Nikhil Joseph","Dr. A. Bose","2026-03-27T09:00:00","Student is stable and cooperative.","Optional counselling only.","positive"],
+      ["CS-7015","Ananya Ghosh","Dr. Meenal Shah","2026-03-26T15:00:00","Good self-awareness and plan adherence.","Maintain optional support track.","positive"],
+      ["CS-7016","Aarav Menon","Dr. R. Sen","2026-03-25T11:30:00","Positive adjustment after timetable changes.","No escalation required.","positive"],
+      ["CS-7017","Zara Khan","Dr. Meenal Shah","2026-04-03T17:15:00","High emotional fatigue with repeated distress markers.","Immediate parent and welfare coordination recommended.","critical"],
+      ["CS-7018","Sana Ali","Dr. A. Bose","2026-03-24T10:00:00","Healthy coping maintained.","No intervention needed.","positive"]
+    ].map(([id,student,counsellor,date,feedback,notes,level])=>({id,student,counsellor,date,feedback,notes,level}));
+    const state={view:"overview",studentSort:{key:"risk",dir:"desc"},sessionSort:{key:"date",dir:"desc"},search:"",risk:"all",sStudent:"all",sLevel:"all",sDate:"",selected:null};
+    const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+    const avg=k=>Math.round(students.reduce((a,b)=>a+b[k],0)/students.length);
+    const dateFmt=v=>new Intl.DateTimeFormat("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}).format(new Date(v));
+    const cls=s=>s==="vulnerable"?"vul":s==="watch"?"wat":"sta";
+    const label=s=>s==="vulnerable"?"Vulnerable":s==="watch"?"Watchlist":"Stable";
+    const pColor=(t,v)=>t==="stress"?(v>75?"#d96f63":v>=60?"#e7a962":"#4FA8B0"):(v<45?"#d96f63":v<60?"#e7a962":"#68b28e");
+    function renderOverview(){
+      const vuln=students.filter(s=>s.status==="vulnerable"),watch=students.filter(s=>s.status==="watch"),top=[...vuln].sort((a,b)=>b.risk-a.risk).slice(0,6);
+      $("#flagCount").textContent=vuln.length;
+      $("#overview").innerHTML=`<div class="cards4">
+        <article class="card stat teal"><div class="eyebrow" style="color:rgba(255,255,255,.8)">Total Proctees</div><div class="metric">${students.length}</div><div>Assigned across hostel clusters.</div></article>
+        <article class="card stat blue"><div class="eyebrow" style="color:rgba(255,255,255,.8)">Average Happiness</div><div class="metric">${avg("happy")}%</div><div>Recent wellness and session trends.</div></article>
+        <article class="card stat orange"><div class="eyebrow" style="color:rgba(81,54,47,.7)">Vulnerable Students</div><div class="metric">${vuln.length}</div><div>High stress or counsellor concern.</div></article>
+        <article class="card stat"><div class="eyebrow">Overall Score</div><div class="metric">${avg("overall")}%</div><div>Behavior, mood, sleep, fitness, quiz.</div></article>
+      </div>
+      <div class="hero-grid">
+        <article class="card hero"><div class="eyebrow" style="color:rgba(255,255,255,.78)">Daily Snapshot</div><h3 style="font:700 clamp(28px,3vw,40px)/1.02 'Fraunces',serif;margin:10px 0 12px">Support students before small signals become bigger risks.</h3><p>The dashboard prioritizes proctees with elevated stress, weaker overall wellness, or concerning counselling notes so proctors can act early.</p>
+          <div class="hero-stats"><div class="hero-box"><span>Needs review</span><strong>${vuln.length+watch.length}</strong></div><div class="hero-box"><span>Sessions tracked</span><strong>${sessions.length}</strong></div><div class="hero-box"><span>Parent contacts ready</span><strong>${vuln.length}</strong></div></div>
+        </article>
+        <article class="card"><div class="section"><div><h3>Priority Cases</h3><p class="muted">Students requiring fast follow-up.</p></div><span class="pill vul">${vuln.length} flagged</span></div>
+          <div class="list">${top.map(s=>`<button class="list-item" data-open="${s.reg}" type="button"><div class="list-top"><div><strong>${s.name}</strong><div class="sub">${s.reg} • ${s.hostel}</div></div><span class="pill ${cls(s.status)}">${label(s.status)}</span></div><p>${s.feedback}</p></button>`).join("")}</div>
+        </article>
+      </div>
+      <article class="card">
+        <div class="section"><div><h3>Proctees Overview</h3><p class="muted">Sortable, filterable, backend-ready student monitoring.</p></div><div class="tools"><input class="search" id="studentSearch" placeholder="Search by name, reg number, hostel"><select class="filter" id="riskFilter"><option value="all">All students</option><option value="vulnerable">Vulnerable only</option><option value="watch">Watchlist only</option><option value="stable">Stable only</option></select></div></div>
+        <div class="table-wrap"><table><thead><tr><th data-sort="name">Student</th><th data-sort="hostel">Hostel</th><th data-sort="reg">Reg Number</th><th data-sort="stress">Stress</th><th data-sort="happy">Happiness</th><th data-sort="overall">Overall Score</th><th data-sort="level">Counselling Feedback</th><th data-sort="risk">Status</th></tr></thead><tbody id="studentRows"></tbody></table></div>
+      </article>`;
+      $("#studentSearch").value=state.search;$("#riskFilter").value=state.risk;renderStudentRows();
+      $("#studentSearch").oninput=e=>{state.search=e.target.value;renderStudentRows()};$("#riskFilter").onchange=e=>{state.risk=e.target.value;renderStudentRows()};
+      $$("#overview [data-sort]").forEach(th=>th.onclick=()=>{const k=th.dataset.sort;state.studentSort={key:k,dir:state.studentSort.key===k&&state.studentSort.dir==="asc"?"desc":"asc"};renderStudentRows()});
+      $$("#overview [data-open]").forEach(b=>b.onclick=()=>selectStudent(b.dataset.open,true));
+    }
+    function studentList(){
+      let list=[...students],q=state.search.trim().toLowerCase();if(q)list=list.filter(s=>[s.name,s.reg,s.hostel].some(v=>v.toLowerCase().includes(q)));if(state.risk!=="all")list=list.filter(s=>s.status===state.risk);
+      const {key,dir}=state.studentSort;list.sort((a,b)=>typeof a[key]==="string"?(dir==="asc"?a[key].localeCompare(b[key]):b[key].localeCompare(a[key])):(dir==="asc"?a[key]-b[key]:b[key]-a[key]));return list;
+    }
+    function renderStudentRows(){
+      $("#studentRows").innerHTML=studentList().map(s=>`<tr class="${s.status==="vulnerable"?"vrow":""}">
+        <td><div class="student"><strong>${s.name}</strong><span>${s.level[0].toUpperCase()+s.level.slice(1)} feedback</span></div></td>
+        <td>${s.hostel}</td><td>${s.reg}</td>
+        <td><div class="ring" style="--v:${s.stress};--c:${pColor("stress",s.stress)}"><span>${s.stress}%</span></div></td>
+        <td><div class="ring" style="--v:${s.happy};--c:${pColor("happy",s.happy)}"><span>${s.happy}%</span></div></td>
+        <td><div class="score">${s.overall}%</div><div class="line"><span style="width:${s.overall}%"></span></div></td>
+        <td><div class="feedback">${s.feedback}</div></td>
+        <td><div style="display:grid;gap:10px"><span class="pill ${cls(s.status)}">${label(s.status)}</span>${s.status==="vulnerable"?`<button class="ghost" data-open-parent="${s.reg}" type="button" style="padding:10px 14px">Open Parent Info</button>`:`<span class="sub">Monitor in dashboard</span>`}</div></td>
+      </tr>`).join("");
+      $$("#studentRows [data-open-parent]").forEach(b=>b.onclick=()=>selectStudent(b.dataset.openParent,true));
+    }
+    function renderInsights(){
+      $("#insights").innerHTML=`<div class="split">
+        <article class="card">
+          <div class="section"><div><h3>Counselling Sessions</h3><p class="muted">Feedback summaries, notes, and session attendance patterns.</p></div></div>
+          <div class="tools" style="margin-bottom:16px"><select class="filter" id="sStudent"></select><select class="filter" id="sLevel"><option value="all">All feedback levels</option><option value="critical">Critical</option><option value="concern">Concern</option><option value="moderate">Moderate</option><option value="positive">Positive</option></select><input class="filter" id="sDate" type="date"></div>
+          <div class="table-wrap"><table><thead><tr><th data-ssort="student">Proctee</th><th data-ssort="counsellor">Counsellor</th><th data-ssort="date">Date / Time</th><th data-ssort="level">Feedback</th><th>Notes</th></tr></thead><tbody id="sessionRows"></tbody></table></div>
+        </article>
+        <div style="display:grid;gap:16px">
+          <article class="card"><div class="section"><div><h3>Stress vs Happiness Trends</h3><p class="muted">Top vulnerable or watched students.</p></div></div><div class="chart" id="trendChart"></div><div class="legend"><span class="s">Stress level</span><span class="h">Happiness level</span></div></article>
+          <article class="card"><div class="section"><div><h3>Recent Insight Feed</h3><p class="muted">Latest counselling activity needing attention.</p></div></div><div class="list" id="insightList"></div></article>
+        </div>
+      </div>`;
+      $("#sStudent").innerHTML=`<option value="all">All proctees</option>${students.map(s=>`<option value="${s.name}">${s.name}</option>`).join("")}`;
+      $("#sStudent").value=state.sStudent;$("#sLevel").value=state.sLevel;$("#sDate").value=state.sDate;
+      $("#sStudent").onchange=e=>{state.sStudent=e.target.value;renderSessionRows()};$("#sLevel").onchange=e=>{state.sLevel=e.target.value;renderSessionRows()};$("#sDate").onchange=e=>{state.sDate=e.target.value;renderSessionRows()};
+      $$("#insights [data-ssort]").forEach(th=>th.onclick=()=>{const k=th.dataset.ssort;state.sessionSort={key:k,dir:state.sessionSort.key===k&&state.sessionSort.dir==="asc"?"desc":"asc"};renderSessionRows()});
+      renderSessionRows();renderTrend();
+    }
+    function sessionList(){
+      let list=[...sessions];if(state.sStudent!=="all")list=list.filter(s=>s.student===state.sStudent);if(state.sLevel!=="all")list=list.filter(s=>s.level===state.sLevel);if(state.sDate)list=list.filter(s=>s.date.startsWith(state.sDate));
+      const {key,dir}=state.sessionSort;list.sort((a,b)=>key==="date"?(dir==="asc"?new Date(a.date)-new Date(b.date):new Date(b.date)-new Date(a.date)):typeof a[key]==="string"?(dir==="asc"?a[key].localeCompare(b[key]):b[key].localeCompare(a[key])):(dir==="asc"?a[key]-b[key]:b[key]-a[key]));return list;
+    }
+    function renderSessionRows(){
+      const list=sessionList();
+      $("#sessionRows").innerHTML=list.map(s=>`<tr><td><div class="session"><strong>${s.student}</strong><span>${s.id}</span></div></td><td>${s.counsellor}</td><td>${dateFmt(s.date)}</td><td><span class="pill ${s.level==="critical"?"vul":s.level==="concern"?"wat":"sta"}">${s.level}</span></td><td><div class="feedback"><strong style="display:block;font-size:14px;margin-bottom:4px">${s.feedback}</strong><span class="sub">${s.notes}</span></div></td></tr>`).join("");
+      $("#insightList").innerHTML=list.slice(0,5).map(s=>`<article class="list-item" style="cursor:default"><div class="list-top"><div><strong>${s.student}</strong><div class="sub">${s.counsellor} • ${dateFmt(s.date)}</div></div><span class="pill ${s.level==="critical"?"vul":s.level==="concern"?"wat":"sta"}">${s.level}</span></div><p>${s.notes}</p></article>`).join("");
+    }
+    function renderTrend(){
+      $("#trendChart").innerHTML=[...students].sort((a,b)=>b.risk-a.risk).slice(0,6).map(s=>`<div class="col"><div class="bars"><div class="b stress" style="height:${Math.max(s.stress*1.6,20)}px" title="Stress ${s.stress}%"></div><div class="b happy" style="height:${Math.max(s.happy*1.6,20)}px" title="Happiness ${s.happy}%"></div></div><div class="sub" style="text-align:center">${s.name.split(" ")[0]}</div></div>`).join("");
+    }
+    function renderParent(){
+      const queue=[...students].filter(s=>s.status!=="stable").sort((a,b)=>b.risk-a.risk);
+      $("#parent").innerHTML=`<div class="split">
+        <article class="card"><div class="section"><div><h3>Parent Contact Profile</h3><p class="muted">Accessed from a selected vulnerable student.</p></div><span class="pill ${state.selected?cls(state.selected.status):"vul"}" id="riskPill">${state.selected?`${label(state.selected.status)} • Risk ${state.selected.risk}`:"Awaiting selection"}</span></div><div id="parentBody">${state.selected?parentMarkup(state.selected):`<p class="muted" style="margin:0">Select a vulnerable student from the overview, priority queue, or quick action button to open parent escalation details here.</p>`}</div></article>
+        <article class="card"><div class="section"><div><h3>Escalation Queue</h3><p class="muted">Students sorted by current risk score.</p></div></div><div class="list">${queue.map(s=>`<button class="list-item" data-queue="${s.reg}" type="button"><div class="list-top"><div><strong>${s.name}</strong><div class="sub">${s.parent.name} • ${s.parent.relation}</div></div><span class="pill ${cls(s.status)}">${s.risk}</span></div><p>${s.note}</p></button>`).join("")}</div><p class="foot">Mock contact buttons are ready for backend integration later.</p></article>
+      </div>`;
+      $$("#parent [data-queue]").forEach(b=>b.onclick=()=>selectStudent(b.dataset.queue,true));
+      if($("#openModalBtn"))$("#openModalBtn").onclick=()=>openModal(state.selected);
+    }
+    function parentMarkup(s){
+      return `<div><div class="parent-head"><div><div class="eyebrow">Ward Information</div><h3 style="font-size:28px;margin-top:8px">${s.name}</h3><p class="muted">${s.reg} • ${s.hostel} • Overall wellbeing ${s.overall}%</p></div><div class="ring" style="--v:${s.stress};--c:${pColor("stress",s.stress)}"><span>${s.stress}%</span></div></div>
+      <div class="parent-grid">
+        <div class="tile"><strong>Parent / Guardian</strong>${s.parent.name}</div>
+        <div class="tile"><strong>Relationship</strong>${s.parent.relation}</div>
+        <div class="tile"><strong>Email</strong>${s.parent.email}</div>
+        <div class="tile"><strong>Phone</strong>${s.parent.phone}</div>
+        <div class="tile"><strong>Counselling Context</strong>${s.feedback}</div>
+        <div class="tile"><strong>Recommended Action</strong>${s.status==="vulnerable"?"Immediate outreach recommended with hostel welfare coordination.":"Continue monitoring and prepare outreach if conditions worsen."}</div>
+      </div>
+      <div class="row" style="margin-top:18px"><a class="contact" href="mailto:${s.parent.email}?subject=${encodeURIComponent(`Well-being update for ${s.name}`)}">Email Parent</a><a class="contact" href="tel:${s.parent.phone.replace(/\s/g,"")}">Call Parent</a><button class="ghost" id="openModalBtn" type="button">Open Details Modal</button></div></div>`;
+    }
+    function openModal(s){
+      if(!s)return;$("#mStudent").textContent=s.name;$("#mMeta").textContent=`${s.reg} • ${s.hostel}`;
+      $("#modalGrid").innerHTML=`<div class="tile"><strong>Guardian</strong>${s.parent.name} (${s.parent.relation})</div><div class="tile"><strong>Contact</strong>${s.parent.email} • ${s.parent.phone}</div><div class="tile"><strong>Stress Level</strong>${s.stress}%</div><div class="tile"><strong>Happiness Level</strong>${s.happy}%</div><div class="tile"><strong>Overall Score</strong>${s.overall}%</div><div class="tile"><strong>Counsellor Note</strong>${s.note}</div>`;
+      $("#mEmail").href=`mailto:${s.parent.email}?subject=${encodeURIComponent(`Well-being update for ${s.name}`)}`;$("#mCall").href=`tel:${s.parent.phone.replace(/\s/g,"")}`;$("#modalWrap").classList.add("active");
+    }
+    function selectStudent(reg,goParent){
+      state.selected=students.find(s=>s.reg===reg)||null;renderParent();if(goParent)setView("parent");
+    }
+    function setView(v){
+      state.view=v;$$(".view").forEach(el=>el.classList.toggle("active",el.id===v));$$(".nav-btn[data-view]").forEach(el=>el.classList.toggle("active",el.dataset.view===v));
+      const meta={overview:["Assigned Proctee Well-being","Monitor proctees, counselling signals, and escalation-ready parent information."],insights:["Counselling Insights","Review session feedback, counsellor notes, and visual wellbeing trends."],parent:["Parent Escalation Details","Access parent and guardian contact information for vulnerable students."]};
+      $("#pageTitle").textContent=meta[v][0];$("#pageSub").textContent=meta[v][1];$("#appView").classList.remove("open");
+    }
+    function renderAll(){renderOverview();renderInsights();renderParent();setView(state.view)}
+    $("#loginForm").onsubmit=e=>{
+      e.preventDefault();const f=new FormData(e.target),email=f.get("email").trim(),pid=f.get("pid").trim(),hostel=f.get("hostel").trim(),pw=f.get("password"),n=$("#loginNotice");
+      let msg="";if(!email||!pid||!hostel||!pw)msg="All login fields are required before entering the dashboard.";else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))msg="Please enter a valid institutional email address.";else if(pw.length<8)msg="Password must be at least 8 characters long.";else if(email!==proctor.email||pid!==proctor.id)msg="Credentials not recognized. Use the demo credentials or configured proctor account.";
+      if(msg){n.hidden=false;n.className="notice";n.textContent=msg;return}
+      n.hidden=false;n.className="notice success";n.textContent="Login successful. Loading secure dashboard...";setTimeout(()=>{$("#loginView").hidden=true;$("#appView").hidden=false;$("#pname").textContent=proctor.name;$("#pmeta").textContent=`${proctor.role} • ${proctor.hostel}`;$("#avatar").textContent=proctor.name.split(" ").map(v=>v[0]).slice(0,2).join("");selectStudent([...students].sort((a,b)=>b.risk-a.risk)[0].reg,false);renderAll()},250)
+    };
+    $("#demoBtn").onclick=()=>{$("#email").value=proctor.email;$("#pid").value=proctor.id;$("#hostel").value="Maple Block";$("#password").value="Mindful@2026";$("#loginNotice").hidden=true};
+    $$(".nav-btn[data-view]").forEach(b=>b.onclick=()=>setView(b.dataset.view));
+    $("#logoutBtn").onclick=()=>{$("#appView").hidden=true;$("#loginView").hidden=false;$("#loginForm").reset();$("#loginNotice").hidden=true;$("#modalWrap").classList.remove("active")};
+    $("#topParentBtn").onclick=()=>{selectStudent([...students].sort((a,b)=>b.risk-a.risk)[0].reg,true);openModal(state.selected)};
+    $("#refreshBtn").onclick=()=>{renderAll();if(state.selected)selectStudent(state.selected.reg,false)};
+    $("#menuBtn").onclick=()=>$("#appView").classList.toggle("open");
+    $("#closeModal").onclick=()=>$("#modalWrap").classList.remove("active");
+    $("#modalWrap").onclick=e=>{if(e.target.id==="modalWrap")$("#modalWrap").classList.remove("active")};
+  </script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EqWell Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#a83836",
+                        "on-primary": "#eefbff",
+                        "on-tertiary-fixed-variant": "#50686f",
+                        "tertiary-dim": "#3f575d",
+                        "surface-container-highest": "#d2e4ff",
+                        "secondary-container": "#c1edd1",
+                        "surface-dim": "#c4dcff",
+                        "primary-fixed": "#aceaf9",
+                        "inverse-surface": "#000f21",
+                        "secondary-dim": "#345b46",
+                        "secondary-fixed-dim": "#b3dec3",
+                        "on-tertiary-container": "#465e64",
+                        "outline-variant": "#91b4e4",
+                        "primary-container": "#aceaf9",
+                        "outline": "#5a7da9",
+                        "error-container": "#fa746f",
+                        "on-secondary-fixed": "#204733",
+                        "inverse-on-surface": "#8e9eb7",
+                        "inverse-primary": "#aceaf9",
+                        "on-error": "#fff7f6",
+                        "surface-container-high": "#dce9ff",
+                        "on-secondary-container": "#335a44",
+                        "background": "#f8f9ff",
+                        "primary-dim": "#155b68",
+                        "surface-bright": "#f8f9ff",
+                        "on-surface": "#05345c",
+                        "on-secondary-fixed-variant": "#3d634e",
+                        "surface-tint": "#266774",
+                        "surface-container-low": "#eff4ff",
+                        "on-tertiary": "#eefbff",
+                        "on-error-container": "#6e0a12",
+                        "on-primary-fixed-variant": "#1f626f",
+                        "tertiary-container": "#dbf5fd",
+                        "surface-container": "#e5eeff",
+                        "surface-variant": "#d2e4ff",
+                        "on-primary-container": "#105865",
+                        "on-primary-fixed": "#00444f",
+                        "on-surface-variant": "#3d618c",
+                        "secondary-fixed": "#c1edd1",
+                        "on-tertiary-fixed": "#344c52",
+                        "surface": "#f8f9ff",
+                        "tertiary": "#4b6369",
+                        "error-dim": "#67040d",
+                        "on-background": "#05345c",
+                        "secondary": "#406751",
+                        "tertiary-fixed": "#dbf5fd",
+                        "tertiary-fixed-dim": "#cde7ee",
+                        "primary-fixed-dim": "#9edbeb",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#266774",
+                        "on-secondary": "#e6ffed"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9ff; }
+        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .tonal-shift { transition: background-color 0.3s ease; }
+    </style>
+</head>
+<body class="bg-background text-on-surface flex min-h-screen">
+<!-- SideNavBar (Shared Component) -->
+<aside class="hidden md:flex h-screen w-72 bg-slate-50 border-r-0 flex-col py-8 space-y-4 fixed left-0 top-0 z-40">
+<div class="px-8 mb-8">
+<h1 class="text-2xl font-black text-[#266774] tracking-tighter">EqWell</h1>
+<p class="text-xs font-medium text-slate-500 font-manrope">Digital Sanctuary</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center space-x-3 py-3 mx-2 rounded-xl text-[#266774] font-bold border-l-4 border-[#266774] pl-4 bg-slate-200/50" href="#">
+<span class="material-symbols-outlined" data-icon="spa">spa</span>
+<span class="font-manrope text-sm font-medium">Sanctuary</span>
+</a>
+<a class="flex items-center space-x-3 py-3 mx-2 rounded-xl text-slate-500 hover:bg-slate-200/50 transition-all pl-5" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-manrope text-sm font-medium">Insights</span>
+</a>
+<a class="flex items-center space-x-3 py-3 mx-2 rounded-xl text-slate-500 hover:bg-slate-200/50 transition-all pl-5" href="#">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-manrope text-sm font-medium">Pulse Check</span>
+</a>
+<a class="flex items-center space-x-3 py-3 mx-2 rounded-xl text-slate-500 hover:bg-slate-200/50 transition-all pl-5" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-manrope text-sm font-medium">Community</span>
+</a>
+<a class="flex items-center space-x-3 py-3 mx-2 rounded-xl text-slate-500 hover:bg-slate-200/50 transition-all pl-5" href="#">
+<span class="material-symbols-outlined" data-icon="library_books">library_books</span>
+<span class="font-manrope text-sm font-medium">Resources</span>
+</a>
+</nav>
+<div class="px-4 py-4 mt-auto space-y-4">
+<button class="w-full bg-gradient-to-r from-primary to-primary-dim text-on-primary py-3 rounded-xl font-semibold shadow-lg shadow-primary/10 active:scale-95 duration-200">
+                Quick Pulse
+            </button>
+<div class="pt-4 space-y-2">
+<a class="flex items-center space-x-3 px-4 py-2 text-slate-500 text-sm font-manrope hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help_outline">help_outline</span>
+<span>Support</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-2 text-slate-500 text-sm font-manrope hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="lock">lock</span>
+<span>Privacy</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-72 flex flex-col min-h-screen">
+<!-- TopAppBar (Shared Component) -->
+<header class="fixed top-0 md:left-72 right-0 z-30 bg-slate-50/80 backdrop-blur-xl flex justify-between items-center px-8 py-4">
+<div class="flex items-center space-x-4">
+<h2 class="text-xl font-bold tracking-tighter text-[#266774] font-manrope">System Overview</h2>
+</div>
+<div class="flex items-center space-x-6">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-lowest border-none rounded-full text-sm focus:ring-2 focus:ring-primary-container w-64" placeholder="Search parameters..." type="text"/>
+</div>
+<div class="flex items-center space-x-3">
+<button class="p-2 text-slate-500 hover:bg-slate-100/50 rounded-full transition-all active:scale-95" title="Notifications">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-100/50 rounded-full transition-all active:scale-95" title="Settings">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="h-10 w-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img alt="User profile" class="h-full w-full object-cover" data-alt="professional portrait of a male administrator in a clean modern office setting with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrr-zzT0niCG9FiliPxuwtvpxLn59bU6BELojYEOY4qdQaXymsHpOfwifAX6WALaJGhbJbqvWxczkcF8-23Lo3v3pSEDYo5Tag9W2MXsA1oIpzvX2Y56zRobPkae8zhbOkBOh_rqyePfgUzOKpLzIAGRxSumqoDJRkdwHkJnUocxpXjMqMjt6jTqkJ_8P2hVMjY3Y2EPQ4h6CgJENW6FyIsIRsyA72ysF7pochZimsWJ2aitreLzssH5Ra2aifhCpfmo6OiQbNDo4k"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="mt-20 p-8 space-y-8">
+<!-- Hero Section: System Overview (Bento Grid) -->
+<section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+<!-- Primary Status Card -->
+<div class="md:col-span-2 bg-surface-container-lowest p-8 rounded-[2rem] flex flex-col justify-between shadow-sm border border-outline-variant/10">
+<div>
+<div class="flex justify-between items-start mb-6">
+<div>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase">Live Status</span>
+<h3 class="text-3xl font-extrabold text-on-surface mt-4 tracking-tight">Campus Harmony Index</h3>
+</div>
+<div class="text-right">
+<p class="text-4xl font-black text-primary">84%</p>
+<p class="text-xs text-slate-400 font-medium">+2.4% from last week</p>
+</div>
+</div>
+<p class="text-on-surface-variant max-w-md leading-relaxed">System-wide sentiment is currently elevated. Data reflects aggregated metrics from 1,240 active participants across 4 campuses.</p>
+</div>
+<div class="mt-8 flex gap-2 overflow-hidden h-16 items-end">
+<div class="flex-1 bg-primary-container/20 rounded-t-lg h-3/4"></div>
+<div class="flex-1 bg-primary-container/30 rounded-t-lg h-1/2"></div>
+<div class="flex-1 bg-primary-container/40 rounded-t-lg h-full"></div>
+<div class="flex-1 bg-primary-container/20 rounded-t-lg h-2/3"></div>
+<div class="flex-1 bg-primary-container/30 rounded-t-lg h-5/6"></div>
+<div class="flex-1 bg-primary-container/50 rounded-t-lg h-3/4"></div>
+<div class="flex-1 bg-primary-container/20 rounded-t-lg h-1/2"></div>
+</div>
+</div>
+<!-- Active Sessions Card -->
+<div class="bg-tertiary-container p-8 rounded-[2rem] flex flex-col justify-between border border-outline-variant/5">
+<span class="material-symbols-outlined text-on-tertiary-container text-4xl" data-icon="pulse">monitoring</span>
+<div>
+<h4 class="text-on-tertiary-container font-bold text-xl mt-4">Active Pulse</h4>
+<p class="text-on-tertiary-fixed-variant text-sm mt-1">428 users currently checking in</p>
+</div>
+<div class="mt-4 pt-4 border-t border-on-tertiary-container/10">
+<button class="text-primary font-bold text-sm flex items-center group">
+                            View Live Map
+                            <span class="material-symbols-outlined ml-1 group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Warning/Alert Card -->
+<div class="bg-surface-container-high p-8 rounded-[2rem] flex flex-col justify-between">
+<div class="flex justify-between items-center">
+<span class="material-symbols-outlined text-error" data-icon="warning">warning</span>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Threshold Alert</span>
+</div>
+<div>
+<h4 class="text-on-surface font-bold text-lg mt-4">Section B-4</h4>
+<p class="text-on-surface-variant text-xs mt-1">Slight anomaly in anxiety markers detected. Recommended observation.</p>
+</div>
+<button class="mt-4 w-full py-2 bg-surface-container-lowest rounded-xl text-xs font-bold text-primary hover:bg-white transition-colors">
+                        Investigate
+                    </button>
+</div>
+</section>
+<!-- Secondary Section: Management & Configuration -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- System Settings (Weighting Parameters) -->
+<div class="lg:col-span-2 space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-2xl font-bold tracking-tight text-on-surface">Stress Model Weighting</h3>
+<button class="text-primary font-semibold text-sm">Reset Defaults</button>
+</div>
+<div class="bg-surface-container-low p-8 rounded-[2.5rem] space-y-8">
+<!-- Parameter Slider 1 -->
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<div>
+<h5 class="text-sm font-bold text-on-surface">Academic Load Variance</h5>
+<p class="text-xs text-on-surface-variant">Influences stress perception during exam periods</p>
+</div>
+<span class="text-primary font-bold">0.85</span>
+</div>
+<div class="relative h-2 bg-slate-200 rounded-full overflow-hidden">
+<div class="absolute h-full bg-primary" style="width: 85%;"></div>
+<div class="absolute h-4 w-4 bg-white border-2 border-primary rounded-full top-1/2 -translate-y-1/2 -ml-2" style="left: 85%;"></div>
+</div>
+</div>
+<!-- Parameter Slider 2 -->
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<div>
+<h5 class="text-sm font-bold text-on-surface">Circadian Rhythm Alignment</h5>
+<p class="text-xs text-on-surface-variant">Sensitivity to irregular sleep patterns in insights</p>
+</div>
+<span class="text-primary font-bold">0.42</span>
+</div>
+<div class="relative h-2 bg-slate-200 rounded-full overflow-hidden">
+<div class="absolute h-full bg-primary" style="width: 42%;"></div>
+<div class="absolute h-4 w-4 bg-white border-2 border-primary rounded-full top-1/2 -translate-y-1/2 -ml-2" style="left: 42%;"></div>
+</div>
+</div>
+<!-- Parameter Slider 3 -->
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<div>
+<h5 class="text-sm font-bold text-on-surface">Social Isolation Markers</h5>
+<p class="text-xs text-on-surface-variant">Weight of digital interaction versus physical presence</p>
+</div>
+<span class="text-primary font-bold">0.68</span>
+</div>
+<div class="relative h-2 bg-slate-200 rounded-full overflow-hidden">
+<div class="absolute h-full bg-primary" style="width: 68%;"></div>
+<div class="absolute h-4 w-4 bg-white border-2 border-primary rounded-full top-1/2 -translate-y-1/2 -ml-2" style="left: 68%;"></div>
+</div>
+</div>
+<div class="pt-4">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-xl font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+                                Apply Model Changes
+                            </button>
+</div>
+</div>
+</div>
+<!-- User Management (Wardens & Counsellors) -->
+<div class="space-y-6">
+<h3 class="text-2xl font-bold tracking-tight text-on-surface">Personnel</h3>
+<div class="bg-white rounded-[2.5rem] p-6 shadow-sm border border-outline-variant/10">
+<div class="space-y-6">
+<!-- Person 1 -->
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<div class="h-12 w-12 rounded-2xl bg-surface-container overflow-hidden">
+<img alt="Counselor Profile" class="h-full w-full object-cover" data-alt="headshot of a middle-aged woman with a friendly expression in a bright professional environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSeFLptzSxUrqZGfyQrqhjAnfTBuNSkghe5tta3bGZejJsldhs1-jaZobIfNeX4ekcx7UfXZNx5LSDXEZkywc0C5WoErQ75xRK3xUp8s2ZY1YA98DyDLVIVUyiwNUTA9BWpewd-xPd_2w42AssF7Rps3ZF22XJlzVQeCrF7nkZX2cFVYJLVKavATRw_5cVgb0KfTrRyhkVIu8uBVuC8wmESd3Fsfwmw_bSkTPaRkxED0YVElnT32w9UajcAvuMwlogcOZngzzRdqqN"/>
+</div>
+<div>
+<h6 class="text-sm font-bold text-on-surface">Dr. Aris Thorne</h6>
+<p class="text-[10px] font-bold text-primary tracking-widest uppercase">Lead Counsellor</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer" data-icon="more_vert">more_vert</span>
+</div>
+<!-- Person 2 -->
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<div class="h-12 w-12 rounded-2xl bg-surface-container overflow-hidden">
+<img alt="Warden Profile" class="h-full w-full object-cover" data-alt="portrait of a man with glasses smiling gently against a blurred bookshelf background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA72QjQomvWwBWsf2qQBSGafLahNfPsSujiZj-MB7h9VaGSmpEzDgE890BtJIDGPb52srEhjQLaY-2hioa34t-1UZtgBPgX3IFeICkhP4KSnA6EegXWhcIHyMd9QXOa6Zh7rNN_lmclJ4iA3dr2Su9e1W55-RTEP5r9hFALKZIuW-gNhBzS808i_tVj6WxN9EYwCxs_X4rbeXVIBDte-5yBKkfgfTElnqIdxbccgZ00XXlBWNw-b0pX0uW_gd6vQjpAX4QbL8KlHOj8"/>
+</div>
+<div>
+<h6 class="text-sm font-bold text-on-surface">Warden Silas</h6>
+<p class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">West Wing Warden</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer" data-icon="more_vert">more_vert</span>
+</div>
+<!-- Person 3 -->
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<div class="h-12 w-12 rounded-2xl bg-surface-container overflow-hidden">
+<img alt="Staff Profile" class="h-full w-full object-cover" data-alt="professional woman in a modern workspace looking thoughtfully at the camera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOX77y7OsIudUo3rJzSmEOmYqT8ewzJKBfPBNQzIgtNubACnAggfG2XYjsyqmZaYk9lZVmdpJrJhErlIBNoheR3FyQxE2CMB2NfRyLsvRedKiT78rd9WFglBMxZx-Grn3lCWqnSa3CwQoEmkmfTu5HayK2i-B0jMUo8kqKluT3d2O6lAvExf11v2XwsGH8fndmNcQUDtt9gtRI_uFQ_dVjj-nDM7Wq0FlCE0HHD8EJldaryYYVOdFbJ8l9uxT8PoyOWEe9F8phd_ai"/>
+</div>
+<div>
+<h6 class="text-sm font-bold text-on-surface">Elena Vance</h6>
+<p class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Wellbeing Liaison</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer" data-icon="more_vert">more_vert</span>
+</div>
+</div>
+<button class="w-full mt-8 py-4 border-2 border-dashed border-outline-variant rounded-2xl text-slate-400 font-bold text-sm hover:bg-slate-50 transition-colors">
+                            + Add New Staff
+                        </button>
+</div>
+</div>
+</section>
+<!-- Bottom Section: Aggregated Reports -->
+<section class="pb-12">
+<div class="flex items-end justify-between mb-8">
+<div>
+<h3 class="text-2xl font-bold tracking-tight text-on-surface">Aggregated Intelligence</h3>
+<p class="text-sm text-on-surface-variant">Long-term wellbeing trends without individual tracking.</p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-surface-container rounded-lg text-sm font-semibold text-primary">Monthly</button>
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-sm font-semibold text-slate-500">Quarterly</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Report Card 1 -->
+<div class="bg-surface-container-low p-8 rounded-[2rem] relative overflow-hidden group">
+<div class="relative z-10 flex flex-col h-full justify-between">
+<div>
+<h4 class="text-xl font-bold text-on-surface">Resilience Report</h4>
+<p class="text-sm text-on-surface-variant mt-2 max-w-xs">Analysis of collective recovery rates post-assessment periods across all faculties.</p>
+</div>
+<div class="mt-12 flex items-center space-x-4">
+<button class="bg-white text-primary px-6 py-2 rounded-full font-bold text-xs shadow-sm hover:shadow-md transition-all">Download PDF</button>
+<span class="text-[10px] font-bold text-slate-400 uppercase">Size: 4.2 MB</span>
+</div>
+</div>
+<span class="material-symbols-outlined absolute -right-8 -bottom-8 text-[12rem] text-primary/5 -rotate-12 group-hover:rotate-0 transition-transform duration-700" data-icon="description">description</span>
+</div>
+<!-- Report Card 2 -->
+<div class="bg-surface-container-low p-8 rounded-[2rem] relative overflow-hidden group">
+<div class="relative z-10 flex flex-col h-full justify-between">
+<div>
+<h4 class="text-xl font-bold text-on-surface">Engagement Metrics</h4>
+<p class="text-sm text-on-surface-variant mt-2 max-w-xs">Tracking peak sanctuary usage times to optimize on-site counsellor availability.</p>
+</div>
+<div class="mt-12 flex items-center space-x-4">
+<button class="bg-white text-primary px-6 py-2 rounded-full font-bold text-xs shadow-sm hover:shadow-md transition-all">Open Report</button>
+<span class="text-[10px] font-bold text-slate-400 uppercase">Last updated: 2h ago</span>
+</div>
+</div>
+<span class="material-symbols-outlined absolute -right-8 -bottom-8 text-[12rem] text-primary/5 -rotate-12 group-hover:rotate-0 transition-transform duration-700" data-icon="timeline">timeline</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>
