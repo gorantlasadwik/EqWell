@@ -6801,9 +6801,9 @@ def student_google_fit_callback():
         flash(f"Google Fit connected, but sync failed: {fit_error}", "error")
     elif (fit_payload or {}).get("steps_source") == "api-no-points":
         flash(
-            "Google Fit connected, but Google API returned no step data for this account yet. "
-            "Reconnect and select the exact Google account that shows steps in your fitness app.",
-            "error",
+            "Google Fit connected successfully. Google API returned no step points right now, "
+            "so EqWell is using 0 steps for this sync. Login and dashboard access continue normally.",
+            "success",
         )
     else:
         flash("Google Fit connected successfully and wellbeing score updated.", "success")
