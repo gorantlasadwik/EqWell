@@ -26,3 +26,6 @@ Thumbs.db
 
 # Temporary archives
 *.zip
+
+# Local legacy workspace snapshot (not part of clean repo layout)
+frontend/

@@ -127,7 +127,10 @@ else:
     SCORE_DB_PATH = Path(__file__).resolve().with_name("eqwell_scores.db")
 EQWELL_ENABLE_MOCK_LOGINS = read_env_bool("EQWELL_ENABLE_MOCK_LOGINS", True)
 EQWELL_SEED_MOCK_DATA = read_env_bool("EQWELL_SEED_MOCK_DATA", True)
-QUIZ_MODES_DIR = Path(__file__).resolve().parents[2] / "final" / "quiz questions"
+QUIZ_MODES_DIR = Path(__file__).resolve().parent / "quiz_questions"
+if not QUIZ_MODES_DIR.exists():
+    # Backward-compatible fallback when running from legacy repository layout.
+    QUIZ_MODES_DIR = Path(__file__).resolve().parent.parent / "final" / "quiz questions"
 QUIZ_MODE_QUESTION_LIMIT = max(5, min(read_env_int("QUIZ_MODE_QUESTION_LIMIT", 10), 25))
 EQWELL_DEBUG_SIGNAL_LOGS = os.getenv("EQWELL_DEBUG_SIGNAL_LOGS", "1").strip().lower() in {
     "1",
