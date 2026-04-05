@@ -50,7 +50,21 @@ def should_use_mobile_templates():
 
     user_agent = str(request.user_agent.string or "")
     is_mobile_agent = bool(MOBILE_USER_AGENT_PATTERN.search(user_agent))
+    platform_hint = str(request.headers.get("Sec-CH-UA-Platform", "") or "").strip().strip('"').lower()
+    mobile_hint = str(request.headers.get("Sec-CH-UA-Mobile", "") or "").strip().lower()
+    model_hint = str(request.headers.get("Sec-CH-UA-Model", "") or "").strip().strip('"').lower()
+
+    is_mobile_platform = any(token in platform_hint for token in {"android", "ios", "iphone", "ipad", "ipados"})
+    has_mobile_model = bool(model_hint and model_hint not in {"?", "unknown", "none", "null"})
+    is_mobile_client_hint = mobile_hint == "?1"
+
     if is_mobile_agent:
+        return True
+    if is_mobile_platform:
+        return True
+    if has_mobile_model:
+        return True
+    if is_mobile_client_hint:
         return True
 
     forced_view = str(request.args.get("view", "")).strip().lower()
