@@ -159,7 +159,13 @@ configured_db_path = str(os.getenv("EQWELL_DB_PATH", "")).strip()
 is_vercel_runtime = os.getenv("VERCEL", "").strip() == "1"
 if configured_db_path:
     score_db_candidate = Path(configured_db_path).expanduser()
-    if not score_db_candidate.is_absolute():
+    if is_vercel_runtime:
+        if not score_db_candidate.is_absolute():
+            score_db_candidate = Path("/tmp") / score_db_candidate.name
+        normalized_db_path = str(score_db_candidate).replace("\\", "/")
+        if not normalized_db_path.startswith("/tmp/"):
+            score_db_candidate = Path("/tmp") / score_db_candidate.name
+    elif not score_db_candidate.is_absolute():
         score_db_candidate = (Path(__file__).resolve().parent / score_db_candidate).resolve()
     SCORE_DB_PATH = score_db_candidate
 else:
