@@ -29,6 +29,15 @@ table {
   overflow-x: auto;
 }
 
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table-wrap table {
+  min-width: 620px;
+}
+
 @media (max-width: 1100px) {
   .app-shell {
     display: block !important;
@@ -75,6 +84,28 @@ table {
     margin-left: 0 !important;
   }
 
+  [class*="grid-cols-2"],
+  [class*="grid-cols-3"],
+  [class*="grid-cols-4"],
+  [class*="grid-cols-5"],
+  [class*="grid-cols-6"],
+  [class*="sm:grid-cols-"],
+  [class*="md:grid-cols-"],
+  [class*="lg:grid-cols-"],
+  [class*="xl:grid-cols-"],
+  [class*="2xl:grid-cols-"],
+  [class*="grid-cols-["] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  [class*="sm:col-span-"],
+  [class*="md:col-span-"],
+  [class*="lg:col-span-"],
+  [class*="xl:col-span-"],
+  [class*="2xl:col-span-"] {
+    grid-column: auto / span 1 !important;
+  }
+
   [class*="px-10"],
   [class*="px-8"] {
     padding-left: 14px !important;
@@ -92,7 +123,59 @@ table {
   }
 }
 
+@media (max-width: 900px) {
+  .flex.items-center.justify-between,
+  .flex.justify-between.items-center,
+  .flex.items-start.justify-between,
+  .flex.flex-wrap.items-start.justify-between,
+  .flex.flex-wrap.items-center.justify-between,
+  header.flex.items-center.justify-between,
+  header.flex.flex-wrap.items-start.justify-between {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+
+  [class*="text-4xl"] {
+    font-size: clamp(1.65rem, 6.9vw, 2rem) !important;
+    line-height: 1.1 !important;
+  }
+
+  [class*="text-3xl"] {
+    font-size: clamp(1.35rem, 6.2vw, 1.75rem) !important;
+    line-height: 1.14 !important;
+  }
+
+  [class*="text-2xl"] {
+    font-size: clamp(1.1rem, 5.6vw, 1.45rem) !important;
+    line-height: 1.18 !important;
+  }
+}
+
 @media (max-width: 760px) {
+  main,
+  .main {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  article,
+  section,
+  .chart-card,
+  .panel-card,
+  .soft-card,
+  .deep-card,
+  .analytics-subcard,
+  .wellbeing-card {
+    border-radius: 18px !important;
+  }
+
+  [class*="h-72"],
+  [class*="h-64"],
+  .chart-box {
+    height: 220px !important;
+  }
+
   .slot-calendar-grid {
     gap: 6px !important;
   }

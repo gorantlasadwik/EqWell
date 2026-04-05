@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
   <meta charset="utf-8" />
@@ -417,7 +417,7 @@
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
   </style>
-  <link rel="stylesheet" href="mobile-overrides.css" />
+  <link rel="stylesheet" href="/mobile-overrides.css" />
 </head>
 <body class="counsellor-ui font-body text-on-surface antialiased overflow-x-hidden">
   {% set page = counsellor_page | default('dashboard') %}
@@ -971,7 +971,7 @@
             + '<p class="text-xs text-stone-500">' + item.reg_number + '</p>'
             + '</td>'
             + '<td class="px-4 py-3 text-stone-600">' + item.hostel + '</td>'
-            + '<td class="px-4 py-3 text-stone-600">' + formatDate(item.date) + ' â€¢ ' + item.time + '</td>'
+            + '<td class="px-4 py-3 text-stone-600">' + formatDate(item.date) + ' • ' + item.time + '</td>'
             + '<td class="px-4 py-3"><span class="tiny-pill ' + urgencyClass(item.urgency) + '">' + labelCase(item.urgency) + '</span></td>'
             + '<td class="px-4 py-3"><span class="tiny-pill ' + statusClass(item.status) + '">' + labelCase(item.status) + '</span></td>'
             + '<td class="px-4 py-3"><button class="open-student-btn px-3 py-1.5 rounded-full bg-[#111723] text-white text-xs font-bold hover:opacity-90" data-student-id="' + item.student_id + '" type="button">Open</button></td>'
@@ -1000,7 +1000,7 @@
         var tone = riskTone(student.stress_category);
         if (els.studentName) els.studentName.textContent = student.name;
         if (els.studentMeta) {
-          els.studentMeta.textContent = [student.department, student.year, student.hostel, student.reg_number].join(' â€¢ ');
+          els.studentMeta.textContent = [student.department, student.year, student.hostel, student.reg_number].join(' • ');
         }
         if (els.stressScore) els.stressScore.textContent = String(clampPercent(student.stress_level));
         if (els.analyticsRing) {
@@ -1018,7 +1018,7 @@
             els.noteList.innerHTML = '<p class="rounded-xl border border-[#ded8cf] bg-white px-3 py-2">No interventions recorded yet.</p>';
           } else {
             els.noteList.innerHTML = notes.map(function (note) {
-            return '<p class="rounded-xl border border-[#ded8cf] bg-white px-3 py-2">â€¢ ' + note + '</p>';
+            return '<p class="rounded-xl border border-[#ded8cf] bg-white px-3 py-2">• ' + note + '</p>';
             }).join('');
           }
         }

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -11,7 +11,7 @@
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
     :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
   </style>
-  <link rel="stylesheet" href="mobile-overrides.css" />
+  <link rel="stylesheet" href="/mobile-overrides.css" />
 </head>
 <body class="bg-[#ece8e2] font-['Inter'] text-[#1a1c22] antialiased">
   <aside class="fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-40">
@@ -42,7 +42,7 @@
             <div class="flex items-center justify-between gap-2">
               <div>
                 <p class="font-semibold text-[#1e304c]">{{ student.name }}</p>
-                <p class="text-xs text-stone-500 mt-1">{{ student.email }} â€¢ {{ student.hostel_block }}</p>
+                <p class="text-xs text-stone-500 mt-1">{{ student.email }} • {{ student.hostel_block }}</p>
               </div>
               <span class="px-2.5 py-1 rounded-full text-xs font-bold {% if student.stress_category == 'HIGH' %}bg-[#f9e8ed] text-[#7a2f49]{% elif student.stress_category == 'MODERATE' %}bg-[#fff2d5] text-[#7b5a23]{% else %}bg-[#e4f3e8] text-[#31593a]{% endif %}">{{ student.status_label }}</span>
             </div>
@@ -75,7 +75,7 @@
         var attemptHtml = attempts.map(function (item) {
           return '<li class="rounded-xl border border-[#e6dfd4] bg-[#faf7f2] p-2">' +
               '<p class="font-semibold text-[#1f3250]">' + String(item.quiz_title || 'Quiz') + '</p>' +
-              '<p class="text-xs text-stone-500 mt-1">Score ' + String(item.score_percent || 0) + '% â€¢ ' + String(item.risk_band || 'MODERATE') + ' â€¢ ' + String(item.created_at_label || 'recently') + '</p>' +
+              '<p class="text-xs text-stone-500 mt-1">Score ' + String(item.score_percent || 0) + '% • ' + String(item.risk_band || 'MODERATE') + ' • ' + String(item.created_at_label || 'recently') + '</p>' +
             '</li>';
         }).join('');
 
