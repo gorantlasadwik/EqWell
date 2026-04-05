@@ -3205,16 +3205,23 @@ def authenticate_portal_user(role, email, password):
             return None, "Invalid credentials for selected role."
         return account, ""
 
-    # Backward-compatible fallback to in-memory demo credentials.
-    role_data = CREDENTIALS.get(safe_role)
-    if role_data and safe_email == role_data.get("email") and raw_password == role_data.get("password"):
-        return {
-            "id": 0,
-            "name": str(role_data.get("name", safe_role.title())),
-            "email": safe_email,
-            "role": safe_role,
-            "status": "approved",
-        }, ""
+    # Backward-compatible fallback to in-memory demo credentials when DB is unavailable.
+    if EQWELL_ENABLE_MOCK_LOGINS:
+        for mock_account in get_mock_showcase_accounts():
+            if mock_account.get("role") != safe_role:
+                continue
+            if safe_email != str(mock_account.get("email", "")).strip().lower():
+                continue
+            if raw_password != str(mock_account.get("password", "")):
+                continue
+            return {
+                "id": 0,
+                "name": str(mock_account.get("name", safe_role.title())),
+                "email": safe_email,
+                "role": safe_role,
+                "status": "approved",
+            }, ""
+
     return None, "Invalid credentials for selected role."
 
 
