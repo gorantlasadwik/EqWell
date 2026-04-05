@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EqWell | Wellbeing Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  <style id="card-wrap-guard">
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+  <link rel="stylesheet" href="mobile-overrides.css" />
+</head>
+<body class="folio-page">
+  <main class="folio-shell">
+    <section class="folio-panel folio-hero-panel">
+      <header class="folio-topbar">
+        <nav class="folio-social-links" aria-label="Quick links">
+          <a href="{{ url_for('login', role='student') }}">Student</a>
+          <a href="{{ url_for('login', role='counsellor') }}">Counsellor</a>
+          <a href="{{ url_for('login', role='developer') }}">Developer</a>
+        </nav>
+      </header>
+
+      <div class="folio-hero-content">
+        <h1>Building digital wellbeing products, support workflows, and intervention experiences.</h1>
+        <p>
+          One privacy-first system connecting students, wardens, counsellors, developers, parents, and proctors.
+        </p>
+
+        <div class="folio-hero-actions">
+          <a class="folio-pill folio-pill-dark" href="{{ url_for('login') }}">Open Login</a>
+          <a class="folio-pill" href="{{ url_for('signup_showcase') }}">Create Account</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="folio-panel folio-logo-strip" aria-label="Platform modules">
+      <span>Student Pulse</span>
+      <span>Warden Heatmap</span>
+      <span>Counselling Queue</span>
+      <span>Developer Pipeline</span>
+      <span>Parent Alerts</span>
+      <span>Proctor Insights</span>
+    </section>
+
+    <section class="folio-panel folio-services-panel">
+      <h2>Collaborate across roles to create meaningful student outcomes.</h2>
+      <p class="folio-services-sub">Integrated from your previous page elements and dashboard entry points.</p>
+
+      <div class="folio-role-grid">
+        <a class="folio-role-card" href="{{ url_for('login', role='student') }}">
+          <span class="material-symbols-outlined">sentiment_satisfied</span>
+          <h3>Student</h3>
+          <p>Mood check-ins, quizzes, support booking.</p>
+        </a>
+        <a class="folio-role-card" href="{{ url_for('login', role='warden') }}">
+          <span class="material-symbols-outlined">apartment</span>
+          <h3>Warden</h3>
+          <p>Block analytics, risk clusters, early warning.</p>
+        </a>
+        <a class="folio-role-card" href="{{ url_for('login', role='counsellor') }}">
+          <span class="material-symbols-outlined">psychology</span>
+          <h3>Counsellor</h3>
+          <p>Session queues and intervention planning.</p>
+        </a>
+        <a class="folio-role-card" href="{{ url_for('login', role='developer') }}">
+          <span class="material-symbols-outlined">code</span>
+          <h3>Developer</h3>
+          <p>Signal pipelines, operations, and controls.</p>
+        </a>
+        <a class="folio-role-card" href="{{ url_for('login', role='parent') }}">
+          <span class="material-symbols-outlined">family_restroom</span>
+          <h3>Parent</h3>
+          <p>Summary trends and consented wellbeing alerts.</p>
+        </a>
+        <a class="folio-role-card" href="{{ url_for('login', role='proctor') }}">
+          <span class="material-symbols-outlined">school</span>
+          <h3>Proctor</h3>
+          <p>Group-level stress trends and action queue.</p>
+        </a>
+      </div>
+
+      <div class="folio-trust-note">
+        <span class="material-symbols-outlined">encrypted</span>
+        <p>Privacy-first access with role-restricted views. We do not track students. We track wellbeing signals.</p>
+      </div>
+    </section>
+
+    <section class="folio-panel folio-cta-panel">
+      <span class="material-symbols-outlined folio-handshake">handshake</span>
+      <h2>Tell us about your next wellbeing project</h2>
+      <div class="folio-hero-actions">
+        <a class="folio-pill folio-pill-dark" href="mailto:eqwell@digitalsanctuary.app">Email Us</a>
+        <a class="folio-pill" href="{{ url_for('signup_showcase') }}">Start With Signup</a>
+      </div>
+    </section>
+
+    <footer class="folio-footer-row">
+      <p>&copy; 2026 EqWell. All rights reserved.</p>
+      <nav aria-label="Footer links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('signup_showcase') }}">Signup</a>
+      </nav>
+    </footer>
+  </main>
+
+</body>
+</html>
+
+
+

@@ -9,14 +9,78 @@ import re
 from urllib.parse import parse_qs, unquote_plus, urlencode, urlparse
 
 from dotenv import load_dotenv
-from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
+from flask import Flask, flash, jsonify, has_request_context, redirect, render_template as flask_render_template, request, send_from_directory, session, url_for
 import jwt
 import requests
+from jinja2 import ChoiceLoader, FileSystemLoader, PrefixLoader, TemplateNotFound
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 load_dotenv(dotenv_path=Path(__file__).resolve().with_name(".env"))
 
 app = Flask(__name__)
+
+MOBILE_USER_AGENT_PATTERN = re.compile(
+    r"(android|iphone|ipod|ipad|blackberry|bb10|iemobile|opera mini|mobile)",
+    re.IGNORECASE,
+)
+
+
+def resolve_mobile_template_dir():
+    current_file = Path(__file__).resolve()
+    for base_dir in [current_file.parent, *current_file.parents]:
+        candidate = base_dir / "mobile"
+        if candidate.is_dir():
+            return candidate
+    return None
+
+
+MOBILE_TEMPLATE_DIR = resolve_mobile_template_dir()
+if MOBILE_TEMPLATE_DIR is not None:
+    app.jinja_loader = ChoiceLoader(
+        [
+            PrefixLoader({"mobile": FileSystemLoader(str(MOBILE_TEMPLATE_DIR))}),
+            app.jinja_loader,
+        ]
+    )
+
+
+def should_use_mobile_templates():
+    if not has_request_context():
+        return False
+
+    forced_view = str(request.args.get("view", "")).strip().lower()
+    if forced_view in {"mobile", "m"}:
+        return True
+    if forced_view in {"desktop", "web", "pc"}:
+        return False
+
+    user_agent = str(request.user_agent.string or "")
+    return bool(MOBILE_USER_AGENT_PATTERN.search(user_agent))
+
+
+def render_template(template_name_or_list, *args, **kwargs):
+    if (
+        isinstance(template_name_or_list, str)
+        and MOBILE_TEMPLATE_DIR is not None
+        and should_use_mobile_templates()
+    ):
+        try:
+            return flask_render_template(f"mobile/{template_name_or_list}", *args, **kwargs)
+        except TemplateNotFound:
+            pass
+    return flask_render_template(template_name_or_list, *args, **kwargs)
+
+
+@app.route("/mobile-overrides.css")
+def mobile_overrides_css():
+    if MOBILE_TEMPLATE_DIR is None:
+        return "", 404
+
+    overrides_file = MOBILE_TEMPLATE_DIR / "mobile-overrides.css"
+    if not overrides_file.exists():
+        return "", 404
+
+    return send_from_directory(MOBILE_TEMPLATE_DIR, "mobile-overrides.css", mimetype="text/css")
 
 
 def read_env_int(name, default):

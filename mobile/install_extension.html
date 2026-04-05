@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Install EqWell Extension</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  <style>
+    body {
+      font-family: Manrope, sans-serif;
+      background: #f2f4ef;
+      margin: 0;
+      color: #1f2a1f;
+    }
+
+    .wrap {
+      max-width: 760px;
+      margin: 56px auto;
+      background: #ffffff;
+      border: 1px solid #d5ddcf;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 14px 40px rgba(20, 32, 21, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      line-height: 1.2;
+    }
+
+    p {
+      margin: 0 0 12px;
+      color: #4b5e4d;
+      line-height: 1.5;
+    }
+
+    ol {
+      margin: 8px 0 16px;
+      padding-left: 20px;
+      color: #344535;
+      line-height: 1.6;
+    }
+
+    .notice {
+      border: 1px solid #f3c6c6;
+      background: #fff4f4;
+      color: #8f1f1f;
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin: 8px 0;
+      font-weight: 600;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 0;
+      text-decoration: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      background: #2f6a3d;
+      color: #fff;
+    }
+
+    .btn.ghost {
+      background: #e9eee6;
+      color: #1f2a1f;
+    }
+  </style>
+  <style id="card-wrap-guard">
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+  <link rel="stylesheet" href="mobile-overrides.css" />
+</head>
+<body>
+  <main class="wrap">
+    <h1>Install EqWell Extension to Continue</h1>
+    <p>Student portal access is protected by EqWell extension verification and consent heartbeat.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="notice" data-category="{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <ol>
+      <li>Download extension ZIP and extract it to a folder.</li>
+      <li>Open Chrome and go to chrome://extensions.</li>
+      <li>Enable Developer mode and load the EqWell extension folder.</li>
+      <li>Open extension popup and login with student credentials.</li>
+      <li>Enable wellbeing consent in extension.</li>
+      <li>Wait a few seconds, then return to login.</li>
+    </ol>
+
+    <div class="actions">
+      <a class="btn primary" href="{{ url_for('login') }}">Go to Login</a>
+      <a class="btn ghost" href="{{ url_for('static', filename='downloads/eqwell-extension.zip') }}" download>Download Extension ZIP</a>
+      <a class="btn ghost" href="chrome://extensions" target="_blank" rel="noopener noreferrer">Open Extensions</a>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var notices = Array.from(document.querySelectorAll('.notice[data-category="security_popup"]'));
+      if (!notices.length) return;
+      var text = notices.map(function (el) { return el.textContent.trim(); }).join('\n');
+      if (text) {
+        setTimeout(function () { alert(text); }, 120);
+      }
+    })();
+  </script>
+</body>
+</html>
+
+
+

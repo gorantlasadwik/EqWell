@@ -1,0 +1,2215 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }} | EqWell</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            surface: '#ece8e2',
+            'surface-container-lowest': '#ffffff',
+            'surface-container-low': '#f3f2f1',
+            'surface-container': '#ece8e2',
+            'surface-container-high': '#e4e0da',
+            'surface-container-highest': '#dcd8d2',
+            'on-surface': '#1a1c22',
+            'on-surface-variant': '#5f687b',
+            primary: '#11131a',
+            secondary: '#355f8e',
+            'secondary-container': '#e6dab2',
+            'secondary-fixed': '#c4d8f2',
+            'secondary-fixed-dim': '#aec0d9',
+            'on-secondary-container': '#2d3240',
+            tertiary: '#170000',
+            'tertiary-fixed': '#f2c4ce',
+            'on-tertiary-container': '#c74971',
+            'on-secondary-fixed-variant': '#3d4f6a',
+            outline: '#d7d4cf'
+          },
+          fontFamily: {
+            headline: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          },
+          borderRadius: {
+            xl2: '2rem',
+            xl3: '3rem'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 450, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .reflection-blob {
+      filter: blur(80px);
+      opacity: 0.4;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .slot-calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .day-cell {
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid rgba(68, 71, 72, 0.18);
+      background: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      color: #3f4344;
+      transition: all 0.16s ease;
+    }
+
+    .day-cell.empty {
+      border: 0;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    .day-cell.available {
+      border-color: #96b9a2;
+      background: #edf7f0;
+      color: #1b4b2b;
+    }
+
+    .day-cell.selected {
+      border-color: #11131a;
+      background: #11131a;
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(17, 19, 26, 0.2);
+    }
+
+    .slot-panel {
+      margin-top: 16px;
+      border-radius: 18px;
+      background: #f6f3ee;
+      padding: 12px;
+    }
+
+    .slot-list {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .slot-chip {
+      border-radius: 999px;
+      border: 1px solid rgba(68, 71, 72, 0.24);
+      background: #fff;
+      color: #2d3132;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 10px;
+    }
+
+    .slot-chip.empty {
+      color: #7d8283;
+    }
+
+    .student-chat-fab {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 60px;
+      height: 60px;
+      border-radius: 999px;
+      border: 0;
+      background: radial-gradient(circle at 30% 20%, #5f8cb9, #11131a 72%);
+      color: #fff;
+      box-shadow: 0 18px 36px rgba(17, 19, 26, 0.28);
+      display: grid;
+      place-items: center;
+      z-index: 90;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .student-chat-fab:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 26px 42px rgba(17, 19, 26, 0.32);
+    }
+
+    .student-chat-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: flex-end;
+      justify-content: flex-end;
+      background: linear-gradient(180deg, rgba(11, 12, 16, 0.22), rgba(11, 12, 16, 0.48));
+      z-index: 95;
+      padding: 24px;
+    }
+
+    .student-chat-modal.open {
+      display: flex;
+    }
+
+    .student-chat-dialog {
+      width: min(430px, 100%);
+      max-height: min(76vh, 740px);
+      background: linear-gradient(180deg, #f8f6f3 0%, #f1efeb 100%);
+      border-radius: 26px;
+      border: 1px solid rgba(68, 71, 72, 0.16);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 24px 70px rgba(13, 19, 33, 0.2);
+    }
+
+    .student-chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid rgba(68, 71, 72, 0.14);
+      background: linear-gradient(90deg, #ece8e2, #f4f3f1);
+    }
+
+    .student-chat-header h4 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #1c1c19;
+    }
+
+    .student-chat-close {
+      border: 0;
+      background: transparent;
+      color: #575d5f;
+      cursor: pointer;
+    }
+
+    .student-chat-log {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow: auto;
+      min-height: 260px;
+    }
+
+    .chat-msg {
+      max-width: 90%;
+      padding: 11px 12px;
+      border-radius: 16px;
+      font-size: 13px;
+      line-height: 1.45;
+      box-shadow: 0 6px 18px rgba(25, 29, 36, 0.06);
+      position: relative;
+    }
+
+    .chat-msg-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .chat-msg.bot {
+      background: #ffffff;
+      color: #232321;
+      border-top-left-radius: 4px;
+      border: 1px solid rgba(79, 144, 183, 0.2);
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #101621, #334f73);
+      color: #fff;
+      border-top-right-radius: 4px;
+    }
+
+    .chat-msg.typing {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: auto;
+      max-width: 120px;
+      font-size: 12px;
+      color: #4e5869;
+    }
+
+    .chat-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #7a93b1;
+      animation: pulseDot 1s infinite ease-in-out;
+    }
+
+    .chat-dot:nth-child(2) { animation-delay: 0.12s; }
+    .chat-dot:nth-child(3) { animation-delay: 0.24s; }
+
+    @keyframes pulseDot {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.45; }
+      40% { transform: translateY(-3px); opacity: 1; }
+    }
+
+    .chat-quick-prompts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(68, 71, 72, 0.1);
+      background: #f5f2ee;
+    }
+
+    .chat-prompt-chip {
+      border: 1px solid rgba(53, 95, 142, 0.3);
+      background: #ffffff;
+      color: #355f8e;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    .chat-prompt-chip:hover {
+      transform: translateY(-1px);
+      background: #ebf3fb;
+    }
+
+    .student-chat-input-row {
+      border-top: 1px solid rgba(68, 71, 72, 0.14);
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+    }
+
+    .student-chat-input {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(68, 71, 72, 0.24);
+      background: #fff;
+      padding: 9px 10px;
+      resize: none;
+      font: 500 13px/1.4 Inter, sans-serif;
+    }
+
+    .student-chat-send {
+      border-radius: 999px;
+      border: 0;
+      background: linear-gradient(135deg, #11131a, #355f8e);
+      color: #fff;
+      font: 700 12px/1 Inter, sans-serif;
+      padding: 0 14px;
+      cursor: pointer;
+    }
+
+    .chat-status {
+      margin: 0;
+      padding: 0 12px 10px;
+      color: #6a7072;
+      font-size: 12px;
+      font-weight: 600;
+      min-height: 20px;
+    }
+
+    .student-quiz-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(9, 10, 13, 0.34);
+      z-index: 98;
+      padding: 20px;
+    }
+
+    .student-quiz-modal.open {
+      display: flex;
+    }
+
+    .student-quiz-dialog {
+      width: min(760px, 100%);
+      max-height: min(88vh, 900px);
+      background: #f3f2f1;
+      border-radius: 24px;
+      border: 1px solid rgba(68, 71, 72, 0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .student-quiz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(68, 71, 72, 0.14);
+      background: #f0ede9;
+    }
+
+    .student-quiz-header h4 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 800;
+      color: #1c1c19;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .student-quiz-close {
+      border: 0;
+      background: transparent;
+      color: #575d5f;
+      cursor: pointer;
+    }
+
+    .student-quiz-body {
+      padding: 0;
+      overflow: auto;
+      display: block;
+      background: #f4f5f7;
+    }
+
+    .mode-quiz-shell {
+      padding: 14px 16px 18px;
+    }
+
+    .mode-quiz-main {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 14px;
+    }
+
+    .mode-quiz-panel {
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
+      background: #fff;
+      padding: 18px;
+    }
+
+    .mode-quiz-title {
+      margin: 0;
+      font-size: 35px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #121826;
+      letter-spacing: -0.02em;
+    }
+
+    .mode-quiz-progress-wrap {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mode-quiz-progress-track {
+      flex: 1;
+      height: 9px;
+      border-radius: 999px;
+      background: #e7ebf3;
+      overflow: hidden;
+    }
+
+    .mode-quiz-progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: #0b5ed7;
+      width: 0;
+      transition: width 0.2s ease;
+    }
+
+    .mode-quiz-progress-pct {
+      font-size: 12px;
+      font-weight: 700;
+      color: #546179;
+      min-width: 34px;
+      text-align: right;
+    }
+
+    .mode-quiz-question-meta {
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #7f8799;
+    }
+
+    .mode-quiz-question-text {
+      margin: 8px 0 0;
+      font-size: 15px;
+      line-height: 1.55;
+      color: #1e2533;
+      font-weight: 600;
+    }
+
+    .mode-quiz-hint {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #0b5ed7;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    .quiz-options {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .quiz-option {
+      border: 1px solid #d8deea;
+      border-radius: 8px;
+      padding: 12px 12px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: #eef2f8;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .quiz-option.selected {
+      border-color: #0b5ed7;
+      background: #f4f8ff;
+      box-shadow: inset 0 0 0 1px rgba(11, 94, 215, 0.25);
+    }
+
+    .quiz-option-badge {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid #b9c4d8;
+      background: #fff;
+      margin-top: 1px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #0b5ed7;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .quiz-option.selected .quiz-option-badge {
+      border-color: #0b5ed7;
+      background: #0b5ed7;
+      color: #fff;
+    }
+
+    .mode-quiz-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .mode-quiz-btn {
+      border-radius: 8px;
+      border: 1px solid #0b5ed7;
+      background: #fff;
+      color: #0b5ed7;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 18px;
+      cursor: pointer;
+    }
+
+    .mode-quiz-btn.primary {
+      background: #0b5ed7;
+      color: #fff;
+    }
+
+    .mode-quiz-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .mode-quiz-side {
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
+      background: #fff;
+      padding: 12px;
+      align-self: start;
+    }
+
+    .mode-quiz-score {
+      border-radius: 10px;
+      background: #edf2fa;
+      text-align: center;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .mode-quiz-score-value {
+      margin: 0;
+      font-size: 34px;
+      font-weight: 800;
+      color: #1c2433;
+      line-height: 1;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .mode-quiz-score-note {
+      margin-top: 4px;
+      font-size: 11px;
+      color: #6f7b92;
+      font-weight: 600;
+    }
+
+    .mode-quiz-status-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .mode-quiz-status-item {
+      border-radius: 6px;
+      border: 1px solid #e4e8f0;
+      background: #f2f4f8;
+      padding: 7px 8px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #4b566b;
+    }
+
+    .mode-quiz-status-item.current {
+      border-color: #0b5ed7;
+      background: #f7faff;
+    }
+
+    .mode-quiz-status-item.good {
+      background: #def5df;
+      border-color: #cceacc;
+      color: #22693a;
+    }
+
+    .mode-quiz-status-item.warn {
+      background: #f8e1e1;
+      border-color: #efd2d2;
+      color: #8d2e2e;
+    }
+
+    .mode-quiz-status-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 800;
+      border: 1px solid #c4cfde;
+      background: #fff;
+      color: #6a7488;
+      flex: 0 0 auto;
+    }
+
+    .mode-quiz-status-item.good .mode-quiz-status-dot {
+      border-color: #31a95f;
+      background: #31a95f;
+      color: #fff;
+    }
+
+    .mode-quiz-status-item.warn .mode-quiz-status-dot {
+      border-color: #d9534f;
+      background: #d9534f;
+      color: #fff;
+    }
+
+    .mode-quiz-status-item.current .mode-quiz-status-dot {
+      border-color: #0b5ed7;
+      color: #0b5ed7;
+    }
+
+    .mode-quiz-loading {
+      padding: 20px;
+      font-size: 13px;
+      color: #596379;
+      font-weight: 700;
+    }
+
+    .student-quiz-footer {
+      border-top: 1px solid rgba(68, 71, 72, 0.14);
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .student-quiz-status {
+      margin: 0;
+      color: #5f687b;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 980px) {
+      .mode-quiz-main {
+        grid-template-columns: 1fr;
+      }
+
+      .mode-quiz-score {
+        margin-bottom: 10px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .student-shell {
+        margin-left: 0;
+      }
+
+      .student-sidebar {
+        display: none;
+      }
+
+      .student-main {
+        margin-left: 0;
+      }
+
+      .student-page {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+    }
+  </style>
+  <style id="card-wrap-guard">
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+  <link rel="stylesheet" href="mobile-overrides.css" />
+</head>
+<body class="bg-surface font-body text-on-surface antialiased overflow-x-hidden">
+  <aside class="student-sidebar fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-50">
+    <div class="mb-12 px-4">
+      <h1 class="text-2xl font-black text-[#f4f6fa] font-headline">EqWell</h1>
+      <p class="text-xs font-medium tracking-widest uppercase text-[#a7afc2] mt-1">Student Wellbeing</p>
+    </div>
+
+    <nav class="flex-1 space-y-3">
+      <a class="rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]" href="{{ url_for('student_dashboard') }}">
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-headline tracking-tight">Home</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_tasks_page') }}">
+        <span class="material-symbols-outlined">checklist</span>
+        <span class="font-headline tracking-tight">Tasks</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_quiz_selector_page', quiz=sidebar_quiz_key) }}">
+        <span class="material-symbols-outlined">quiz</span>
+        <span class="font-headline tracking-tight">Quizzes</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_counselling_page') }}">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="font-headline tracking-tight">Counselling</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_profile') }}">
+        <span class="material-symbols-outlined">badge</span>
+        <span class="font-headline tracking-tight">Profile</span>
+      </a>
+
+      <form class="pt-2" method="post" action="{{ url_for('logout') }}">
+        <button class="w-full text-left text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" type="submit">
+          <span class="material-symbols-outlined">logout</span>
+          <span class="font-headline tracking-tight">Logout</span>
+        </button>
+      </form>
+    </nav>
+  </aside>
+
+  <main class="student-main ml-72 min-h-screen relative">
+    <div class="reflection-blob absolute top-20 right-20 w-96 h-96 rounded-full bg-secondary-fixed"></div>
+    <div class="reflection-blob absolute bottom-40 left-20 w-80 h-80 rounded-full bg-tertiary-fixed"></div>
+
+    <header class="flex justify-between items-center w-full px-12 py-6 sticky top-0 bg-[#f3f2f1]/85 backdrop-blur-[20px] border-b border-[#d7d4cf] z-40">
+      <div class="flex flex-col">
+        <h2 class="font-headline text-3xl font-bold tracking-tight text-[#1a1c22]">Hi, {{ display_name.split(' ')[0] }}!</h2>
+        <p class="text-on-surface-variant font-medium mt-1">Let us take a look at your wellbeing today.</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3">
+          <button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container-high hover:opacity-80 transition-opacity" type="button">
+            <span class="material-symbols-outlined">notifications</span>
+          </button>
+          <img src="{{ user_avatar_url }}" alt="Student avatar" class="w-12 h-12 rounded-full object-cover border-2 border-[#d7d4cf] shadow-sm" />
+        </div>
+      </div>
+    </header>
+
+    <div class="student-page px-12 py-8 max-w-7xl mx-auto space-y-8 relative z-10">
+      <section class="grid grid-cols-12 gap-8">
+        <div class="col-span-12 bg-surface-container-lowest rounded-3xl p-10 shadow-[0_12px_48px_rgba(28,28,25,0.06)] relative overflow-hidden group">
+          <div class="absolute -right-20 -top-20 w-80 h-80 bg-secondary-container rounded-full blur-[100px] opacity-20"></div>
+          <div class="absolute right-40 top-40 w-40 h-40 bg-on-tertiary-container rounded-full blur-[60px] opacity-10"></div>
+
+          <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+            <div class="space-y-6">
+              <span class="inline-block px-4 py-1.5 bg-surface-container text-xs font-black tracking-widest uppercase rounded-full">Vital Insight</span>
+              <h3 class="text-5xl font-headline font-extrabold tracking-tight">Your Mental Battery</h3>
+              <p class="text-xl text-on-surface-variant max-w-md leading-relaxed">You have maintained a steady pace this week. Remember to take a break after your next class.</p>
+              <div class="flex items-center gap-4 flex-wrap">
+                <div class="px-6 py-3 bg-secondary-container rounded-full flex items-center gap-2 font-bold text-on-secondary-container">
+                  <span class="material-symbols-outlined">bolt</span>
+                  Steady Flow
+                </div>
+                <div class="px-6 py-3 bg-surface-container rounded-full flex items-center gap-2 font-bold text-on-surface">
+                  Mood: {{ mood_label }} ({{ mood_score }}/5)
+                </div>
+              </div>
+            </div>
+
+            <div class="relative w-72 h-72 flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 288 288" aria-hidden="true">
+                <circle class="text-surface-container-low" cx="144" cy="144" fill="transparent" r="120" stroke="currentColor" stroke-width="24"></circle>
+                <circle id="battery-ring-progress" class="text-secondary-container transition-all duration-1000" cx="144" cy="144" fill="transparent" r="120" stroke="currentColor" stroke-dasharray="753.6" stroke-dashoffset="{{ 753.6 - ((mood_battery / 100) * 753.6) }}" stroke-linecap="round" stroke-width="24"></circle>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span id="battery-percent" class="text-6xl font-headline font-black tracking-tighter">{{ mood_battery }}%</span>
+                <span class="text-sm font-bold text-on-secondary-container tracking-wider uppercase">Energy</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-5 space-y-8">
+          <div id="calendar-section" class="bg-surface-container-lowest rounded-3xl p-8 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+            <div class="flex justify-between items-center gap-2">
+              <h4 class="font-headline text-xl font-bold">Counselling Calendar</h4>
+              <span class="px-3 py-1 rounded-full text-xs font-bold tracking-wide bg-secondary-container text-on-secondary-container">Available Slots</span>
+            </div>
+            <p class="text-sm font-medium text-stone-500 mt-2">Pick a highlighted date to see free counselling slots.</p>
+
+            <div class="mt-4 text-sm font-bold text-stone-600" id="calendar-month"></div>
+            <div class="grid grid-cols-7 gap-2 mt-3 text-[11px] font-black uppercase tracking-wider text-stone-400">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+
+            <div id="slot-calendar-grid" class="slot-calendar-grid"></div>
+
+            <div class="slot-panel">
+              <p id="slot-selected-date" class="text-xs font-bold tracking-wide text-stone-500">Select a highlighted date</p>
+              <div id="slot-list" class="slot-list"></div>
+            </div>
+          </div>
+
+          <div class="bg-surface-container-lowest rounded-3xl p-8 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+            <div class="flex justify-between items-end mb-6">
+              <div>
+                <p class="text-xs font-black tracking-widest uppercase text-stone-400 mb-1">Current State</p>
+                <h4 class="font-headline text-2xl font-bold">Stress Score</h4>
+              </div>
+              <span id="stress-score-value" class="text-3xl font-headline font-extrabold text-on-tertiary-container">{{ ((live_stress_score if live_stress_score is not none else ((100 - mood_battery) / 20)) * 20) | round | int }}<span class="text-sm text-stone-400 font-bold">/100</span></span>
+            </div>
+            <div class="w-full h-4 bg-surface-container-low rounded-full overflow-hidden">
+              <div id="stress-progress-bar" class="h-full bg-on-tertiary-container rounded-full" data-initial-width="{{ ((live_stress_score if live_stress_score is not none else ((100 - mood_battery) / 20)) * 20) | round | int }}" style="width: 0%;"></div>
+            </div>
+            <p id="stress-status-line" class="mt-4 text-sm font-medium text-stone-500">Your stress level is <span id="stress-level-label" class="text-green-600 font-bold">{{ live_stress_category if live_stress_category else 'LOW' }}</span>. Keep taking small breaks.</p>
+            <p id="extension-url-line" class="mt-2 text-xs font-medium text-stone-500">Last extension check: waiting for activity...</p>
+          </div>
+
+          <div id="google-fit-card" class="bg-surface-container-lowest rounded-3xl p-8 shadow-[0_12px_48px_rgba(28,28,25,0.06)]"
+            data-connected="{{ '1' if google_fit.connected else '0' }}"
+            data-steps="{{ google_fit.steps }}"
+            data-sleep="{{ google_fit.sleep_hours }}"
+            data-fitness="{{ google_fit.fitness_component }}"
+            data-sync="{{ google_fit.last_sync_at }}"
+            data-source="{{ google_fit.steps_source }}"
+            data-account-email="{{ google_fit.connected_account_email }}"
+            data-sync-status="{{ google_fit.sync_status }}"
+            data-sync-error="{{ google_fit.sync_error }}"
+            data-reauth="{{ '1' if google_fit.requires_reauth else '0' }}">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-xs font-black tracking-widest uppercase text-stone-400 mb-1">Google Fit</p>
+                <h4 class="font-headline text-2xl font-bold">Fitness Signals</h4>
+                <p id="google-fit-status" class="mt-2 text-sm font-semibold text-stone-600">
+                  {{ 'Connected' if google_fit.connected else 'Not connected' }}
+                </p>
+                <p id="google-fit-account" class="mt-1 text-xs font-medium text-stone-500">
+                  {% if google_fit.connected_account_email %}
+                    Account: {{ google_fit.connected_account_email }}
+                  {% else %}
+                    Account: not available
+                  {% endif %}
+                </p>
+              </div>
+              <div class="flex gap-2">
+                <a href="{{ url_for('student_google_fit_connect') }}" class="px-4 py-2 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold">Connect</a>
+                <button id="google-fit-sync-btn" class="px-4 py-2 rounded-full bg-primary text-white text-xs font-bold" type="button">Sync</button>
+              </div>
+            </div>
+            <div class="mt-4 grid grid-cols-3 gap-3 text-center">
+              <div class="rounded-2xl bg-surface-container-low p-3">
+                <p class="text-[11px] font-black tracking-widest uppercase text-stone-400">Steps</p>
+                <p id="google-fit-steps" class="mt-1 text-lg font-extrabold text-on-surface">{{ google_fit.steps }}</p>
+              </div>
+              <div class="rounded-2xl bg-surface-container-low p-3">
+                <p class="text-[11px] font-black tracking-widest uppercase text-stone-400">Sleep</p>
+                <p id="google-fit-sleep" class="mt-1 text-lg font-extrabold text-on-surface">{{ '%.1f'|format(google_fit.sleep_hours) }}h</p>
+              </div>
+              <div class="rounded-2xl bg-surface-container-low p-3">
+                <p class="text-[11px] font-black tracking-widest uppercase text-stone-400">Fitness</p>
+                <p id="google-fit-fitness" class="mt-1 text-lg font-extrabold text-on-surface">{{ '%.1f'|format(google_fit.fitness_component) }}/5</p>
+              </div>
+            </div>
+            <p id="google-fit-sync-at" class="mt-3 text-xs text-stone-500">
+              {% if google_fit.last_sync_at %}
+                Last sync: {{ google_fit.last_sync_at }}
+              {% else %}
+                Last sync: never
+              {% endif %}
+            </p>
+          </div>
+
+          <div class="bg-primary text-white rounded-3xl p-8 shadow-[0_12px_48px_rgba(28,28,25,0.06)] flex items-center justify-between">
+            <div>
+              <h4 class="font-headline text-lg font-bold mb-1">Weekly Trend</h4>
+              <p id="weekly-trend-note" class="text-stone-400 text-sm">Loading weekly logs...</p>
+            </div>
+            <div id="weekly-trend-bars" class="flex items-end gap-1.5 h-12" aria-label="Weekly trend bars"></div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 bg-surface-container-lowest rounded-3xl p-10 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+          <div class="flex justify-between items-center mb-10">
+            <h4 class="font-headline text-3xl font-extrabold tracking-tight">My Habits and Sessions</h4>
+            <button class="material-symbols-outlined text-stone-400 hover:text-primary transition-colors" type="button">more_horiz</button>
+          </div>
+          <div class="space-y-6">
+            <div class="group flex items-center justify-between p-6 rounded-2xl bg-surface-container-low hover:bg-surface-container-high transition-all">
+              <div class="flex items-center gap-6">
+                <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-on-tertiary-container">
+                  <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">self_improvement</span>
+                </div>
+                <div>
+                  <h5 class="font-bold text-lg">Stretching Session</h5>
+                  <p class="text-sm font-medium text-stone-500">9/12 sessions completed</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <span class="text-sm font-bold text-on-tertiary-container bg-tertiary-fixed px-3 py-1 rounded-full">+15 pts</span>
+                <span class="material-symbols-outlined text-stone-300">chevron_right</span>
+              </div>
+            </div>
+
+            <div class="group flex items-center justify-between p-6 rounded-2xl bg-surface-container-low hover:bg-surface-container-high transition-all border-l-8 border-secondary-container">
+              <div class="flex items-center gap-6">
+                <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-secondary">
+                  <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+                </div>
+                <div>
+                  <h5 class="font-bold text-lg">Counselling Session</h5>
+                  <p class="text-sm font-medium text-stone-500">Friday, 2:00 PM with Dr. Aris</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <button class="px-5 py-2.5 bg-primary text-white rounded-full text-sm font-bold hover:scale-105 transition-transform" type="button">Prepare</button>
+              </div>
+            </div>
+
+            <div id="quiz-section" class="p-7 rounded-3xl bg-gradient-to-br from-[#fff8e9] via-[#f8f1e1] to-[#efe3c9] border border-[#e4d2a6] shadow-[0_12px_30px_rgba(90,70,30,0.08)]">
+              <div class="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <p class="text-xs font-black tracking-widest uppercase text-[#8a6f3a] mb-1">Quiz Section</p>
+                  <h5 class="font-bold text-2xl text-[#352814]">Mind Check Quizzes</h5>
+                  <p class="text-sm text-[#6e5d3f] mt-1">Recommended focus: {{ student_quiz_focus }}</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-[#f2e7c4] text-[#3d3428]">Interactive</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-white/75 text-[#5b4b2f]">{{ student_quiz_cards|length }} Modes</span>
+                </div>
+              </div>
+
+              <div class="mt-5">
+                <div class="bg-white/95 rounded-2xl border border-[#eadfca] px-5 py-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4" data-quiz-card="{{ sidebar_quiz_key }}">
+                  <div class="flex items-start gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-[#f3e7c7] text-[#7e6030] flex items-center justify-center">
+                      <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">quiz</span>
+                    </div>
+                    <div>
+                      <p class="font-bold text-xl text-[#1f1f1d] leading-none">Quiz Hub</p>
+                      <p class="quiz-last-summary text-sm text-stone-500 mt-2">Track wellbeing with quick quizzes and get personalized support suggestions.</p>
+                    </div>
+                  </div>
+                  <a class="quiz-open-link quiz-start-btn inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-full whitespace-nowrap bg-primary text-white text-sm font-bold shadow-[0_8px_20px_rgba(18,22,32,0.25)] hover:translate-y-[-1px] transition-transform" href="{{ url_for('student_quiz_selector_page', quiz=sidebar_quiz_key) }}">
+                    <span>Open Quiz Section</span>
+                    <span class="material-symbols-outlined !text-[18px]">arrow_outward</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="mt-5 bg-white/95 rounded-2xl border border-[#eadfca] p-4">
+                <div class="flex items-center justify-between gap-3">
+                  <p class="font-bold text-xl text-[#1f1f1d]">Recent Quiz Results</p>
+                  <span class="text-xs font-bold text-stone-500 rounded-full bg-[#f5efe1] px-2.5 py-1">Latest 5 attempts</span>
+                </div>
+                <div id="quiz-history-list" class="mt-4 space-y-2.5">
+                  {% if student_quiz_history %}
+                    {% for attempt in student_quiz_history %}
+                    <div class="rounded-2xl border border-[#ece4d0] bg-[#fffdf8] px-4 py-3 flex items-center justify-between gap-3">
+                      <div class="min-w-0">
+                        <p class="text-[18px] leading-5 font-semibold text-[#2c251a] truncate">{{ attempt.quiz_title }}</p>
+                        <div class="flex items-center gap-2 mt-1">
+                          <p class="text-xs text-stone-500">{{ attempt.created_at_label }}</p>
+                          <span class="text-[10px] font-bold tracking-wide uppercase rounded-full bg-[#f5efe1] text-[#6d5c3d] px-2 py-0.5">{{ attempt.risk_band }}</span>
+                        </div>
+                      </div>
+                      <span class="inline-flex min-w-[68px] justify-center text-base font-black text-[#2c251a] rounded-xl bg-[#f7efe0] px-2.5 py-1.5">{{ attempt.score_percent }}%</span>
+                    </div>
+                    {% endfor %}
+                  {% else %}
+                    <p id="quiz-history-empty" class="text-xs text-stone-500 bg-[#fffdf8] rounded-xl border border-[#ece4d0] px-3 py-2">No quiz attempts yet.</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="p-8 rounded-2xl bg-secondary-fixed flex flex-col md:flex-row items-center justify-between gap-6 mt-4">
+              <div class="flex items-center gap-6">
+                <div class="w-16 h-16 bg-white/50 backdrop-blur-md rounded-full flex items-center justify-center">
+                  <span class="material-symbols-outlined text-4xl text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">forum</span>
+                </div>
+                <div>
+                  <h5 class="font-bold text-xl text-on-secondary-container">Feeling overwhelmed?</h5>
+                  <p class="text-on-secondary-fixed-variant font-medium">Chat with EqWell AI to clear your mind.</p>
+                </div>
+              </div>
+              <button id="open-student-chat-btn" class="w-full md:w-auto px-8 py-4 bg-primary text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]" type="button">
+                AI Vent Session
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <button id="student-chat-fab" class="student-chat-fab" type="button" aria-label="Open AI chat">
+    <span class="material-symbols-outlined">forum</span>
+  </button>
+
+  <div id="student-chat-modal" class="student-chat-modal" aria-hidden="true">
+    <div class="student-chat-dialog">
+      <div class="student-chat-header">
+        <div>
+          <h4>EqWell AI Chat</h4>
+          <p class="text-[11px] text-[#5f687b] font-semibold mt-0.5">Private support space. Share how you feel.</p>
+        </div>
+        <button id="student-chat-close" class="student-chat-close" type="button" aria-label="Close chat">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="chat-quick-prompts" id="chat-quick-prompts">
+        <button class="chat-prompt-chip" data-chat-prompt="I feel stressed about studies today.">Study stress</button>
+        <button class="chat-prompt-chip" data-chat-prompt="I cannot focus and keep overthinking.">Low focus</button>
+        <button class="chat-prompt-chip" data-chat-prompt="I feel lonely and disconnected.">Feeling lonely</button>
+      </div>
+
+      <div id="student-chat-log" class="student-chat-log">
+        <div class="chat-msg bot">Hi, I am your EqWell assistant. Tell me how your day feels right now.</div>
+      </div>
+
+      <div class="student-chat-input-row">
+        <textarea id="student-chat-input" class="student-chat-input" placeholder="Type your thoughts..." rows="3"></textarea>
+        <button id="student-chat-send" class="student-chat-send" type="button">Send</button>
+      </div>
+      <p id="student-chat-status" class="chat-status"></p>
+    </div>
+  </div>
+
+  <div id="student-quiz-modal" class="student-quiz-modal" aria-hidden="true">
+    <div class="student-quiz-dialog">
+      <div class="student-quiz-header">
+        <h4 id="student-quiz-title">Mind Check Quiz</h4>
+        <button id="student-quiz-close" class="student-quiz-close" type="button" aria-label="Close quiz">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div id="student-quiz-body" class="student-quiz-body">
+        <p class="text-sm font-medium text-stone-500">Select a quiz card to begin.</p>
+      </div>
+
+      <div class="student-quiz-footer">
+        <p id="student-quiz-status" class="student-quiz-status"></p>
+        <button id="student-quiz-submit" class="px-5 py-2.5 rounded-full bg-primary text-white text-sm font-bold" type="button">Submit Quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var monthLabel = document.getElementById('calendar-month');
+      var calendarGrid = document.getElementById('slot-calendar-grid');
+      var slotList = document.getElementById('slot-list');
+      var slotSelectedDate = document.getElementById('slot-selected-date');
+
+      function toIsoDate(date) {
+        var y = date.getFullYear();
+        var m = String(date.getMonth() + 1).padStart(2, '0');
+        var d = String(date.getDate()).padStart(2, '0');
+        return y + '-' + m + '-' + d;
+      }
+
+      var today = new Date();
+      var slotsByDate = {};
+      [1, 2, 4, 6, 8, 10, 12].forEach(function (offset, idx) {
+        var d = new Date(today);
+        d.setDate(today.getDate() + offset);
+        var key = toIsoDate(d);
+        var options = [
+          ['10:00 AM', '11:30 AM', '03:30 PM'],
+          ['09:30 AM', '01:00 PM'],
+          ['11:00 AM', '04:00 PM', '05:30 PM'],
+          ['10:30 AM', '02:00 PM']
+        ];
+        slotsByDate[key] = options[idx % options.length];
+      });
+
+      function renderSlotsFor(dateKey) {
+        if (!slotList || !slotSelectedDate) return;
+        var slots = slotsByDate[dateKey] || [];
+        var displayDate = new Date(dateKey + 'T00:00:00');
+        slotSelectedDate.textContent = displayDate.toLocaleDateString(undefined, {
+          weekday: 'long', month: 'short', day: 'numeric'
+        });
+
+        slotList.innerHTML = '';
+        if (!slots.length) {
+          var noSlot = document.createElement('span');
+          noSlot.className = 'slot-chip empty';
+          noSlot.textContent = 'No slots available';
+          slotList.appendChild(noSlot);
+          return;
+        }
+
+        slots.forEach(function (slot) {
+          var chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'slot-chip';
+          chip.textContent = slot;
+          slotList.appendChild(chip);
+        });
+      }
+
+      function renderCalendar() {
+        if (!calendarGrid || !monthLabel) return;
+
+        var monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+        var monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        var firstWeekday = monthStart.getDay();
+        var totalDays = monthEnd.getDate();
+
+        monthLabel.textContent = monthStart.toLocaleDateString(undefined, {
+          month: 'long', year: 'numeric'
+        });
+
+        calendarGrid.innerHTML = '';
+        var activeDateKey = null;
+
+        for (var i = 0; i < firstWeekday; i += 1) {
+          var empty = document.createElement('span');
+          empty.className = 'day-cell empty';
+          calendarGrid.appendChild(empty);
+        }
+
+        for (var day = 1; day <= totalDays; day += 1) {
+          var dateObj = new Date(today.getFullYear(), today.getMonth(), day);
+          var dateKey = toIsoDate(dateObj);
+          var hasSlots = Object.prototype.hasOwnProperty.call(slotsByDate, dateKey);
+
+          var button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'day-cell';
+          if (hasSlots) button.classList.add('available');
+          button.textContent = String(day);
+          button.dataset.date = dateKey;
+
+          button.addEventListener('click', function (event) {
+            var selected = event.currentTarget.dataset.date;
+            Array.from(calendarGrid.querySelectorAll('.day-cell.selected')).forEach(function (el) {
+              el.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            renderSlotsFor(selected);
+          });
+
+          if (!activeDateKey && hasSlots) {
+            activeDateKey = dateKey;
+            button.classList.add('selected');
+          }
+
+          calendarGrid.appendChild(button);
+        }
+
+        if (activeDateKey) {
+          renderSlotsFor(activeDateKey);
+        } else if (slotSelectedDate) {
+          slotSelectedDate.textContent = 'No counselling slots this month';
+        }
+      }
+
+      renderCalendar();
+
+      var chatLog = document.getElementById('student-chat-log');
+      var chatInput = document.getElementById('student-chat-input');
+      var chatSend = document.getElementById('student-chat-send');
+      var chatStatus = document.getElementById('student-chat-status');
+      var chatFab = document.getElementById('student-chat-fab');
+      var openChatBtn = document.getElementById('open-student-chat-btn');
+      var chatModal = document.getElementById('student-chat-modal');
+      var chatClose = document.getElementById('student-chat-close');
+      var chatQuickPrompts = Array.from(document.querySelectorAll('[data-chat-prompt]'));
+      var batteryPercent = document.getElementById('battery-percent');
+      var batteryRingProgress = document.getElementById('battery-ring-progress');
+      var stressScoreValue = document.getElementById('stress-score-value');
+      var stressProgressBar = document.getElementById('stress-progress-bar');
+      var stressLevelLabel = document.getElementById('stress-level-label');
+      var extensionUrlLine = document.getElementById('extension-url-line');
+      var googleFitCard = document.getElementById('google-fit-card');
+      var googleFitStatus = document.getElementById('google-fit-status');
+      var googleFitAccount = document.getElementById('google-fit-account');
+      var googleFitSteps = document.getElementById('google-fit-steps');
+      var googleFitSleep = document.getElementById('google-fit-sleep');
+      var googleFitFitness = document.getElementById('google-fit-fitness');
+      var googleFitSyncAt = document.getElementById('google-fit-sync-at');
+      var googleFitSyncBtn = document.getElementById('google-fit-sync-btn');
+      var quizModal = document.getElementById('student-quiz-modal');
+      var quizTitle = document.getElementById('student-quiz-title');
+      var quizBody = document.getElementById('student-quiz-body');
+      var quizStatus = document.getElementById('student-quiz-status');
+      var quizSubmitBtn = document.getElementById('student-quiz-submit');
+      var quizClose = document.getElementById('student-quiz-close');
+      var quizStartButtons = Array.from(document.querySelectorAll('.quiz-start-btn'));
+      var quizHistoryList = document.getElementById('quiz-history-list');
+      var weeklyTrendBars = document.getElementById('weekly-trend-bars');
+      var weeklyTrendNote = document.getElementById('weekly-trend-note');
+      var weeklyTrendLogs = {{ weekly_logs | tojson }};
+
+      var currentQuiz = null;
+
+      var BATTERY_RING_CIRCUMFERENCE = 753.6;
+
+      function toneForBattery(battery) {
+        if (battery <= 20) return '#fc7359';
+        if (battery <= 40) return '#dfa342';
+        if (battery <= 60) return '#c8b35f';
+        if (battery <= 80) return '#9fbe59';
+        return '#6ea73f';
+      }
+
+      function applyLiveBattery(battery) {
+        var value = Number(battery);
+        if (!Number.isFinite(value)) return;
+
+        value = Math.max(0, Math.min(100, Math.round(value)));
+
+        if (batteryPercent) {
+          batteryPercent.textContent = value + '%';
+        }
+
+        if (batteryRingProgress) {
+          batteryRingProgress.style.strokeDashoffset = String(
+            BATTERY_RING_CIRCUMFERENCE - ((value / 100) * BATTERY_RING_CIRCUMFERENCE)
+          );
+          batteryRingProgress.style.color = toneForBattery(value);
+        }
+      }
+
+      function renderWeeklyTrend(logs) {
+        if (!weeklyTrendBars) return;
+
+        var rows = Array.isArray(logs) ? logs.slice(-7) : [];
+        if (!rows.length) {
+          rows = [
+            { day: 'Mon', stress: 55 },
+            { day: 'Tue', stress: 52 },
+            { day: 'Wed', stress: 48 },
+            { day: 'Thu', stress: 46 },
+            { day: 'Fri', stress: 43 },
+            { day: 'Sat', stress: 41 },
+            { day: 'Sun', stress: 40 }
+          ];
+        }
+
+        var normalized = rows.map(function (item) {
+          var stressValue = Number((item || {}).stress);
+          if (!Number.isFinite(stressValue)) {
+            stressValue = 50;
+          }
+
+          return {
+            day: String((item || {}).day || ''),
+            stress: Math.max(0, Math.min(100, Math.round(stressValue)))
+          };
+        });
+
+        var split = Math.max(1, Math.floor(normalized.length / 2));
+        var early = normalized.slice(0, split);
+        var latest = normalized.slice(split);
+        var earlyAvg = early.reduce(function (acc, row) { return acc + row.stress; }, 0) / Math.max(1, early.length);
+        var latestAvg = latest.reduce(function (acc, row) { return acc + row.stress; }, 0) / Math.max(1, latest.length);
+
+        if (weeklyTrendNote) {
+          var delta = latestAvg - earlyAvg;
+          if (delta <= -4) {
+            weeklyTrendNote.textContent = 'Stress is easing this week';
+          } else if (delta >= 4) {
+            weeklyTrendNote.textContent = 'Stress climbed this week';
+          } else {
+            weeklyTrendNote.textContent = 'Consistent weekly pattern';
+          }
+        }
+
+        weeklyTrendBars.innerHTML = normalized
+          .map(function (entry, index) {
+            var wellbeingHeight = Math.max(16, Math.round(12 + ((100 - entry.stress) / 100) * 36));
+            var highlight = index >= normalized.length - 2;
+            var colorClass = highlight ? 'bg-secondary-container' : 'bg-stone-700';
+            var title = entry.day + ': stress ' + entry.stress + '/100';
+            return '<div class="w-2 rounded-full ' + colorClass + '" style="height:' + String(wellbeingHeight) + 'px" title="' + escapeHtml(title) + '"></div>';
+          })
+          .join('');
+      }
+
+      function cleanUrlForDisplay(url) {
+        var text = String(url || '').trim();
+        if (!text) return '';
+        return text.length > 100 ? text.slice(0, 97) + '...' : text;
+      }
+
+      function stressTone(level) {
+        var label = String(level || '').toUpperCase();
+        if (label === 'HIGH') return { text: 'High', className: 'text-red-600' };
+        if (label === 'MODERATE' || label === 'MEDIUM') return { text: 'Moderate', className: 'text-amber-600' };
+        return { text: 'Low', className: 'text-green-600' };
+      }
+
+      function applyLiveStress(score, category, lastUrl) {
+        var value = Number(score);
+        if (!Number.isFinite(value)) return;
+
+        var boundedScore = Math.max(1, Math.min(5, value));
+        var scoreOutOfHundred = Math.round((boundedScore / 5) * 100);
+
+        if (stressScoreValue) {
+          stressScoreValue.innerHTML = String(scoreOutOfHundred) + '<span class="text-sm text-stone-400 font-bold">/100</span>';
+        }
+
+        if (stressProgressBar) {
+          stressProgressBar.style.width = String(scoreOutOfHundred) + '%';
+        }
+
+        if (stressLevelLabel) {
+          var tone = stressTone(category);
+          stressLevelLabel.textContent = tone.text;
+          stressLevelLabel.className = tone.className + ' font-bold';
+        }
+
+        if (extensionUrlLine) {
+          var displayUrl = cleanUrlForDisplay(lastUrl);
+          extensionUrlLine.textContent = displayUrl
+            ? 'Last extension check URL: ' + displayUrl
+            : 'Last extension check: URL received';
+        }
+
+      }
+
+      function renderGoogleFit(data) {
+        if (!data) return;
+
+        var connected = Boolean(data.connected);
+        var requiresReauth = Boolean(data.requires_reauth);
+        var steps = Number(data.steps || 0);
+        var sleepHours = Number(data.sleep_hours || 0);
+        var fitness = Number(data.fitness_component || 0);
+        var lastSync = String(data.last_sync_at || '').trim();
+        var syncError = String(data.sync_error || '').trim();
+        var stepsSource = String(data.steps_source || '').trim().toLowerCase();
+        var connectedAccountEmail = String(data.connected_account_email || '').trim().toLowerCase();
+
+        if (googleFitCard) {
+          googleFitCard.setAttribute('data-connected', connected ? '1' : '0');
+          googleFitCard.setAttribute('data-steps', String(Number.isFinite(steps) ? Math.max(0, Math.round(steps)) : 0));
+          googleFitCard.setAttribute('data-sleep', String(Number.isFinite(sleepHours) ? Math.max(0, sleepHours) : 0));
+          googleFitCard.setAttribute('data-fitness', String(Number.isFinite(fitness) ? Math.max(1, Math.min(5, fitness)) : 3));
+          googleFitCard.setAttribute('data-sync', lastSync);
+          googleFitCard.setAttribute('data-source', stepsSource);
+          googleFitCard.setAttribute('data-account-email', connectedAccountEmail);
+          googleFitCard.setAttribute('data-sync-error', syncError);
+          googleFitCard.setAttribute('data-reauth', requiresReauth ? '1' : '0');
+        }
+
+        if (googleFitStatus) {
+          if (requiresReauth) {
+            googleFitStatus.textContent = 'Auth token sync failed. Login again.';
+            googleFitStatus.className = 'mt-2 text-sm font-semibold text-red-700';
+          } else if (connected) {
+            if (stepsSource === 'api') {
+              googleFitStatus.textContent = 'Connected (latest sync)';
+            } else if (stepsSource === 'api-no-points') {
+              googleFitStatus.textContent = 'Connected (no step data from Google API)';
+            } else if (stepsSource === 'cache' || stepsSource === 'db') {
+              googleFitStatus.textContent = 'Connected (cached)';
+            } else {
+              googleFitStatus.textContent = 'Connected';
+            }
+            googleFitStatus.className = stepsSource === 'api-no-points'
+              ? 'mt-2 text-sm font-semibold text-amber-700'
+              : 'mt-2 text-sm font-semibold text-green-700';
+          } else {
+            googleFitStatus.textContent = 'Not connected';
+            googleFitStatus.className = 'mt-2 text-sm font-semibold text-stone-600';
+          }
+        }
+        if (googleFitSteps) {
+          googleFitSteps.textContent = Number.isFinite(steps) ? String(Math.max(0, Math.round(steps))) : '0';
+        }
+        if (googleFitSleep) {
+          var safeSleep = Number.isFinite(sleepHours) ? Math.max(0, sleepHours) : 0;
+          googleFitSleep.textContent = safeSleep.toFixed(1) + 'h';
+        }
+        if (googleFitFitness) {
+          var safeFitness = Number.isFinite(fitness) ? Math.max(1, Math.min(5, fitness)) : 3;
+          googleFitFitness.textContent = safeFitness.toFixed(1) + '/5';
+        }
+        if (googleFitSyncAt) {
+          if (requiresReauth) {
+            googleFitSyncAt.textContent = syncError || 'Last sync failed due to token expiry. Please reconnect Google Fit.';
+          } else if (stepsSource === 'api-no-points' && syncError) {
+            googleFitSyncAt.textContent = syncError;
+          } else {
+            googleFitSyncAt.textContent = lastSync ? ('Last sync: ' + lastSync) : 'Last sync: never';
+          }
+        }
+        if (googleFitAccount) {
+          if (connectedAccountEmail) {
+            googleFitAccount.textContent = 'Account: ' + connectedAccountEmail;
+          } else {
+            googleFitAccount.textContent = connected ? 'Account: not available' : 'Account: not connected';
+          }
+        }
+
+      }
+
+      function escapeHtml(value) {
+        return String(value || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function setQuizStatus(message, isError) {
+        if (!quizStatus) return;
+        quizStatus.textContent = String(message || '');
+        quizStatus.style.color = isError ? '#b91c1c' : '#5f687b';
+      }
+
+      function setQuizModal(open) {
+        if (!quizModal) return;
+        quizModal.classList.toggle('open', !!open);
+        quizModal.setAttribute('aria-hidden', open ? 'false' : 'true');
+
+        if (!open) {
+          currentQuiz = null;
+          if (quizSubmitBtn) {
+            quizSubmitBtn.disabled = false;
+            quizSubmitBtn.dataset.mode = 'submit';
+            quizSubmitBtn.textContent = 'Submit Quiz';
+            quizSubmitBtn.style.display = '';
+          }
+          setQuizStatus('', false);
+        }
+      }
+
+      function quizRiskTone(riskBand) {
+        var risk = String(riskBand || '').toUpperCase();
+        if (risk === 'HIGH') return 'text-red-700';
+        if (risk === 'LOW') return 'text-green-700';
+        return 'text-amber-700';
+      }
+
+      function quizPreviewFromStress(stress) {
+        var value = Number(stress);
+        if (!Number.isFinite(value)) value = 3;
+        value = Math.max(1, Math.min(5, value));
+        return Math.max(0, Math.min(100, Math.round(((6 - value) / 5) * 100)));
+      }
+
+      function quizOptionPreview(question, optionId) {
+        var options = Array.isArray(question && question.options) ? question.options : [];
+        var match = options.find(function (option) {
+          return String(option && option.id || '').toLowerCase() === String(optionId || '').toLowerCase();
+        });
+        if (!match) return 50;
+        if (typeof match.preview_score !== 'undefined') {
+          var preview = Number(match.preview_score);
+          return Number.isFinite(preview) ? Math.max(0, Math.min(100, Math.round(preview))) : 50;
+        }
+        return quizPreviewFromStress(match.stress);
+      }
+
+      function computeQuizPreview(state) {
+        if (!state || !Array.isArray(state.questions)) {
+          return { total: 0, answered: 0, preview: 0 };
+        }
+
+        var total = state.questions.length;
+        var answered = 0;
+        var previewTotal = 0;
+
+        state.questions.forEach(function (question) {
+          var qId = String(question.id || '');
+          var selected = String((state.answers || {})[qId] || '');
+          if (!selected) return;
+          answered += 1;
+          previewTotal += quizOptionPreview(question, selected);
+        });
+
+        var preview = answered ? Math.round(previewTotal / answered) : 0;
+        return { total: total, answered: answered, preview: preview };
+      }
+
+      function buildQuizRunnerHtml(state) {
+        if (!state || !Array.isArray(state.questions) || !state.questions.length) {
+          return '<div class="mode-quiz-loading">Quiz content is unavailable.</div>';
+        }
+
+        var total = state.questions.length;
+        var index = Math.max(0, Math.min(total - 1, Number(state.currentIndex || 0)));
+        var question = state.questions[index] || {};
+        var questionId = String(question.id || '');
+        var selectedAnswer = String((state.answers || {})[questionId] || '');
+        var progressPct = Math.round(((index + 1) / total) * 100);
+        var preview = computeQuizPreview(state);
+
+        var html = [];
+        html.push('<div class="mode-quiz-shell">');
+
+        html.push('<div class="mode-quiz-main">');
+        html.push('<div class="mode-quiz-panel">');
+        html.push('<h5 class="mode-quiz-title">' + escapeHtml(state.title || 'Mode Quiz') + '</h5>');
+        html.push('<div class="mode-quiz-progress-wrap">');
+        html.push('<div class="mode-quiz-progress-track"><div class="mode-quiz-progress-fill" style="width:' + String(progressPct) + '%;"></div></div>');
+        html.push('<span class="mode-quiz-progress-pct">' + String(progressPct) + '%</span>');
+        html.push('</div>');
+
+        html.push('<p class="mode-quiz-question-meta">Question ' + String(index + 1) + '/' + String(total) + ' â€¢ ' + escapeHtml(state.focus || '') + ' mode</p>');
+        html.push('<p class="mode-quiz-question-text">' + escapeHtml(question.prompt || '') + '</p>');
+        html.push('<p class="mode-quiz-hint">Reference Mode Bank</p>');
+
+        html.push('<div class="quiz-options">');
+        (question.options || []).forEach(function (option) {
+          var optionId = String(option.id || '');
+          var isSelected = selectedAnswer.toLowerCase() === optionId.toLowerCase();
+          html.push('<button type="button" class="quiz-option' + (isSelected ? ' selected' : '') + '" data-quiz-answer="' + escapeHtml(optionId) + '">');
+          html.push('<span class="quiz-option-badge">' + (isSelected ? '&#10003;' : '') + '</span>');
+          html.push('<span class="text-sm text-[#2d2922]">' + escapeHtml(option.label || '') + '</span>');
+          html.push('</button>');
+        });
+        html.push('</div>');
+
+        var isLast = index >= (total - 1);
+        html.push('<div class="mode-quiz-actions">');
+        html.push('<button type="button" class="mode-quiz-btn" data-quiz-action="prev"' + (index === 0 ? ' disabled' : '') + '>Previous</button>');
+        if (isLast) {
+          html.push('<button type="button" class="mode-quiz-btn primary" data-quiz-action="submit">Submit</button>');
+        } else {
+          html.push('<button type="button" class="mode-quiz-btn primary" data-quiz-action="next">Next</button>');
+        }
+        html.push('</div>');
+        html.push('</div>');
+
+        html.push('<aside class="mode-quiz-side">');
+        html.push('<div class="mode-quiz-score">');
+        html.push('<p class="mode-quiz-score-value">' + String(preview.preview || 0) + '%</p>');
+        html.push('<p class="mode-quiz-score-note">Preview wellbeing score</p>');
+        html.push('</div>');
+        html.push('<div class="mode-quiz-status-list">');
+
+        state.questions.forEach(function (item, idx) {
+          var itemId = String(item.id || '');
+          var answerId = String((state.answers || {})[itemId] || '');
+          var klass = 'mode-quiz-status-item';
+          var dot = '&bull;';
+
+          if (answerId) {
+            var answerPreview = quizOptionPreview(item, answerId);
+            if (answerPreview >= 60) {
+              klass += ' good';
+              dot = '&#10003;';
+            } else {
+              klass += ' warn';
+              dot = '&#10005;';
+            }
+          } else if (idx === index) {
+            klass += ' current';
+            dot = '&#9675;';
+          }
+
+          html.push('<button type="button" class="' + klass + '" data-quiz-jump="' + String(idx) + '">');
+          html.push('<span class="mode-quiz-status-dot">' + dot + '</span>');
+          html.push('<span>Question ' + String(idx + 1) + '</span>');
+          html.push('</button>');
+        });
+
+        html.push('</div>');
+        html.push('</aside>');
+        html.push('</div>');
+        html.push('</div>');
+
+        return html.join('');
+      }
+
+      function renderQuizRunner() {
+        if (!quizBody) return;
+        quizBody.innerHTML = buildQuizRunnerHtml(currentQuiz);
+      }
+
+      function buildQuizResultHtml(quizData, result) {
+        var recommendations = Array.isArray(result.recommendations) ? result.recommendations : [];
+        var riskBand = String(result.risk_band || 'MODERATE').toUpperCase();
+        var riskClass = quizRiskTone(riskBand);
+        var moodAnalysis = String(result.mood_analysis || '').trim();
+        var riskAnalysis = String(result.risk_analysis || '').trim();
+
+        var html = [];
+        html.push('<div class="rounded-2xl border border-[#eadfca] bg-white p-4">');
+        html.push('<p class="text-xs font-black tracking-widest uppercase text-stone-400">Quiz Result</p>');
+        html.push('<h5 class="mt-1 text-xl font-bold text-[#1f1f1d]">' + escapeHtml((quizData || {}).title || 'Mind Check') + '</h5>');
+        html.push('<div class="mt-3 flex flex-wrap items-center gap-3">');
+        html.push('<span class="px-3 py-1 rounded-full bg-surface-container text-sm font-bold text-stone-700">'
+          + escapeHtml(result.score_percent || 0) + '% wellbeing</span>');
+        html.push('<span class="px-3 py-1 rounded-full bg-surface-container text-sm font-bold ' + riskClass + '">'
+          + escapeHtml(riskBand) + '</span>');
+        html.push('<span class="px-3 py-1 rounded-full bg-surface-container text-sm font-bold text-stone-700">'
+          + escapeHtml(result.average_stress || 0) + '/5 stress</span>');
+        html.push('</div>');
+        html.push('<p class="mt-3 text-sm text-stone-600">' + escapeHtml(result.summary || '') + '</p>');
+        if (moodAnalysis) {
+          html.push('<p class="mt-3 text-sm text-stone-700"><strong>Mood analysis:</strong> ' + escapeHtml(moodAnalysis) + '</p>');
+        }
+        if (riskAnalysis) {
+          html.push('<p class="mt-2 text-sm text-stone-700"><strong>Risk analysis:</strong> ' + escapeHtml(riskAnalysis) + '</p>');
+        }
+
+        if (recommendations.length) {
+          html.push('<ul class="mt-3 list-disc pl-5 text-sm text-stone-600 space-y-1">');
+          recommendations.forEach(function (item) {
+            html.push('<li>' + escapeHtml(item) + '</li>');
+          });
+          html.push('</ul>');
+        }
+        html.push('<p class="mt-4 text-xs font-semibold text-stone-500">You can retake quizzes from the dashboard quiz section anytime.</p>');
+        html.push('</div>');
+        return html.join('');
+      }
+
+      function renderQuizHistory(history) {
+        if (!quizHistoryList) return;
+        var attempts = Array.isArray(history) ? history : [];
+        if (!attempts.length) {
+          quizHistoryList.innerHTML = '<p id="quiz-history-empty" class="text-xs text-stone-500 bg-[#fffdf8] rounded-xl border border-[#ece4d0] px-3 py-2">No quiz attempts yet.</p>';
+          return;
+        }
+
+        var html = [];
+        attempts.forEach(function (attempt) {
+          html.push('<div class="rounded-2xl border border-[#ece4d0] bg-[#fffdf8] px-4 py-3 flex items-center justify-between gap-3">');
+          html.push('<div class="min-w-0">');
+          html.push('<p class="text-[18px] leading-5 font-semibold text-[#2c251a] truncate">' + escapeHtml(attempt.quiz_title || 'Mind Check') + '</p>');
+          html.push('<div class="flex items-center gap-2 mt-1">');
+          html.push('<p class="text-xs text-stone-500">' + escapeHtml(attempt.created_at_label || 'recently') + '</p>');
+          html.push('<span class="text-[10px] font-bold tracking-wide uppercase rounded-full bg-[#f5efe1] text-[#6d5c3d] px-2 py-0.5">' + escapeHtml(attempt.risk_band || 'MODERATE') + '</span>');
+          html.push('</div>');
+          html.push('</div>');
+          html.push('<span class="inline-flex min-w-[68px] justify-center text-base font-black text-[#2c251a] rounded-xl bg-[#f7efe0] px-2.5 py-1.5">' + escapeHtml(attempt.score_percent || 0) + '%</span>');
+          html.push('</div>');
+        });
+        quizHistoryList.innerHTML = html.join('');
+      }
+
+      function updateQuizCardFromAttempt(attempt) {
+        if (!attempt) return;
+        var key = String(attempt.quiz_key || '').trim();
+        var card = key
+          ? document.querySelector('[data-quiz-card="' + key.replace(/"/g, '') + '"]')
+          : null;
+        if (!card) {
+          card = document.querySelector('[data-quiz-card]');
+        }
+        if (!card) return;
+
+        var summary = card.querySelector('.quiz-last-summary');
+        if (summary) {
+          summary.textContent = 'Last result: '
+            + String(attempt.score_percent || 0)
+            + '% wellbeing at '
+            + String(attempt.created_at_label || 'recently');
+        }
+
+        var ctaButton = card.querySelector('.quiz-start-btn');
+        if (ctaButton) {
+          ctaButton.textContent = 'Open Quiz Section';
+        }
+      }
+
+      function formatSupportContacts(contacts) {
+        var rows = Array.isArray(contacts) ? contacts : [];
+        if (!rows.length) return '';
+        return rows
+          .map(function (item) {
+            var name = String((item || {}).name || 'Support');
+            var phone = String((item || {}).phone || '').trim();
+            return phone ? (name + ': ' + phone) : name;
+          })
+          .join(' | ');
+      }
+
+      async function openQuiz(quizKey) {
+        if (!quizBody || !quizSubmitBtn) return;
+        setQuizModal(true);
+        setQuizStatus('Loading quiz...', false);
+        quizSubmitBtn.disabled = true;
+        quizBody.innerHTML = '<div class="mode-quiz-loading">Loading quiz mode...</div>';
+
+        try {
+          var response = await fetch('/api/student/quiz/' + encodeURIComponent(String(quizKey || '')), {
+            cache: 'no-store'
+          });
+          var data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.error || 'Unable to load quiz right now.');
+          }
+
+          var incomingQuiz = data.quiz || null;
+          if (!incomingQuiz || !Array.isArray(incomingQuiz.questions) || !incomingQuiz.questions.length) {
+            throw new Error('Quiz content is unavailable right now.');
+          }
+
+          currentQuiz = {
+            key: String(incomingQuiz.key || ''),
+            title: String(incomingQuiz.title || 'Mode Quiz'),
+            focus: String(incomingQuiz.focus || ''),
+            questions: incomingQuiz.questions,
+            answers: {},
+            currentIndex: 0,
+          };
+
+          if (quizTitle) {
+            quizTitle.textContent = String(currentQuiz.title || 'Mind Check Quiz');
+          }
+          renderQuizRunner();
+          quizSubmitBtn.disabled = false;
+          quizSubmitBtn.dataset.mode = 'hidden';
+          quizSubmitBtn.textContent = 'Submit Quiz';
+          quizSubmitBtn.style.display = 'none';
+          setQuizStatus('Use Next/Previous inside the quiz panel and submit at the last question.', false);
+        } catch (error) {
+          currentQuiz = null;
+          quizBody.innerHTML = '<p class="text-sm font-medium text-red-700">'
+            + escapeHtml(error instanceof Error ? error.message : 'Quiz failed to load.')
+            + '</p>';
+          quizSubmitBtn.disabled = false;
+          quizSubmitBtn.dataset.mode = 'close';
+          quizSubmitBtn.style.display = '';
+          quizSubmitBtn.textContent = 'Close';
+          setQuizStatus('Quiz could not be loaded.', true);
+        }
+      }
+
+      async function submitQuiz() {
+        if (!quizSubmitBtn) return;
+        if (currentQuiz && currentQuiz.submitted) {
+          setQuizModal(false);
+          return;
+        }
+        if (quizSubmitBtn.dataset.mode === 'close') {
+          setQuizModal(false);
+          return;
+        }
+
+        if (!currentQuiz || !Array.isArray(currentQuiz.questions)) {
+          setQuizStatus('Open a quiz first.', true);
+          return;
+        }
+
+        var answers = {};
+        var missing = false;
+        var firstMissingIndex = -1;
+
+        currentQuiz.questions.forEach(function (question, idx) {
+          var questionId = String(question.id || '').trim();
+          var selected = String((currentQuiz.answers || {})[questionId] || '').trim();
+          if (!selected) {
+            missing = true;
+            if (firstMissingIndex < 0) {
+              firstMissingIndex = idx;
+            }
+            return;
+          }
+          answers[questionId] = selected;
+        });
+
+        if (missing) {
+          if (firstMissingIndex >= 0) {
+            currentQuiz.currentIndex = firstMissingIndex;
+            renderQuizRunner();
+          }
+          setQuizStatus('Please answer every question before submitting.', true);
+          return;
+        }
+
+        quizSubmitBtn.disabled = true;
+        setQuizStatus('Submitting quiz...', false);
+
+        try {
+          var response = await fetch('/api/student/quiz/' + encodeURIComponent(String(currentQuiz.key || '')) + '/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ answers: answers })
+          });
+          var data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.error || 'Quiz submission failed.');
+          }
+
+          if (quizBody) {
+            quizBody.innerHTML = buildQuizResultHtml(data.quiz || currentQuiz, data.result || {});
+          }
+
+          currentQuiz.submitted = true;
+
+          if (data.attempt) {
+            updateQuizCardFromAttempt(data.attempt);
+          }
+
+          if (Array.isArray(data.history)) {
+            renderQuizHistory(data.history);
+          }
+
+          if (typeof data.mental_battery !== 'undefined') {
+            applyLiveBattery(data.mental_battery);
+          }
+          if (typeof data.stress_score !== 'undefined') {
+            applyLiveStress(data.stress_score, data.stress_category, 'Quiz submission');
+          }
+
+          var resultPayload = data.result || {};
+          var scoreText = String(resultPayload.score_percent || 0);
+          var riskText = String(resultPayload.risk_band || 'MODERATE').toUpperCase();
+          var moodText = String(resultPayload.mood_analysis || '').trim();
+          var statusText = 'Score: ' + scoreText + '% | Risk: ' + riskText;
+          if (moodText) {
+            statusText += ' | ' + moodText;
+          }
+          setQuizStatus(statusText, false);
+          quizSubmitBtn.dataset.mode = 'close';
+          quizSubmitBtn.style.display = '';
+          quizSubmitBtn.textContent = 'Close';
+        } catch (error) {
+          setQuizStatus(error instanceof Error ? error.message : 'Quiz submission failed.', true);
+          quizSubmitBtn.disabled = false;
+        }
+      }
+
+      async function pollExtensionLiveSignal() {
+        if (document.hidden) return;
+
+        try {
+          var response = await fetch('/api/student/live-extension-signal', { cache: 'no-store' });
+          if (response.redirected) {
+            window.location.href = response.url;
+            return;
+          }
+
+          if (!response.ok) {
+            if (response.status === 401 || response.status === 403) {
+              window.location.href = '/install-extension';
+            }
+            return;
+          }
+
+          var contentType = String(response.headers.get('content-type') || '').toLowerCase();
+          if (contentType.indexOf('application/json') === -1) {
+            window.location.href = '/install-extension';
+            return;
+          }
+
+          var data = await response.json();
+          if (!data || !data.available) return;
+
+          if (typeof data.mental_battery !== 'undefined') {
+            applyLiveBattery(data.mental_battery);
+          }
+          if (typeof data.stress_score !== 'undefined') {
+            applyLiveStress(data.stress_score, data.stress_category, data.last_checked_url);
+          }
+          if (data.google_fit) {
+            renderGoogleFit(data.google_fit);
+          }
+        } catch (_err) {
+          // Keep UI responsive even if polling fails briefly.
+        }
+      }
+
+      if (batteryPercent) {
+        var initialBattery = Number((batteryPercent.textContent || '').replace('%', ''));
+        if (Number.isFinite(initialBattery)) {
+          applyLiveBattery(initialBattery);
+        }
+      }
+
+      if (stressProgressBar) {
+        var initialWidth = Number(stressProgressBar.getAttribute('data-initial-width') || '0');
+        if (Number.isFinite(initialWidth)) {
+          stressProgressBar.style.width = String(Math.max(0, Math.min(100, Math.round(initialWidth)))) + '%';
+        }
+      }
+
+      if (googleFitCard) {
+        renderGoogleFit({
+          connected: googleFitCard.getAttribute('data-connected') === '1',
+          steps: Number(googleFitCard.getAttribute('data-steps') || '0'),
+          sleep_hours: Number(googleFitCard.getAttribute('data-sleep') || '0'),
+          fitness_component: Number(googleFitCard.getAttribute('data-fitness') || '3'),
+          last_sync_at: String(googleFitCard.getAttribute('data-sync') || ''),
+          steps_source: String(googleFitCard.getAttribute('data-source') || ''),
+          connected_account_email: String(googleFitCard.getAttribute('data-account-email') || ''),
+          sync_status: String(googleFitCard.getAttribute('data-sync-status') || ''),
+          sync_error: String(googleFitCard.getAttribute('data-sync-error') || ''),
+          requires_reauth: googleFitCard.getAttribute('data-reauth') === '1'
+        });
+      }
+
+      renderWeeklyTrend(weeklyTrendLogs);
+
+      setTimeout(pollExtensionLiveSignal, 1200);
+      setInterval(pollExtensionLiveSignal, 5000);
+
+      function setChatModal(open) {
+        if (!chatModal) return;
+        chatModal.classList.toggle('open', !!open);
+        chatModal.setAttribute('aria-hidden', open ? 'false' : 'true');
+        if (open && chatInput) chatInput.focus();
+      }
+
+      function appendChat(role, text) {
+        if (!chatLog) return;
+
+        var msg = document.createElement('div');
+        msg.className = 'chat-msg ' + role;
+
+        var meta = document.createElement('div');
+        meta.className = 'chat-msg-meta';
+
+        var who = document.createElement('span');
+        who.textContent = role === 'user' ? 'You' : 'EqWell AI';
+
+        var now = new Date();
+        var when = document.createElement('span');
+        when.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        meta.appendChild(who);
+        meta.appendChild(when);
+
+        var body = document.createElement('div');
+        body.textContent = text;
+
+        msg.appendChild(meta);
+        msg.appendChild(body);
+        chatLog.appendChild(msg);
+        chatLog.scrollTop = chatLog.scrollHeight;
+      }
+
+      function appendTypingIndicator() {
+        if (!chatLog) return null;
+
+        var typing = document.createElement('div');
+        typing.className = 'chat-msg bot typing';
+        typing.id = 'chat-typing-indicator';
+        typing.innerHTML = '<span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span>';
+        chatLog.appendChild(typing);
+        chatLog.scrollTop = chatLog.scrollHeight;
+        return typing;
+      }
+
+      function removeTypingIndicator() {
+        var el = document.getElementById('chat-typing-indicator');
+        if (el && el.parentNode) {
+          el.parentNode.removeChild(el);
+        }
+      }
+
+      async function sendStudentChat() {
+        if (!chatInput || !chatSend || !chatStatus) return;
+        var content = (chatInput.value || '').trim();
+        if (!content) return;
+
+        appendChat('user', content);
+        chatInput.value = '';
+        chatSend.disabled = true;
+        chatSend.textContent = '...';
+        chatStatus.textContent = 'Thinking...';
+        appendTypingIndicator();
+
+        var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        var timeoutId = null;
+        if (controller) {
+          timeoutId = setTimeout(function () {
+            controller.abort();
+          }, 15000);
+        }
+
+        try {
+          var response = await fetch('/api/student/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: content }),
+            signal: controller ? controller.signal : undefined
+          });
+
+          if (response.redirected && response.url) {
+            window.location.href = response.url;
+            return;
+          }
+
+          var contentType = String(response.headers.get('content-type') || '').toLowerCase();
+          var isJson = contentType.indexOf('application/json') > -1;
+          var data = isJson ? await response.json() : null;
+
+          if (!response.ok) {
+            if (data && data.redirect) {
+              chatStatus.textContent = data.error || 'Session needs re-verification. Redirecting...';
+              setTimeout(function () {
+                window.location.href = data.redirect;
+              }, 500);
+              return;
+            }
+
+            var textError = '';
+            if (!isJson) {
+              textError = (await response.text() || '').trim();
+            }
+            throw new Error((data && data.error) || textError || 'Chat failed. Please retry.');
+          }
+
+          if (!data) {
+            throw new Error('Unexpected chat response format.');
+          }
+
+          appendChat('bot', data.reply || 'I could not generate a reply.');
+          var supportText = formatSupportContacts(data.support_contacts);
+          if (supportText) {
+            appendChat('bot', 'Counsellor Support Numbers: ' + supportText);
+          }
+          if (typeof data.mental_battery !== 'undefined') {
+            applyLiveBattery(data.mental_battery);
+          }
+          if (typeof data.stress_score !== 'undefined') {
+            applyLiveStress(data.stress_score, data.stress_category, 'From AI chat');
+          }
+
+          if (data.chat_warning) {
+            chatStatus.textContent = String(data.chat_warning);
+          } else {
+            chatStatus.textContent = '';
+          }
+        } catch (err) {
+          if (err && err.name === 'AbortError') {
+            chatStatus.textContent = 'Response took too long. Please retry, or ask using more details.';
+          } else {
+            chatStatus.textContent = err.message || 'Chat failed. Please try again.';
+          }
+        } finally {
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+          }
+          removeTypingIndicator();
+          chatSend.disabled = false;
+          chatSend.textContent = 'Send';
+        }
+      }
+
+      if (chatSend) chatSend.addEventListener('click', sendStudentChat);
+      if (chatFab) chatFab.addEventListener('click', function () { setChatModal(true); });
+      if (openChatBtn) openChatBtn.addEventListener('click', function () { setChatModal(true); });
+      if (chatClose) chatClose.addEventListener('click', function () { setChatModal(false); });
+
+      if (chatModal) {
+        chatModal.addEventListener('click', function (event) {
+          if (event.target === chatModal) setChatModal(false);
+        });
+      }
+
+      if (chatInput) {
+        chatInput.addEventListener('keydown', function (event) {
+          if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            sendStudentChat();
+          }
+        });
+      }
+
+      chatQuickPrompts.forEach(function (chip) {
+        chip.addEventListener('click', function () {
+          if (!chatInput) return;
+          chatInput.value = String(chip.getAttribute('data-chat-prompt') || '').trim();
+          chatInput.focus();
+        });
+      });
+
+      if (quizBody) {
+        quizBody.addEventListener('click', function (event) {
+          if (!currentQuiz || currentQuiz.submitted) {
+            return;
+          }
+
+          var jumpButton = event.target.closest('[data-quiz-jump]');
+          if (jumpButton) {
+            var jumpIndex = Number(jumpButton.getAttribute('data-quiz-jump'));
+            if (Number.isFinite(jumpIndex)) {
+              currentQuiz.currentIndex = Math.max(0, Math.min((currentQuiz.questions || []).length - 1, Math.round(jumpIndex)));
+              renderQuizRunner();
+              setQuizStatus('', false);
+            }
+            return;
+          }
+
+          var answerButton = event.target.closest('[data-quiz-answer]');
+          if (answerButton) {
+            var currentQuestion = (currentQuiz.questions || [])[currentQuiz.currentIndex || 0];
+            if (!currentQuestion) return;
+            var questionId = String(currentQuestion.id || '').trim();
+            if (!questionId) return;
+
+            var answerId = String(answerButton.getAttribute('data-quiz-answer') || '').trim();
+            if (!answerId) return;
+            currentQuiz.answers[questionId] = answerId;
+            renderQuizRunner();
+            setQuizStatus('', false);
+            return;
+          }
+
+          var actionButton = event.target.closest('[data-quiz-action]');
+          if (actionButton) {
+            var action = String(actionButton.getAttribute('data-quiz-action') || '');
+            if (action === 'prev') {
+              currentQuiz.currentIndex = Math.max(0, (currentQuiz.currentIndex || 0) - 1);
+              renderQuizRunner();
+              return;
+            }
+            if (action === 'next') {
+              var q = (currentQuiz.questions || [])[currentQuiz.currentIndex || 0];
+              var qId = String((q || {}).id || '').trim();
+              if (!qId || !currentQuiz.answers[qId]) {
+                setQuizStatus('Choose Yes or No before moving to the next question.', true);
+                return;
+              }
+              currentQuiz.currentIndex = Math.min((currentQuiz.questions || []).length - 1, (currentQuiz.currentIndex || 0) + 1);
+              renderQuizRunner();
+              setQuizStatus('', false);
+              return;
+            }
+            if (action === 'submit') {
+              submitQuiz();
+            }
+          }
+        });
+      }
+
+      quizStartButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+          openQuiz(button.getAttribute('data-quiz-key'));
+        });
+      });
+
+      if (quizSubmitBtn) {
+        quizSubmitBtn.addEventListener('click', submitQuiz);
+      }
+
+      if (quizClose) {
+        quizClose.addEventListener('click', function () {
+          setQuizModal(false);
+        });
+      }
+
+      if (quizModal) {
+        quizModal.addEventListener('click', function (event) {
+          if (event.target === quizModal) {
+            setQuizModal(false);
+          }
+        });
+      }
+
+      if (googleFitSyncBtn) {
+        googleFitSyncBtn.addEventListener('click', async function () {
+          googleFitSyncBtn.disabled = true;
+          var oldText = googleFitSyncBtn.textContent;
+          googleFitSyncBtn.textContent = 'Syncing...';
+          try {
+            var response = await fetch('/api/student/google-fit/sync', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' }
+            });
+            var data = await response.json();
+            if (!response.ok) {
+              if (data.requires_reauth) {
+                renderGoogleFit(data.google_fit || { requires_reauth: true, sync_error: data.error || '' });
+                var redirectUrl = String(data.connect_url || '/api/student/google-fit/connect');
+                alert(data.error || 'Google Fit token sync failed. Please login again.');
+                window.location.href = redirectUrl;
+                return;
+              }
+              throw new Error(data.error || 'Google Fit sync failed');
+            }
+
+            if (data.google_fit) {
+              renderGoogleFit(data.google_fit);
+            }
+            if (typeof data.mental_battery !== 'undefined') {
+              applyLiveBattery(data.mental_battery);
+            }
+            if (typeof data.stress_score !== 'undefined') {
+              applyLiveStress(data.stress_score, data.stress_category, 'Google Fit sync');
+            }
+          } catch (error) {
+            alert(error instanceof Error ? error.message : 'Google Fit sync failed');
+          } finally {
+            googleFitSyncBtn.disabled = false;
+            googleFitSyncBtn.textContent = oldText;
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
+
+
+

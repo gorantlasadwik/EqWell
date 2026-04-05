@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }} | EqWell</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="{{ url_for('static', filename='figma_chart_theme.js') }}"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            surface: '#ece8e2',
+            'surface-container-lowest': '#ffffff',
+            'surface-container': '#ece8e2',
+            'surface-container-high': '#e4e0da',
+            'on-surface': '#1a1c22'
+          },
+          fontFamily: {
+            headline: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+  <style id="card-wrap-guard">
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+  <link rel="stylesheet" href="mobile-overrides.css" />
+</head>
+<body class="bg-surface font-body text-on-surface antialiased overflow-x-hidden">
+  <aside class="fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-50">
+    <div class="mb-12 px-4">
+      <h1 class="text-2xl font-black text-[#f4f6fa] font-headline">EqWell</h1>
+      <p class="text-xs font-medium tracking-widest uppercase text-[#a7afc2] mt-1">Parent Console</p>
+    </div>
+
+    <nav class="flex-1 space-y-3">
+      <a class="{% if active_nav == 'overview' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]{% else %}text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_overview_page') }}">
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-headline tracking-tight">Overview</span>
+      </a>
+      <a class="{% if active_nav == 'weekly-trend' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]{% else %}text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_weekly_trend_page') }}">
+        <span class="material-symbols-outlined">query_stats</span>
+        <span class="font-headline tracking-tight">Weekly Trend</span>
+      </a>
+      <a class="{% if active_nav == 'alerts' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]{% else %}text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_alerts_page') }}">
+        <span class="material-symbols-outlined">warning</span>
+        <span class="font-headline tracking-tight">Alerts</span>
+      </a>
+      <a class="{% if active_nav == 'lifestyle' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]{% else %}text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_lifestyle_page') }}">
+        <span class="material-symbols-outlined">self_improvement</span>
+        <span class="font-headline tracking-tight">Lifestyle</span>
+      </a>
+      <a class="{% if active_nav == 'contact' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]{% else %}text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_contact_page') }}">
+        <span class="material-symbols-outlined">contacts</span>
+        <span class="font-headline tracking-tight">Contact</span>
+      </a>
+      <form class="pt-2" method="post" action="{{ url_for('logout') }}">
+        <button class="w-full text-left text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4" type="submit">
+          <span class="material-symbols-outlined">logout</span>
+          <span class="font-headline tracking-tight">Logout</span>
+        </button>
+      </form>
+    </nav>
+  </aside>
+
+  <main class="ml-72 min-h-screen px-10 py-8">
+    <header class="flex flex-wrap items-start justify-between gap-4 mb-7">
+      <div>
+        <p class="text-xs font-black tracking-widest uppercase text-stone-500">Parent Dashboard</p>
+        <h2 class="font-headline text-4xl font-extrabold tracking-tight mt-1">Ward Detailed Summary</h2>
+        <p class="text-sm text-stone-500 mt-2">A detailed and privacy-safe wellbeing analysis for your ward.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-3 py-1 rounded-full bg-[#e4f3e8] text-[#31593a] text-xs font-bold">{{ parent_guardian_profile.status_label }}</span>
+        <span class="px-3 py-1 rounded-full bg-white text-stone-700 text-xs font-bold border border-[#ddd9d2]">{{ display_name }}</span>
+      </div>
+    </header>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-7">
+      <article class="rounded-2xl border border-[#ddd9d2] p-4 bg-[#eaf3ff]">
+        <p class="text-xs font-black tracking-widest uppercase text-stone-500">Mental Battery</p>
+        <p class="text-3xl font-headline font-extrabold mt-1">{{ parent_student_profile.battery }}%</p>
+        <p class="text-xs text-stone-600 mt-1">{{ parent_student_profile.stress_category | title }} stress band</p>
+      </article>
+      <article class="rounded-2xl border border-[#ddd9d2] p-4 bg-[#fff8df]">
+        <p class="text-xs font-black tracking-widest uppercase text-stone-500">Weekly Average Stress</p>
+        <p class="text-3xl font-headline font-extrabold mt-1">{{ parent_analysis.weekly_average }}</p>
+        <p class="text-xs text-stone-600 mt-1">Momentum: {{ parent_analysis.momentum_label }}</p>
+      </article>
+      <article class="rounded-2xl border border-[#ddd9d2] p-4 bg-[#fbe7ec]">
+        <p class="text-xs font-black tracking-widest uppercase text-stone-500">Daily Sleep</p>
+        <p class="text-3xl font-headline font-extrabold mt-1">{{ parent_lifestyle_insights.sleep_hours }}h</p>
+        <p class="text-xs text-stone-600 mt-1">Status: {{ parent_lifestyle_insights.sleep_status }}</p>
+      </article>
+      <article class="rounded-2xl border border-[#ddd9d2] p-4 bg-[#e7f7ea]">
+        <p class="text-xs font-black tracking-widest uppercase text-stone-500">Counselling</p>
+        <p class="text-xl font-headline font-extrabold mt-1">{{ parent_counselling.booked_label }}</p>
+        <p class="text-xs text-stone-600 mt-1">Attendance: {{ parent_counselling.attended_label }}</p>
+      </article>
+    </section>
+
+    <section class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-7">
+      <article class="xl:col-span-2 bg-white rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)] border border-[#ddd9d2]">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <h3 class="font-headline text-2xl font-bold">Weekly Stress Analysis</h3>
+            <p class="text-sm text-stone-500 mt-1">7-day trend for {{ parent_student_profile.name }}.</p>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-[#f5f2ec] text-[#2f405c] text-xs font-bold">Risk: {{ parent_analysis.risk_level }}</span>
+        </div>
+        <div class="mt-5 h-64"><canvas id="parentTrendChart"></canvas></div>
+      </article>
+
+      <article class="bg-white rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)] border border-[#ddd9d2]">
+        <h3 class="font-headline text-2xl font-bold">Ward Profile</h3>
+        <div class="mt-4 space-y-3 text-sm text-[#415071]">
+          <div class="rounded-2xl border border-[#e6dfd4] bg-[#faf8f4] p-3">
+            <p class="text-xs uppercase tracking-widest font-bold text-stone-500">Student</p>
+            <p class="mt-1 font-semibold text-[#1f293f]">{{ parent_student_profile.name }}</p>
+            <p class="text-xs text-stone-500 mt-1">{{ parent_student_profile.email }}</p>
+          </div>
+          <div class="rounded-2xl border border-[#e6dfd4] bg-[#faf8f4] p-3">
+            <p class="text-xs uppercase tracking-widest font-bold text-stone-500">Hostel Block</p>
+            <p class="mt-1 font-semibold text-[#1f293f]">{{ parent_student_profile.hostel_block }}</p>
+          </div>
+          <div class="rounded-2xl border border-[#e6dfd4] bg-[#faf8f4] p-3">
+            <p class="text-xs uppercase tracking-widest font-bold text-stone-500">Last Update</p>
+            <p class="mt-1 font-semibold text-[#1f293f]">{{ parent_student_profile.updated_at_label }}</p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <article class="bg-white rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)] border border-[#ddd9d2]">
+        <h3 class="font-headline text-2xl font-bold">Recent Assessments</h3>
+        <div class="mt-4 overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-stone-500 border-b border-[#ece4d9]">
+                <th class="py-2 pr-3">Quiz</th>
+                <th class="py-2 pr-3">Score</th>
+                <th class="py-2 pr-3">Risk</th>
+                <th class="py-2">Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in parent_recent_attempts %}
+              <tr class="border-b border-[#f1ebe2]">
+                <td class="py-2 pr-3 font-semibold text-[#1f293f]">{{ row.quiz_title }}</td>
+                <td class="py-2 pr-3">{{ row.score_percent }}%</td>
+                <td class="py-2 pr-3">{{ row.risk_band }}</td>
+                <td class="py-2 text-stone-500">{{ row.created_at_label }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="bg-gradient-to-br from-[#11131a] to-[#232b39] text-white rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.12)]">
+        <h3 class="font-headline text-2xl font-bold">Recommendations</h3>
+        <ul class="space-y-3 mt-4 text-sm text-[#d5def5]">
+          {% for tip in parent_analysis.recommendations %}
+          <li class="rounded-2xl border border-white/15 bg-white/5 p-3">{{ tip }}</li>
+          {% endfor %}
+        </ul>
+        <p class="text-xs text-[#c2cdea] mt-5">{{ parent_privacy_line }}</p>
+      </article>
+    </section>
+  </main>
+
+  <script id="parent-weekly-logs" type="application/json">{{ parent_weekly_logs | tojson }}</script>
+  <script>
+    (function () {
+      var theme = window.EqWellChartTheme || null;
+      if (theme && typeof theme.applyDefaults === 'function') {
+        theme.applyDefaults();
+      }
+      var palette = theme ? theme.palette : { navy: '#355f8e', muted: '#5f6f88' };
+
+      var logs = [];
+      try {
+        logs = JSON.parse(document.getElementById('parent-weekly-logs').textContent || '[]');
+      } catch (_err) {
+        logs = [];
+      }
+
+      if (!Array.isArray(logs) || !logs.length) {
+        logs = [
+          { day: 'Mon', stress: 58 },
+          { day: 'Tue', stress: 56 },
+          { day: 'Wed', stress: 55 },
+          { day: 'Thu', stress: 54 },
+          { day: 'Fri', stress: 52 },
+          { day: 'Sat', stress: 50 },
+          { day: 'Sun', stress: 49 }
+        ];
+      }
+
+      var ctx = document.getElementById('parentTrendChart');
+      if (!ctx || typeof Chart === 'undefined') return;
+
+      var dataset = theme
+        ? theme.lineDataset('Stress', logs.map(function (item) { return Number(item.stress || 0); }), palette.navy)
+        : {
+            label: 'Stress',
+            data: logs.map(function (item) { return Number(item.stress || 0); }),
+            borderColor: '#496d94',
+            backgroundColor: 'rgba(73, 109, 148, 0.16)',
+            pointBackgroundColor: '#233d60',
+            pointRadius: 4,
+            borderWidth: 3,
+            tension: 0.35,
+            fill: true
+          };
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: logs.map(function (item) { return item.day; }),
+          datasets: [dataset]
+        },
+        options: theme
+          ? theme.cartesianOptions({
+              plugins: { legend: { display: false } },
+              scales: { y: { max: 100 }, x: { grid: { display: false } } }
+            })
+          : {
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 100,
+                  ticks: { color: '#5f6f88' },
+                  grid: { color: '#eee7dd' }
+                },
+                x: {
+                  ticks: { color: '#5f6f88' },
+                  grid: { display: false }
+                }
+              },
+              plugins: {
+                legend: { display: false }
+              }
+            }
+      });
+    })();
+  </script>
+</body>
+</html>
+
+

@@ -1,0 +1,328 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }} | EqWell</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            surface: '#ece8e2',
+            'surface-container-lowest': '#ffffff',
+            'surface-container-low': '#f3f2f1',
+            'surface-container': '#ece8e2',
+            'surface-container-high': '#e4e0da',
+            'on-surface': '#1a1c22',
+            primary: '#11131a',
+            secondary: '#355f8e',
+            'secondary-container': '#e6dab2',
+            'on-secondary-container': '#2d3240',
+            outline: '#d7d4cf'
+          },
+          fontFamily: {
+            headline: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .bg-reflection-blob {
+      background: radial-gradient(circle at 50% 50%, rgba(230, 218, 178, 0.58) 0%, rgba(236, 232, 226, 0) 72%);
+    }
+
+    .quiz-panel {
+      display: none;
+    }
+
+    .quiz-panel.active {
+      display: block;
+    }
+  </style>
+  <style id="card-wrap-guard">
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+  <link rel="stylesheet" href="mobile-overrides.css" />
+</head>
+<body class="bg-surface font-body text-on-surface antialiased overflow-x-hidden">
+  <aside class="fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-50">
+    <div class="mb-12 px-4">
+      <h1 class="text-2xl font-black text-[#f4f6fa] font-headline">EqWell</h1>
+      <p class="text-xs font-medium tracking-widest uppercase text-[#a7afc2] mt-1">Student Wellbeing</p>
+    </div>
+
+    <nav class="flex-1 space-y-3">
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200" href="{{ url_for('student_dashboard') }}">
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-headline tracking-tight">Home</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200" href="{{ url_for('student_tasks_page') }}">
+        <span class="material-symbols-outlined">checklist</span>
+        <span class="font-headline tracking-tight">Tasks</span>
+      </a>
+      <a class="rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]" href="{{ url_for('student_quiz_selector_page', quiz=sidebar_quiz_key) }}">
+        <span class="material-symbols-outlined">quiz</span>
+        <span class="font-headline tracking-tight">Quizzes</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200" href="{{ url_for('student_counselling_page') }}">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="font-headline tracking-tight">Counselling</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200" href="{{ url_for('student_profile') }}">
+        <span class="material-symbols-outlined">badge</span>
+        <span class="font-headline tracking-tight">Profile</span>
+      </a>
+      <form class="pt-2" method="post" action="{{ url_for('logout') }}">
+        <button class="w-full text-left text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200" type="submit">
+          <span class="material-symbols-outlined">logout</span>
+          <span class="font-headline tracking-tight">Logout</span>
+        </button>
+      </form>
+    </nav>
+  </aside>
+
+  <main class="ml-72 min-h-screen px-8 py-10 relative">
+    <div class="absolute top-40 right-0 w-[560px] h-[560px] bg-reflection-blob -z-10 blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto">
+      <header class="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <a class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white text-sm font-bold" href="{{ url_for('student_dashboard') }}#quiz-section">
+          <span class="material-symbols-outlined text-base">arrow_back</span>
+          Back to Dashboard
+        </a>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-surface-container text-stone-700 text-xs font-bold">{{ quiz.duration }}</span>
+          <span class="px-3 py-1 rounded-full bg-surface-container text-stone-700 text-xs font-bold">{{ quiz.difficulty }}</span>
+          <span class="px-3 py-1 rounded-full bg-surface-container text-stone-700 text-xs font-bold">{{ quiz.focus }}</span>
+        </div>
+      </header>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <section class="space-y-2 mb-6">
+            {% for category, message in messages %}
+              <p class="rounded-xl px-4 py-3 text-sm font-semibold {% if category == 'success' %}bg-green-100 text-green-800{% else %}bg-rose-100 text-rose-800{% endif %}">{{ message }}</p>
+            {% endfor %}
+          </section>
+        {% endif %}
+      {% endwith %}
+
+      <section class="flex flex-col xl:flex-row gap-10 items-start">
+        <div class="w-full xl:w-1/3 xl:sticky xl:top-12">
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-secondary mb-4">Current Module</p>
+          <h1 class="font-headline text-4xl md:text-6xl font-extrabold text-primary leading-[1.08] tracking-tight">
+            CHECK IN<br>
+            WITH YOUR<br>
+            <span class="text-secondary">MENTAL RHYTHM</span>
+          </h1>
+          <div class="mt-7 flex gap-2">
+            <div class="h-1.5 w-12 rounded-full bg-primary"></div>
+            <div class="h-1.5 w-12 rounded-full bg-secondary-container"></div>
+            <div class="h-1.5 w-12 rounded-full bg-surface-container-high"></div>
+          </div>
+          <p class="mt-6 text-sm text-stone-600 leading-relaxed max-w-sm">
+            {{ quiz.description or 'This guided assessment helps you identify daily stress patterns and choose practical recovery actions.' }}
+          </p>
+        </div>
+
+        <div class="w-full xl:w-2/3">
+          <form id="quiz-form" method="post" action="{{ url_for('student_quiz_attempt_page', quiz_key=quiz.key) }}" class="bg-surface-container-low rounded-3xl p-7 md:p-8 shadow-[0_12px_48px_rgba(28,28,25,0.06)] border border-outline/20">
+            <div class="mb-6">
+              <div class="flex items-center justify-between gap-3 mb-2">
+                <p class="text-xs font-black tracking-widest uppercase text-stone-500">{{ quiz.title }}</p>
+                <p id="quiz-progress-label" class="text-xs font-bold text-stone-600">Question 1 / {{ quiz.questions|length }}</p>
+              </div>
+              <div class="w-full h-2.5 rounded-full bg-surface-container overflow-hidden">
+                <div id="quiz-progress-bar" class="h-full rounded-full bg-secondary transition-all duration-300" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div id="quiz-panel-wrap">
+              {% for question in quiz.questions %}
+                <section class="quiz-panel {% if loop.first %}active{% endif %}" data-index="{{ loop.index0 }}" data-question-id="{{ question.id }}">
+                  <div class="flex items-center justify-between mb-3">
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-stone-500">Question {{ loop.index }}</p>
+                    <span class="material-symbols-outlined text-secondary">auto_awesome</span>
+                  </div>
+                  <h3 class="font-headline text-2xl md:text-3xl font-extrabold leading-tight text-primary">{{ question.prompt }}</h3>
+
+                  <div class="mt-6 space-y-3">
+                    {% for option in question.options %}
+                      {% set checked = selected_answers.get(question.id) == option.id %}
+                      <label class="block cursor-pointer">
+                        <input type="radio" class="peer sr-only" name="answer_{{ question.id }}" value="{{ option.id }}" {% if checked %}checked{% endif %}>
+                        <span class="w-full group text-left px-5 py-4 rounded-full border border-outline/45 bg-white hover:border-secondary-container hover:bg-secondary-container/70 transition-all duration-200 flex items-center gap-4 peer-checked:bg-secondary-container peer-checked:border-secondary peer-checked:text-on-secondary-container">
+                          <span class="w-8 h-8 rounded-full border border-outline/60 bg-surface-container-low flex items-center justify-center text-xs font-bold font-headline text-stone-700 peer-checked:bg-white">
+                            {{ ['A','B','C','D','E','F'][loop.index0] if loop.index0 < 6 else loop.index }}
+                          </span>
+                          <span class="font-medium text-on-surface">{{ option.label }}</span>
+                        </span>
+                      </label>
+                    {% endfor %}
+                  </div>
+                </section>
+              {% endfor %}
+            </div>
+
+            <div class="mt-7 flex flex-wrap items-center justify-between gap-3">
+              <p id="quiz-status-text" class="text-sm font-semibold text-stone-500">Answer each question and move next.</p>
+              <div class="flex items-center gap-3">
+                <button id="quiz-prev" type="button" class="px-5 py-3 rounded-full border border-outline/50 bg-white text-stone-700 text-sm font-bold">Previous</button>
+                <button id="quiz-next" type="button" class="px-6 py-3 rounded-full bg-primary text-white text-sm font-bold">Next</button>
+                <button id="quiz-submit" type="submit" class="hidden px-6 py-3 rounded-full bg-primary text-white text-sm font-bold">Submit Quiz</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-8">
+        <article class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+          <h3 class="font-headline text-xl font-bold mb-2">Latest Attempt</h3>
+          {% if latest_attempt %}
+            <p class="text-sm text-stone-600">{{ latest_attempt.quiz_title }}</p>
+            <p class="text-xs text-stone-500 mt-1">{{ latest_attempt.created_at_label }}</p>
+            <div class="mt-3 flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-full bg-surface-container text-xs font-bold">{{ latest_attempt.score_percent }}%</span>
+              <span class="px-2.5 py-1 rounded-full bg-surface-container text-xs font-bold">{{ latest_attempt.risk_band }}</span>
+            </div>
+          {% else %}
+            <p class="text-sm text-stone-500">No previous attempts for this quiz yet.</p>
+          {% endif %}
+        </article>
+
+        {% if quiz_result %}
+          <article class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)] xl:col-span-2">
+            <h3 class="font-headline text-xl font-bold mb-2">Current Result</h3>
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+              <span class="px-2.5 py-1 rounded-full bg-surface-container text-xs font-bold">{{ quiz_result.score_percent }}% wellbeing</span>
+              <span class="px-2.5 py-1 rounded-full bg-surface-container text-xs font-bold">{{ quiz_result.risk_band }}</span>
+              <span class="px-2.5 py-1 rounded-full bg-surface-container text-xs font-bold">{{ quiz_result.average_stress }}/5 stress</span>
+            </div>
+            <p class="text-sm text-stone-700">{{ quiz_result.summary }}</p>
+            {% if quiz_result.mood_analysis %}
+              <p class="mt-3 text-sm text-stone-700"><strong>Mood analysis:</strong> {{ quiz_result.mood_analysis }}</p>
+            {% endif %}
+            {% if quiz_result.risk_analysis %}
+              <p class="mt-2 text-sm text-stone-700"><strong>Risk analysis:</strong> {{ quiz_result.risk_analysis }}</p>
+            {% endif %}
+            {% if quiz_result.recommendations %}
+              <ul class="mt-3 list-disc pl-5 text-sm text-stone-600 space-y-1">
+                {% for rec in quiz_result.recommendations %}
+                  <li>{{ rec }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </article>
+        {% endif %}
+      </section>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var panels = Array.from(document.querySelectorAll('.quiz-panel'));
+      var total = panels.length;
+      if (!total) return;
+
+      var currentIndex = panels.findIndex(function (panel) { return panel.classList.contains('active'); });
+      if (currentIndex < 0) currentIndex = 0;
+
+      var prevBtn = document.getElementById('quiz-prev');
+      var nextBtn = document.getElementById('quiz-next');
+      var submitBtn = document.getElementById('quiz-submit');
+      var statusText = document.getElementById('quiz-status-text');
+      var progressLabel = document.getElementById('quiz-progress-label');
+      var progressBar = document.getElementById('quiz-progress-bar');
+      var form = document.getElementById('quiz-form');
+
+      function currentPanel() {
+        return panels[currentIndex] || null;
+      }
+
+      function answered(panel) {
+        if (!panel) return false;
+        var qid = String(panel.getAttribute('data-question-id') || '').trim();
+        if (!qid) return false;
+        return !!form.querySelector('input[name="answer_' + qid + '"]:checked');
+      }
+
+      function firstUnansweredIndex() {
+        for (var i = 0; i < panels.length; i++) {
+          if (!answered(panels[i])) return i;
+        }
+        return -1;
+      }
+
+      function paint() {
+        panels.forEach(function (panel, idx) {
+          panel.classList.toggle('active', idx === currentIndex);
+        });
+
+        var pct = Math.round(((currentIndex + 1) / total) * 100);
+        if (progressLabel) progressLabel.textContent = 'Question ' + (currentIndex + 1) + ' / ' + total;
+        if (progressBar) progressBar.style.width = pct + '%';
+
+        if (prevBtn) prevBtn.disabled = currentIndex === 0;
+        var isLast = currentIndex === (total - 1);
+        if (nextBtn) nextBtn.classList.toggle('hidden', isLast);
+        if (submitBtn) submitBtn.classList.toggle('hidden', !isLast);
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function () {
+          if (currentIndex > 0) {
+            currentIndex -= 1;
+            paint();
+            if (statusText) statusText.textContent = 'Review and update your response if needed.';
+          }
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function () {
+          var panel = currentPanel();
+          if (!answered(panel)) {
+            if (statusText) statusText.textContent = 'Pick one option to continue.';
+            return;
+          }
+          if (currentIndex < total - 1) {
+            currentIndex += 1;
+            paint();
+            if (statusText) statusText.textContent = 'Great. Continue to the next question.';
+          }
+        });
+      }
+
+      if (form) {
+        form.addEventListener('submit', function (event) {
+          var missing = firstUnansweredIndex();
+          if (missing >= 0) {
+            event.preventDefault();
+            currentIndex = missing;
+            paint();
+            if (statusText) statusText.textContent = 'Please answer all questions before submitting.';
+          }
+        });
+      }
+
+      paint();
+    })();
+  </script>
+</body>
+</html>
+
+
+

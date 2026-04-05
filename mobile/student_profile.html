@@ -1,0 +1,437 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }} | EqWell</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            surface: '#ece8e2',
+            'surface-container-lowest': '#ffffff',
+            'surface-container-low': '#f3f2f1',
+            'surface-container': '#ece8e2',
+            'surface-container-high': '#e4e0da',
+            'surface-container-highest': '#dcd8d2',
+            'on-surface': '#1a1c22',
+            'on-surface-variant': '#5f687b',
+            primary: '#11131a',
+            secondary: '#355f8e',
+            'secondary-container': '#e6dab2',
+            'on-secondary-container': '#2d3240',
+            calm: '#a8d5bf',
+            alert: '#f0c6ce',
+            info: '#bcd4f2'
+          },
+          fontFamily: {
+            headline: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 450, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .weekly-log-bar {
+      border-radius: 14px 14px 10px 10px;
+      transition: height 0.45s ease;
+    }
+
+    .profile-card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .profile-card-body {
+      flex: 1;
+    }
+
+    @media (max-width: 1024px) {
+      .student-main {
+        margin-left: 0;
+      }
+
+      .student-sidebar {
+        display: none;
+      }
+
+      .student-page {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+    }
+  </style>
+  <style id="card-wrap-guard">
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+  <link rel="stylesheet" href="mobile-overrides.css" />
+</head>
+<body class="bg-surface font-body text-on-surface antialiased overflow-x-hidden">
+  <aside class="student-sidebar fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-50">
+    <div class="mb-12 px-4">
+      <h1 class="text-2xl font-black text-[#f4f6fa] font-headline">EqWell</h1>
+      <p class="text-xs font-medium tracking-widest uppercase text-[#a7afc2] mt-1">Student Wellbeing</p>
+    </div>
+
+    <nav class="flex-1 space-y-3">
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_dashboard') }}">
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-headline tracking-tight">Home</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_tasks_page') }}">
+        <span class="material-symbols-outlined">checklist</span>
+        <span class="font-headline tracking-tight">Tasks</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_quiz_selector_page', quiz=sidebar_quiz_key) }}">
+        <span class="material-symbols-outlined">quiz</span>
+        <span class="font-headline tracking-tight">Quizzes</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_counselling_page') }}">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="font-headline tracking-tight">Counselling</span>
+      </a>
+      <a class="rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]" href="{{ url_for('student_profile') }}">
+        <span class="material-symbols-outlined">badge</span>
+        <span class="font-headline tracking-tight">Profile</span>
+      </a>
+
+      <form class="pt-2" method="post" action="{{ url_for('logout') }}">
+        <button class="w-full text-left text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" type="submit">
+          <span class="material-symbols-outlined">logout</span>
+          <span class="font-headline tracking-tight">Logout</span>
+        </button>
+      </form>
+    </nav>
+  </aside>
+
+  <main class="student-main ml-72 min-h-screen">
+    <header class="flex justify-between items-center w-full px-12 py-6 sticky top-0 bg-[#f3f2f1]/85 backdrop-blur-[20px] border-b border-[#d7d4cf] z-40">
+      <div class="flex flex-col">
+        <h2 class="font-headline text-2xl font-bold tracking-tight text-[#1a1c22]">My Profile</h2>
+        <p class="text-on-surface-variant font-medium mt-1">Personal data, wellbeing charts, and trusted contacts.</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container-high hover:opacity-80 transition-opacity" type="button">
+          <span class="material-symbols-outlined">notifications</span>
+        </button>
+        <img src="{{ user_avatar_url }}" alt="Student avatar" class="w-12 h-12 rounded-full object-cover border-2 border-[#d7d4cf] shadow-sm" />
+      </div>
+    </header>
+
+    <div class="student-page px-4 sm:px-6 lg:px-12 py-8 max-w-7xl mx-auto space-y-8">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <section class="space-y-2">
+            {% for category, message in messages %}
+              <div class="rounded-2xl border px-4 py-3 text-sm font-semibold {% if category == 'success' %}border-[#cde8d3] bg-[#e7f6eb] text-[#2f6a3d]{% else %}border-[#efcad3] bg-[#f9e8ed] text-[#7a2f49]{% endif %}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </section>
+        {% endif %}
+      {% endwith %}
+
+      {% if not student_setup_ready %}
+      <section class="rounded-3xl border border-[#f1d7de] bg-[#fff3f6] px-5 py-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p class="text-xs font-black tracking-widest uppercase text-[#8f304d]">Student Access Setup Required</p>
+            <p class="mt-1 text-sm font-semibold text-[#7a2f49]">Complete both checks below to unlock full student access.</p>
+          </div>
+          <a href="{{ url_for('student_google_fit_connect') }}" class="rounded-full bg-[#7a2f49] px-4 py-2 text-xs font-bold text-white hover:opacity-90 transition-opacity">Connect Google Fit</a>
+        </div>
+        <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+          <div class="rounded-2xl bg-white px-4 py-3 border border-[#ecd6dc]">
+            <p class="font-black uppercase tracking-wide text-[11px] text-[#8f304d]">Parent Information</p>
+            <p class="mt-1 font-semibold {% if student_setup_details.parent_ready %}text-[#2f6a3d]{% else %}text-[#7a2f49]{% endif %}">
+              {% if student_setup_details.parent_ready %}Ready{% else %}Incomplete{% endif %}
+            </p>
+          </div>
+          <div class="rounded-2xl bg-white px-4 py-3 border border-[#ecd6dc]">
+            <p class="font-black uppercase tracking-wide text-[11px] text-[#8f304d]">Google Fit</p>
+            <p class="mt-1 font-semibold {% if student_setup_details.google_fit_ready %}text-[#2f6a3d]{% else %}text-[#7a2f49]{% endif %}">
+              {% if student_setup_details.google_fit_ready %}Ready{% else %}Incomplete{% endif %}
+            </p>
+          </div>
+        </div>
+      </section>
+      {% endif %}
+
+      <section class="grid grid-cols-1 2xl:grid-cols-2 gap-6 items-stretch">
+        <article class="profile-card bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+          <p class="text-[11px] font-black tracking-widest uppercase text-[#8f8572]">Profile Snapshot</p>
+          <div class="profile-card-body mt-4 grid grid-cols-1 md:grid-cols-[140px,1fr] gap-5 items-start">
+            <img
+              src="{{ user_avatar_url }}"
+              alt="Student profile photo"
+              class="w-32 h-32 rounded-2xl object-cover"
+            />
+            <div>
+              <h3 class="font-headline text-2xl font-bold">{{ display_name }}</h3>
+              <p class="text-sm text-on-surface-variant mt-1">Student ID: STU-{{ (display_name|length * 127) % 10000 }}</p>
+              <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                <div class="rounded-2xl bg-surface-container-low px-4 py-3">
+                  <p class="text-xs font-black tracking-wide uppercase text-on-surface-variant">Email</p>
+                  <p class="font-semibold mt-1 break-all">{{ session.get('email') }}</p>
+                </div>
+                <div class="rounded-2xl bg-surface-container-low px-4 py-3">
+                  <p class="text-xs font-black tracking-wide uppercase text-on-surface-variant">Current Mood</p>
+                  <p class="font-semibold mt-1">{{ mood_label }} ({{ mood_score }}/5)</p>
+                </div>
+              </div>
+
+              <div class="mt-4 rounded-2xl bg-surface-container-low px-4 py-3">
+                <div class="flex items-center justify-between gap-3">
+                  <p class="text-xs font-black tracking-wide uppercase text-on-surface-variant">Achievement Badges</p>
+                  <span class="text-xs font-bold text-on-surface-variant">{{ (student_badges | selectattr('unlocked') | list | length) }}/{{ student_badges|length }} unlocked</span>
+                </div>
+                <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {% for badge in student_badges %}
+                  <div class="rounded-xl border px-3 py-2 {% if badge.unlocked %}bg-white border-[#d7d4cf]{% else %}bg-[#efede8] border-[#e1ddd6] opacity-80{% endif %}">
+                    <div class="flex items-center gap-2">
+                      <span class="material-symbols-outlined text-lg {% if badge.unlocked %}{% if badge.tone == 'emerald' %}text-[#2f7d58]{% elif badge.tone == 'sky' %}text-[#2d5e90]{% else %}text-[#916a11]{% endif %}{% else %}text-[#8f8572]{% endif %}">{{ badge.icon }}</span>
+                      <p class="text-xs font-black leading-none {% if badge.unlocked %}text-[#1a1c22]{% else %}text-[#5f687b]{% endif %}">{{ badge.label }}</p>
+                    </div>
+                    <p class="mt-1 text-[11px] leading-4 text-on-surface-variant">{{ badge.progress }}</p>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="profile-card bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+          <div class="flex items-center justify-between">
+            <p class="text-[11px] font-black tracking-widest uppercase text-[#8f8572]">Wellbeing Mix</p>
+            <span class="px-3 py-1 rounded-full text-xs font-black bg-secondary-container text-on-secondary-container">Live</span>
+          </div>
+          <div class="profile-card-body mt-5 grid grid-cols-1 lg:grid-cols-[210px,1fr] gap-5 items-center">
+            <div class="relative w-48 h-48 mx-auto flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 288 288" aria-hidden="true">
+                <circle class="text-surface-container-low" cx="144" cy="144" fill="transparent" r="120" stroke="currentColor" stroke-width="24"></circle>
+                <circle
+                  id="profile-battery-ring"
+                  class="text-[#4f90b7] transition-all duration-1000"
+                  cx="144"
+                  cy="144"
+                  fill="transparent"
+                  r="120"
+                  stroke="currentColor"
+                  stroke-dasharray="753.6"
+                  stroke-dashoffset="{{ 753.6 - ((mood_battery / 100) * 753.6) }}"
+                  stroke-linecap="round"
+                  stroke-width="24"></circle>
+              </svg>
+              <div class="absolute inset-0 grid place-items-center text-center">
+                <p class="font-headline text-4xl font-black" id="profile-battery-percent">{{ mood_battery }}%</p>
+                <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Battery</p>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <div class="rounded-2xl bg-calm/50 px-4 py-3 flex items-center justify-between">
+                <span class="text-sm font-semibold">Recovery Stability</span>
+                <span class="text-sm font-black">78</span>
+              </div>
+              <div class="rounded-2xl bg-info/55 px-4 py-3 flex items-center justify-between">
+                <span class="text-sm font-semibold">Focus Consistency</span>
+                <span class="text-sm font-black">69</span>
+              </div>
+              <div class="rounded-2xl bg-alert/60 px-4 py-3 flex items-center justify-between">
+                <span class="text-sm font-semibold">Stress Vulnerability</span>
+                <span class="text-sm font-black">41</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid grid-cols-1 2xl:grid-cols-[1.4fr,1fr] gap-6 items-stretch">
+        <article class="profile-card bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+          <div class="flex items-center justify-between">
+            <h3 class="font-headline text-xl font-bold">Weekly Trend</h3>
+            <span class="text-xs font-black tracking-wide uppercase text-on-surface-variant">7 Days</span>
+          </div>
+          <p class="text-sm text-on-surface-variant mt-1">Weekly logs from dashboard flow (mock data for now).</p>
+
+          <div class="profile-card-body mt-6 h-60 grid grid-cols-7 gap-3 items-end" id="weekly-log-bars"></div>
+        </article>
+
+        <article class="profile-card bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+          <h3 class="font-headline text-xl font-bold">Account Privacy</h3>
+          <div class="profile-card-body mt-4 space-y-3 text-sm">
+            <div class="rounded-2xl bg-surface-container-low px-4 py-3">Only wellbeing signals are kept for support prediction.</div>
+            <div class="rounded-2xl bg-surface-container-low px-4 py-3">Chat text is transformed into mood vectors before storage.</div>
+            <div class="rounded-2xl bg-surface-container-low px-4 py-3">Trusted contacts can be connected for future guardian login.</div>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid grid-cols-1 2xl:grid-cols-2 gap-6 items-stretch">
+        <article class="profile-card bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+          <div class="flex items-center justify-between">
+            <h3 class="font-headline text-xl font-bold">Proctor Information</h3>
+            <span class="px-3 py-1 rounded-full text-xs font-black bg-surface-container-low text-on-surface-variant">Future Login</span>
+          </div>
+          <p class="text-sm text-on-surface-variant mt-1">Add your academic proctor contact for upcoming proctor portal access.</p>
+
+          <form id="proctor-form" class="profile-card-body mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 content-start">
+            <input id="proctor-name" class="rounded-xl border-0 bg-surface-container-low px-4 py-3 text-sm font-medium" placeholder="Proctor name" type="text" />
+            <input id="proctor-email" class="rounded-xl border-0 bg-surface-container-low px-4 py-3 text-sm font-medium" placeholder="Proctor email" type="email" />
+            <input id="proctor-phone" class="rounded-xl border-0 bg-surface-container-low px-4 py-3 text-sm font-medium" placeholder="Phone" type="text" />
+            <input id="proctor-dept" class="rounded-xl border-0 bg-surface-container-low px-4 py-3 text-sm font-medium" placeholder="Department" type="text" />
+            <button class="sm:col-span-2 rounded-full bg-primary text-white py-3 text-sm font-bold hover:opacity-90 transition-opacity" type="button" id="save-proctor">Save Proctor Draft</button>
+          </form>
+        </article>
+
+        <article class="profile-card bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+          <div class="flex items-center justify-between">
+            <h3 class="font-headline text-xl font-bold">Parent Information</h3>
+            <span class="px-3 py-1 rounded-full text-xs font-black {% if parent_contact.verified %}bg-[#dff3e3] text-[#2d7042]{% else %}bg-[#fff3da] text-[#7b5a23]{% endif %}">
+              {% if parent_contact.verified %}Verified{% else %}Pending Verification{% endif %}
+            </span>
+          </div>
+          <p class="text-sm text-on-surface-variant mt-1">Student adds parent contact, verifies via WhatsApp OTP, and only risk summaries are shared.</p>
+
+          <div class="mt-4 rounded-2xl bg-surface-container-low px-4 py-3 text-sm">
+            <div class="flex items-center justify-between gap-2">
+              <p class="font-semibold">Google Fit Setup</p>
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-black {% if student_setup_details.google_fit_ready %}bg-[#dff3e3] text-[#2d7042]{% else %}bg-[#fff3da] text-[#7b5a23]{% endif %}">
+                {% if student_setup_details.google_fit_ready %}Ready{% else %}Action Needed{% endif %}
+              </span>
+            </div>
+            <p class="mt-1 text-on-surface-variant">
+              {% if google_fit.connected_account_email %}
+                Account: {{ google_fit.connected_account_email }}
+              {% else %}
+                No Google account linked yet.
+              {% endif %}
+            </p>
+            {% if google_fit.last_sync_at %}
+              <p class="mt-1 text-on-surface-variant">Last sync: {{ google_fit.last_sync_at }}</p>
+            {% endif %}
+            {% if student_setup_details.google_fit_connected and not student_setup_details.google_fit_account_match %}
+              <p class="mt-2 text-xs font-semibold text-[#7a2f49]">Connected Google account does not match your student login email ({{ session.get('email') }}).</p>
+            {% endif %}
+            <a href="{{ url_for('student_google_fit_connect') }}" class="mt-3 inline-flex rounded-full bg-primary px-4 py-2 text-xs font-bold text-white hover:opacity-90 transition-opacity">
+              {% if student_setup_details.google_fit_ready %}Reconnect Google Fit{% else %}Connect Google Fit{% endif %}
+            </a>
+          </div>
+
+          <div class="mt-4 rounded-2xl bg-surface-container-low px-4 py-3 text-sm">
+            <p class="font-semibold">Current setup</p>
+            <p class="mt-1 text-on-surface-variant">
+              {% if parent_contact.parent_name %}
+                {{ parent_contact.parent_name }} â€¢ {{ parent_contact.parent_phone_masked }}
+              {% else %}
+                No parent contact saved yet.
+              {% endif %}
+            </p>
+            <p class="mt-1 text-on-surface-variant">
+              Consent: {% if parent_contact.consent_enabled %}enabled{% else %}not enabled{% endif %} |
+              Alerts: {% if parent_contact.alerts_enabled %}enabled{% else %}disabled{% endif %}
+            </p>
+            {% if parent_contact.verified_at %}
+              <p class="mt-1 text-on-surface-variant">Verified at: {{ parent_contact.verified_at }}</p>
+            {% endif %}
+            {% if parent_contact.verified %}
+              <p class="mt-2 text-xs font-semibold text-[#7a2f49]">Locked after verification. Admin can edit only once if number changes.</p>
+            {% endif %}
+          </div>
+
+          <form method="post" action="{{ url_for('student_parent_contact_request_otp') }}" class="profile-card-body mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 content-start">
+            <input name="parent_name" class="rounded-xl border-0 bg-surface-container-low px-4 py-3 text-sm font-medium" placeholder="Parent name" type="text" value="{{ parent_contact.parent_name }}" {% if parent_contact.verified %}disabled{% else %}required{% endif %} />
+            <input name="parent_phone" class="rounded-xl border-0 bg-surface-container-low px-4 py-3 text-sm font-medium" placeholder="Phone (ex: +9198XXXXXXXX)" type="text" value="{{ parent_contact.parent_phone }}" {% if parent_contact.verified %}disabled{% else %}required{% endif %} />
+            <label class="sm:col-span-2 rounded-xl bg-surface-container-low px-4 py-3 text-sm font-semibold flex items-center gap-2">
+              <input type="checkbox" name="consent_enabled" {% if parent_contact.consent_enabled %}checked{% endif %} {% if parent_contact.verified %}disabled{% endif %} required />
+              I consent to share only summary wellbeing alerts with my parent.
+            </label>
+            <label class="sm:col-span-2 rounded-xl bg-surface-container-low px-4 py-3 text-sm font-semibold flex items-center gap-2">
+              <input type="checkbox" name="alerts_enabled" {% if parent_contact.alerts_enabled %}checked{% endif %} {% if parent_contact.verified %}disabled{% endif %} />
+              Enable parent alerts for significant risk conditions.
+            </label>
+            {% if not parent_contact.verified %}
+            <button class="sm:col-span-2 rounded-full bg-primary text-white py-3 text-sm font-bold hover:opacity-90 transition-opacity" type="submit">Send WhatsApp OTP</button>
+            <p class="sm:col-span-2 text-xs text-on-surface-variant">OTP expires in {{ parent_otp_ttl_minutes }} minutes. Number is saved after successful verification.</p>
+            {% endif %}
+          </form>
+
+          {% if not parent_contact.verified %}
+          <form method="post" action="{{ url_for('student_parent_contact_verify_otp') }}" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input name="otp_code" maxlength="6" class="rounded-xl border-0 bg-surface-container-low px-4 py-3 text-sm font-medium" placeholder="Enter 6-digit OTP" type="text" required />
+            <button class="rounded-full bg-[#0f1118] text-white py-3 text-sm font-bold hover:opacity-90 transition-opacity" type="submit">Verify OTP</button>
+          </form>
+          {% endif %}
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <script id="weekly-logs-data" type="application/json">{{ weekly_logs | tojson }}</script>
+  <script>
+    const weeklyLogsSource = document.getElementById('weekly-logs-data');
+    const weeklyLogs = weeklyLogsSource ? JSON.parse(weeklyLogsSource.textContent || '[]') : [];
+
+    function renderWeeklyLogs(logs) {
+      const host = document.getElementById('weekly-log-bars');
+      if (!host) {
+        return;
+      }
+
+      host.innerHTML = logs
+        .map((item, index) => {
+          const palette = ['#dde6f0', '#cfdff0', '#b7d3ee', '#9fc5ea', '#89b7e5', '#72a9de', '#5d9ad4'];
+          const color = palette[index % palette.length];
+          const height = Math.max(18, Math.min(100, Number(item.stress || 0)));
+          return `
+            <div class="h-full flex flex-col justify-end items-center gap-2">
+              <div class="weekly-log-bar w-full" style="height:${height}%; background:${color};"></div>
+              <span class="text-xs font-bold text-on-surface-variant">${item.day}</span>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    function loadDrafts() {
+      const proctor = JSON.parse(localStorage.getItem('student_profile_proctor') || '{}');
+
+      document.getElementById('proctor-name').value = proctor.name || '';
+      document.getElementById('proctor-email').value = proctor.email || '';
+      document.getElementById('proctor-phone').value = proctor.phone || '';
+      document.getElementById('proctor-dept').value = proctor.dept || '';
+    }
+
+    function bindSaveButtons() {
+      document.getElementById('save-proctor').addEventListener('click', () => {
+        const payload = {
+          name: document.getElementById('proctor-name').value.trim(),
+          email: document.getElementById('proctor-email').value.trim(),
+          phone: document.getElementById('proctor-phone').value.trim(),
+          dept: document.getElementById('proctor-dept').value.trim(),
+        };
+        localStorage.setItem('student_profile_proctor', JSON.stringify(payload));
+      });
+    }
+
+    renderWeeklyLogs(Array.isArray(weeklyLogs) ? weeklyLogs : []);
+    loadDrafts();
+    bindSaveButtons();
+  </script>
+</body>
+</html>
+
+
+

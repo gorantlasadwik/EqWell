@@ -1,0 +1,155 @@
+﻿/* Mobile alignment and wrapping overrides for copied web UI templates */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+:where(h1, h2, h3, h4, h5, h6, p, span, a, li, td, th, label, button, small, strong, code) {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+:where(section, article, div, main, header, nav, aside, form) {
+  min-width: 0;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 1100px) {
+  .app-shell {
+    display: block !important;
+  }
+
+  .sidebar {
+    position: relative !important;
+    width: 100% !important;
+    min-height: auto !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid rgba(140, 148, 165, 0.28) !important;
+  }
+
+  .main {
+    padding: 14px !important;
+  }
+
+  .topbar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+
+  .top-controls {
+    width: 100% !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .privacy-strip {
+    line-height: 1.35;
+  }
+
+  aside.fixed.left-0.top-0 {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  main.ml-72,
+  [class~="ml-72"] {
+    margin-left: 0 !important;
+  }
+
+  [class*="px-10"],
+  [class*="px-8"] {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  [class*="py-8"] {
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+  }
+
+  .student-chat-fab {
+    right: 12px !important;
+    bottom: 12px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .slot-calendar-grid {
+    gap: 6px !important;
+  }
+
+  .day-cell {
+    height: 34px !important;
+    font-size: 12px !important;
+  }
+
+  .student-chat-modal {
+    padding: 10px !important;
+  }
+
+  .student-chat-dialog {
+    width: 100% !important;
+    max-height: 86vh !important;
+    border-radius: 18px !important;
+  }
+
+  .folio-shell {
+    width: min(100%, 1000px);
+    padding: 14px 12px 26px !important;
+  }
+
+  .folio-panel {
+    border-radius: 22px !important;
+    padding: 18px 14px !important;
+  }
+
+  .folio-topbar,
+  .folio-social-links,
+  .folio-hero-actions,
+  .folio-footer-row,
+  .folio-footer-row nav {
+    flex-wrap: wrap;
+    gap: 8px !important;
+  }
+
+  .folio-hero-content h1,
+  .folio-services-panel h2,
+  .folio-cta-panel h2 {
+    font-size: clamp(1.8rem, 8.5vw, 2.35rem) !important;
+    line-height: 1.08 !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  .folio-hero-content p,
+  .folio-services-sub,
+  .folio-role-card p,
+  .folio-trust-note p,
+  .folio-footer-row p {
+    font-size: 0.95rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .folio-logo-strip,
+  .folio-role-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }} | EqWell</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="{{ url_for('static', filename='figma_chart_theme.js') }}"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <style id="card-wrap-guard">
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+  <link rel="stylesheet" href="mobile-overrides.css" />
+</head>
+<body class="bg-[#ece8e2] font-['Inter'] text-[#1a1c22] antialiased">
+  <aside class="fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130]">
+    <div class="mb-12 px-4"><h1 class="text-2xl font-black text-[#f4f6fa] font-['Plus_Jakarta_Sans']">EqWell</h1><p class="text-xs tracking-widest uppercase text-[#a7afc2] mt-1">Parent Console</p></div>
+    <nav class="flex-1 space-y-3">
+      <a class="{% if active_nav == 'overview' %}rounded-full px-6 py-3.5 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white font-bold flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_overview_page') }}"><span class="material-symbols-outlined">home</span>Overview</a>
+      <a class="{% if active_nav == 'weekly-trend' %}rounded-full px-6 py-3.5 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white font-bold flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_weekly_trend_page') }}"><span class="material-symbols-outlined">query_stats</span>Weekly Trend</a>
+      <a class="{% if active_nav == 'alerts' %}rounded-full px-6 py-3.5 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white font-bold flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_alerts_page') }}"><span class="material-symbols-outlined">warning</span>Alerts</a>
+      <a class="{% if active_nav == 'lifestyle' %}rounded-full px-6 py-3.5 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white font-bold flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_lifestyle_page') }}"><span class="material-symbols-outlined">self_improvement</span>Lifestyle</a>
+      <a class="{% if active_nav == 'contact' %}rounded-full px-6 py-3.5 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white font-bold flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_contact_page') }}"><span class="material-symbols-outlined">contacts</span>Contact</a>
+      <form method="post" action="{{ url_for('logout') }}" class="pt-2"><button type="submit" class="w-full text-left text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4"><span class="material-symbols-outlined">logout</span>Logout</button></form>
+    </nav>
+  </aside>
+
+  <main class="ml-72 min-h-screen px-10 py-8">
+    <header class="mb-7">
+      <p class="text-xs tracking-widest uppercase text-stone-500 font-black">Parent Lifestyle</p>
+      <h2 class="text-4xl font-black font-['Plus_Jakarta_Sans'] mt-1">Lifestyle Performance</h2>
+      <p class="text-sm text-stone-500 mt-2">Sleep and activity diagnostics with simple interpretation for guardians.</p>
+    </header>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-7">
+      <article class="rounded-2xl border border-[#ddd9d2] p-4 bg-[#eaf3ff]"><p class="text-xs uppercase tracking-widest text-stone-500 font-bold">Sleep</p><p class="text-3xl font-black mt-1 font-['Plus_Jakarta_Sans']">{{ parent_lifestyle_insights.sleep_hours }}h</p><p class="text-xs text-stone-600 mt-1">{{ parent_lifestyle_insights.sleep_status }}</p></article>
+      <article class="rounded-2xl border border-[#ddd9d2] p-4 bg-[#fff8df]"><p class="text-xs uppercase tracking-widest text-stone-500 font-bold">Steps</p><p class="text-3xl font-black mt-1 font-['Plus_Jakarta_Sans']">{{ parent_lifestyle_insights.steps }}</p><p class="text-xs text-stone-600 mt-1">{{ parent_lifestyle_insights.activity_status }}</p></article>
+      <article class="rounded-2xl border border-[#ddd9d2] p-4 bg-[#e7f7ea]"><p class="text-xs uppercase tracking-widest text-stone-500 font-bold">Fitness Component</p><p class="text-3xl font-black mt-1 font-['Plus_Jakarta_Sans']">{{ parent_lifestyle_insights.fitness_component }}/5</p><p class="text-xs text-stone-600 mt-1">Derived wellness signal</p></article>
+    </section>
+
+    <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <article class="bg-white rounded-3xl p-6 border border-[#ddd9d2] shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+        <h3 class="text-2xl font-bold font-['Plus_Jakarta_Sans']">Sleep Vs Activity</h3>
+        <div class="h-64 mt-4"><canvas id="lifestyleChart"></canvas></div>
+      </article>
+      <article class="bg-white rounded-3xl p-6 border border-[#ddd9d2] shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+        <h3 class="text-2xl font-bold font-['Plus_Jakarta_Sans']">Insights</h3>
+        <ul class="space-y-3 mt-4 text-sm text-[#415071]">
+          <li class="rounded-2xl border border-[#e6dfd4] bg-[#faf7f2] p-3">Maintain regular sleep above 7 hours for better stress recovery.</li>
+          <li class="rounded-2xl border border-[#e6dfd4] bg-[#faf7f2] p-3">Aim for consistent activity above 6000 steps on weekdays.</li>
+          <li class="rounded-2xl border border-[#e6dfd4] bg-[#faf7f2] p-3">Use counselling and routine support when stress trend rises for two days.</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <script id="parent-lifestyle-json" type="application/json">{{ parent_lifestyle_insights | tojson }}</script>
+  <script>
+    (function () {
+      var theme = window.EqWellChartTheme || null;
+      if (theme && typeof theme.applyDefaults === 'function') {
+        theme.applyDefaults();
+      }
+      var palette = theme ? theme.palette : { navy: '#4f90b7', mint: '#63b27a' };
+
+      var payload = {};
+      try {
+        payload = JSON.parse(document.getElementById('parent-lifestyle-json').textContent || '{}');
+      } catch (_err) {
+        payload = {};
+      }
+
+      var sleep = Number(payload.sleep_hours);
+      var steps = Number(payload.steps);
+      if (!Number.isFinite(sleep) || sleep <= 0) sleep = 6.9;
+      if (!Number.isFinite(steps) || steps <= 0) steps = 6480;
+
+      var chart = document.getElementById('lifestyleChart');
+      if (!chart || typeof Chart === 'undefined') return;
+      var stepsInThousands = Math.max(1, Math.round(steps / 1000));
+      var chartMax = Math.max(10, Math.ceil(Math.max(sleep, stepsInThousands) + 2));
+      var dataset = {
+        data: [sleep, stepsInThousands],
+        backgroundColor: [theme ? palette.navy : '#55769c', theme ? palette.mint : '#87a46e'],
+        borderRadius: 12,
+        borderSkipped: false
+      };
+
+      new Chart(chart, {
+        type: 'bar',
+        data: {
+          labels: ['Sleep Hours', 'Steps (x1000)'],
+          datasets: [dataset]
+        },
+        options: theme
+          ? theme.cartesianOptions({
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { suggestedMax: chartMax },
+                x: { grid: { display: false } }
+              }
+            })
+          : {
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { beginAtZero: true, suggestedMax: chartMax, ticks: { color: '#5c6d86' }, grid: { color: '#ece4d9' } },
+                x: { ticks: { color: '#5c6d86' }, grid: { display: false } }
+              }
+            }
+      });
+    })();
+  </script>
+</body>
+</html>
+
+

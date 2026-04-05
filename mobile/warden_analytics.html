@@ -1,0 +1,625 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }} | EqWell</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            surface: '#ece8e2',
+            'surface-container-lowest': '#ffffff',
+            'surface-container-low': '#f3f2f1',
+            'surface-container': '#ece8e2',
+            'surface-container-high': '#e4e0da',
+            'on-surface': '#1a1c22',
+            primary: '#11131a',
+            secondary: '#355f8e',
+            outline: '#d7d4cf'
+          },
+          fontFamily: {
+            headline: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .dashboard-shell {
+      border-radius: 32px;
+      border: 1px solid rgba(196, 199, 199, 0.38);
+      background: rgba(255, 255, 255, 0.84);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 12px 48px rgba(28, 28, 25, 0.06);
+      padding: 30px;
+    }
+
+    .control-card {
+      border-radius: 24px;
+      border: 1px solid rgba(196, 199, 199, 0.35);
+      background: #ffffff;
+      padding: 18px;
+      box-shadow: 0 10px 34px rgba(28, 28, 25, 0.05);
+    }
+
+    .chart-card {
+      border-radius: 30px;
+      border: 1px solid rgba(196, 199, 199, 0.35);
+      background: #fff;
+      box-shadow: 0 12px 40px rgba(28, 28, 25, 0.06);
+      padding: 24px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chart-box {
+      position: relative;
+      width: 100%;
+      height: auto;
+    }
+
+    .bars-shell {
+      height: 228px;
+      display: flex;
+      align-items: end;
+      gap: 14px;
+      padding: 0 4px;
+    }
+
+    .bars-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .bars-track {
+      width: 100%;
+      max-width: 56px;
+      height: 172px;
+      border-radius: 14px;
+      background: #ece8e2;
+      border: 1px solid rgba(196, 199, 199, 0.35);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+    }
+
+    .bars-fill {
+      width: 100%;
+      border-radius: 12px 12px 0 0;
+      height: 0;
+      transition: height .35s ease;
+      background: linear-gradient(180deg, #8ca7c8 0%, #4f90b7 100%);
+    }
+
+    .bars-dot {
+      position: absolute;
+      left: 50%;
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      transform: translateX(-50%);
+      background: #d58a94;
+      border: 2px solid #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .bars-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #526078;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .ring-shell {
+      width: 172px;
+      height: 172px;
+      position: relative;
+      margin: 8px auto 0;
+    }
+
+    .ring-shell svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .comp-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .comp-track {
+      flex: 1;
+      height: 16px;
+      border-radius: 999px;
+      background: #ece8e2;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .comp-seg-low {
+      background: #8bc89a;
+    }
+
+    .comp-seg-mod {
+      background: #dfc177;
+    }
+
+    .comp-seg-high {
+      background: #d58a94;
+    }
+
+    .legend-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #3a4760;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    .summary-chip {
+      border-radius: 999px;
+      border: 1px solid rgba(196, 199, 199, 0.35);
+      background: #f3f2f1;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #42506a;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .demand-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 12px;
+      border: 1px solid rgba(196, 199, 199, 0.35);
+      background: #f6f3ee;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #2c374e;
+    }
+
+    .demand-row strong {
+      border-radius: 999px;
+      border: 1px solid rgba(196, 199, 199, 0.35);
+      background: #fff;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .mini-trend {
+      margin-top: 10px;
+      height: 86px;
+      display: flex;
+      align-items: end;
+      gap: 8px;
+    }
+
+    .mini-trend-col {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mini-trend-bar {
+      width: 100%;
+      max-width: 18px;
+      border-radius: 999px 999px 0 0;
+      background: rgba(255, 255, 255, 0.2);
+      transition: height .25s ease;
+    }
+
+    .mini-trend-bar.peak {
+      background: linear-gradient(180deg, #dd7258 0%, #cf5f48 100%);
+      box-shadow: 0 6px 16px rgba(207, 95, 72, 0.35);
+    }
+
+    .mini-trend-day {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: rgba(220, 229, 247, 0.68);
+    }
+
+    @media (max-width: 1280px) {
+      .dashboard-shell {
+        padding: 24px;
+      }
+
+      .chart-box {
+        min-height: 0;
+      }
+    }
+  </style>
+  <style id="card-wrap-guard">
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+  <link rel="stylesheet" href="mobile-overrides.css" />
+</head>
+<body class="bg-surface font-body text-on-surface antialiased overflow-x-hidden">
+  <aside class="fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-50">
+    <div class="mb-12 px-4">
+      <h1 class="text-2xl font-black text-[#f4f6fa] font-headline">EqWell</h1>
+      <p class="text-xs font-medium tracking-widest uppercase text-[#a7afc2] mt-1">Warden Console</p>
+    </div>
+
+    <nav class="flex-1 space-y-3">
+      <a class="{% if active_nav == 'overview' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]{% else %}text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200{% endif %}" href="{{ url_for('warden_overview_page') }}">
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-headline tracking-tight">Overview</span>
+      </a>
+      <a class="{% if active_nav == 'students' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]{% else %}text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200{% endif %}" href="{{ url_for('warden_students_page') }}">
+        <span class="material-symbols-outlined">group</span>
+        <span class="font-headline tracking-tight">Students</span>
+      </a>
+      <a class="{% if active_nav == 'analytics' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]{% else %}text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200{% endif %}" href="{{ url_for('warden_analytics_page') }}">
+        <span class="material-symbols-outlined">query_stats</span>
+        <span class="font-headline tracking-tight">Analytics</span>
+      </a>
+      <a class="{% if active_nav == 'alerts' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]{% else %}text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200{% endif %}" href="{{ url_for('warden_alerts_page') }}">
+        <span class="material-symbols-outlined">warning</span>
+        <span class="font-headline tracking-tight">Alerts</span>
+      </a>
+      <form class="pt-2" method="post" action="{{ url_for('logout') }}">
+        <button class="w-full text-left text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200" type="submit">
+          <span class="material-symbols-outlined">logout</span>
+          <span class="font-headline tracking-tight">Logout</span>
+        </button>
+      </form>
+    </nav>
+  </aside>
+
+  <main class="ml-72 min-h-screen px-10 py-8">
+    <header class="dashboard-shell flex flex-wrap items-start justify-between gap-4 mb-8">
+      <div>
+        <p class="text-[10px] font-black tracking-[0.11em] uppercase text-stone-500">Warden Analytics</p>
+        <h2 class="font-headline text-4xl font-extrabold tracking-tight mt-1">Performance and Risk Analytics</h2>
+        <p class="text-sm text-stone-500 mt-2 max-w-3xl">Deep visual analysis for block health index, demand pressure, and risk composition.</p>
+      </div>
+      <div class="flex items-center gap-3 bg-surface-container px-4 py-2 rounded-full border border-[#d7d4cf]">
+        <span class="px-3 py-1 rounded-full bg-[#e4f3e8] text-[#31593a] text-xs font-bold inline-flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#2d7042]"></span>
+          Live Analytics
+        </span>
+        <span class="px-3 py-1 rounded-full bg-surface-container-lowest text-stone-700 text-xs font-bold border border-[#d7d4cf]">{{ display_name }}</span>
+      </div>
+    </header>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+      <article class="control-card">
+        <p class="text-xs font-black tracking-widest uppercase text-stone-500">Hostel Filter</p>
+        <select id="hostel-filter" class="mt-2 w-full rounded-full border-[#d7d4cf] text-sm font-semibold bg-surface-container-lowest"></select>
+      </article>
+      <article class="control-card">
+        <p class="text-xs font-black tracking-widest uppercase text-stone-500">Risk Threshold</p>
+        <select id="threshold-filter" class="mt-2 w-full rounded-full border-[#d7d4cf] text-sm font-semibold bg-surface-container-lowest">
+          <option value="55">High risk below 55</option>
+          <option value="60" selected>High risk below 60</option>
+          <option value="65">High risk below 65</option>
+        </select>
+      </article>
+      <article class="control-card bg-[#11131a] text-white border-[#202738]">
+        <p class="text-xs font-black tracking-widest uppercase text-[#cfd9ef]">Signal Window</p>
+        <p class="text-sm mt-2 text-[#dce5f7]">Analysis combines live block metrics and counselling demand split.</p>
+        <div id="analytics-mini-trend" class="mini-trend" aria-hidden="true"></div>
+        <p id="analytics-meta" class="text-xs mt-3 text-[#9fb3d3] font-semibold">Loading analytics feed...</p>
+      </article>
+    </section>
+
+    <section class="grid grid-cols-1 xl:grid-cols-12 gap-6 pb-1">
+      <article class="chart-card xl:col-span-8">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 class="font-headline text-2xl font-bold">Block Performance Comparison</h3>
+            <p class="text-xs uppercase tracking-wide text-stone-500 mt-1">Health index profile by selected hostel set</p>
+          </div>
+          <span id="analytics-block-count" class="summary-chip">0 blocks</span>
+        </div>
+        <div class="chart-box mt-5">
+          <div id="block-performance-bars" class="bars-shell"></div>
+        </div>
+      </article>
+
+      <article class="chart-card xl:col-span-4">
+        <h3 class="font-headline text-2xl font-bold">Risk Distribution</h3>
+        <p class="text-xs uppercase tracking-wide text-stone-500 mt-1">Healthy, stable, watchlist, critical</p>
+        <div class="ring-shell">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="40" stroke="#ece8e2" stroke-width="12" fill="none"></circle>
+            <circle id="dist-arc-healthy" cx="50" cy="50" r="40" stroke="#8bc89a" stroke-width="12" fill="none" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round"></circle>
+            <circle id="dist-arc-stable" cx="50" cy="50" r="40" stroke="#8ca7c8" stroke-width="12" fill="none" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round"></circle>
+            <circle id="dist-arc-watch" cx="50" cy="50" r="40" stroke="#dfc177" stroke-width="12" fill="none" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round"></circle>
+            <circle id="dist-arc-critical" cx="50" cy="50" r="40" stroke="#d58a94" stroke-width="12" fill="none" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round"></circle>
+          </svg>
+          <div class="ring-center">
+            <span id="dist-total" class="text-3xl font-black text-[#1f2d43]">0</span>
+            <span class="text-[10px] uppercase tracking-widest font-bold text-[#6b768d]">Students</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-y-2 mt-3 text-[11px] font-bold text-[#33425b]">
+          <span>Healthy: <strong id="dist-healthy">0</strong></span>
+          <span>Stable: <strong id="dist-stable">0</strong></span>
+          <span>Watchlist: <strong id="dist-watch">0</strong></span>
+          <span>Critical: <strong id="dist-critical">0</strong></span>
+        </div>
+      </article>
+
+      <article class="chart-card xl:col-span-7">
+        <div class="flex items-center justify-between gap-2">
+          <h3 class="font-headline text-2xl font-bold">Risk Composition by Block</h3>
+          <div class="flex items-center gap-3">
+            <span class="legend-chip"><span class="legend-dot" style="background:#22c55e"></span>Low</span>
+            <span class="legend-chip"><span class="legend-dot" style="background:#f59e0b"></span>Moderate</span>
+            <span class="legend-chip"><span class="legend-dot" style="background:#ef4444"></span>High</span>
+          </div>
+        </div>
+        <div id="risk-composition-rows" class="space-y-4 mt-4"></div>
+      </article>
+
+      <article class="chart-card xl:col-span-5">
+        <h3 class="font-headline text-2xl font-bold">Counselling Demand Split</h3>
+        <p class="text-xs uppercase tracking-wide text-stone-500 mt-1">Current intervention queue state</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center mt-4">
+          <div class="space-y-2">
+            <div class="demand-row"><span>Pending</span><strong id="demand-pending">0</strong></div>
+            <div class="demand-row"><span>In Progress</span><strong id="demand-progress">0</strong></div>
+            <div class="demand-row"><span>Completed</span><strong id="demand-completed">0</strong></div>
+            <div class="demand-row"><span>Total</span><strong id="demand-total">0</strong></div>
+          </div>
+          <div class="chart-box">
+            <div class="ring-shell">
+              <svg viewBox="0 0 100 100" aria-hidden="true">
+                <circle cx="50" cy="50" r="40" stroke="#ece8e2" stroke-width="12" fill="none"></circle>
+                <circle id="demand-arc-pending" cx="50" cy="50" r="40" stroke="#dfc177" stroke-width="12" fill="none" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round"></circle>
+                <circle id="demand-arc-progress" cx="50" cy="50" r="40" stroke="#8ca7c8" stroke-width="12" fill="none" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round"></circle>
+              </svg>
+              <div class="ring-center">
+                <span id="demand-ring-total" class="text-3xl font-black text-[#1f2d43]">0</span>
+                <span class="text-[10px] uppercase tracking-widest font-bold text-[#6b768d]">Requests</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script id="warden-block-cards-json" type="application/json">{{ warden_block_cards | tojson }}</script>
+  <script id="warden-demand-json" type="application/json">{{ warden_demand_split | tojson }}</script>
+  <script>
+    (function () {
+      function parseById(id, fallback) {
+        var node = document.getElementById(id);
+        if (!node) return fallback;
+        try { return JSON.parse(node.textContent || ''); } catch (_err) { return fallback; }
+      }
+
+      var state = { hostel: 'all', threshold: 60 };
+      var sourceRows = parseById('warden-block-cards-json', []);
+      var demand = parseById('warden-demand-json', { pending: 0, in_progress: 0, completed: 0 });
+
+      function rowsFiltered() {
+        if (state.hostel === 'all') return sourceRows.slice();
+        return sourceRows.filter(function (r) { return String(r.label || '') === state.hostel; });
+      }
+
+      function populateHostels() {
+        var select = document.getElementById('hostel-filter');
+        select.innerHTML = ['<option value="all">All Hostels</option>'].concat(
+          sourceRows.map(function (row) {
+            return '<option value="' + escapeHtml(String(row.label || '')) + '">' + escapeHtml(String(row.label || '')) + '</option>';
+          })
+        ).join('');
+      }
+
+      function draw() {
+        var rows = rowsFiltered();
+        var labels = rows.map(function (r) { return r.label; });
+        var health = rows.map(function (r) { return Number(r.health_index || 0); });
+        var high = rows.map(function (r) { return Number(r.high || 0); });
+        var moderate = rows.map(function (r) { return Number(r.moderate || 0); });
+        var low = rows.map(function (r) { return Number(r.low || 0); });
+
+        var distribution = { healthy: 0, stable: 0, watchlist: 0, critical: 0 };
+        rows.forEach(function (r) {
+          distribution.critical += Number(r.high || 0);
+          distribution.watchlist += Number(r.moderate || 0);
+          if (Number(r.health_index || 0) >= state.threshold + 20) distribution.healthy += Number(r.low || 0);
+          else if (Number(r.health_index || 0) >= state.threshold) distribution.stable += Number(r.low || 0);
+          else distribution.watchlist += Number(r.low || 0);
+        });
+
+        var demandTotal = Number(demand.pending || 0) + Number(demand.in_progress || 0) + Number(demand.completed || 0);
+        var analyticsMeta = document.getElementById('analytics-meta');
+        if (analyticsMeta) {
+          analyticsMeta.textContent = 'Blocks: ' + rows.length + ' | Threshold: ' + state.threshold + ' | Requests: ' + demandTotal;
+        }
+        var blockCountEl = document.getElementById('analytics-block-count');
+        if (blockCountEl) blockCountEl.textContent = String(rows.length) + ' blocks';
+        var demandPendingEl = document.getElementById('demand-pending');
+        if (demandPendingEl) demandPendingEl.textContent = String(Number(demand.pending || 0));
+        var demandProgressEl = document.getElementById('demand-progress');
+        if (demandProgressEl) demandProgressEl.textContent = String(Number(demand.in_progress || 0));
+        var demandCompletedEl = document.getElementById('demand-completed');
+        if (demandCompletedEl) demandCompletedEl.textContent = String(Number(demand.completed || 0));
+        var demandTotalEl = document.getElementById('demand-total');
+        if (demandTotalEl) demandTotalEl.textContent = String(demandTotal);
+        var demandRingTotalEl = document.getElementById('demand-ring-total');
+        if (demandRingTotalEl) demandRingTotalEl.textContent = String(demandTotal);
+
+        var barsShell = document.getElementById('block-performance-bars');
+        if (barsShell) {
+          barsShell.innerHTML = rows.map(function (r) {
+            var label = String(r.label || 'Block');
+            var healthVal = Math.max(0, Math.min(100, Number(r.health_index || 0)));
+            var studentsVal = Number(r.students || 0);
+            var highShare = studentsVal ? Math.round((Number(r.high || 0) / studentsVal) * 100) : 0;
+            var fillColor = healthVal < state.threshold ? 'linear-gradient(180deg,#d58a94 0%,#ba6f82 100%)' : 'linear-gradient(180deg,#8ca7c8 0%,#4f90b7 100%)';
+            return '' +
+              '<div class="bars-col">' +
+                '<div class="bars-track">' +
+                  '<span class="bars-fill" style="height:' + Math.round(healthVal * 1.6) + 'px;background:' + fillColor + '"></span>' +
+                  '<span class="bars-dot" style="bottom:' + highShare + '%"></span>' +
+                '</div>' +
+                '<span class="bars-label">' + escapeHtml(label) + '</span>' +
+              '</div>';
+          }).join('');
+        }
+
+        var miniTrendEl = document.getElementById('analytics-mini-trend');
+        if (miniTrendEl) {
+          var miniDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+          var base = rows.length
+            ? rows.reduce(function (acc, r) {
+                return acc + (Number(r.high || 0) * 3) + (Number(r.moderate || 0) * 2) + Math.max(0, 80 - Number(r.health_index || 0));
+              }, 0) / rows.length
+            : 12;
+          var seq = miniDays.map(function (d, idx) {
+            var wave = 0.74 + (Math.sin((idx + 1) * 0.88) * 0.18);
+            var spike = idx === 2 ? 1.16 : 1;
+            return { day: d, val: Math.max(8, Math.round(base * wave * spike)) };
+          });
+          var maxVal = Math.max.apply(null, seq.map(function (s) { return s.val; }).concat([1]));
+          var peakIndex = seq.reduce(function (best, s, idx, list) {
+            return s.val > list[best].val ? idx : best;
+          }, 0);
+          miniTrendEl.innerHTML = seq.map(function (entry, idx) {
+            var h = Math.max(18, Math.round((entry.val / maxVal) * 64));
+            var peakClass = idx === peakIndex ? ' peak' : '';
+            return '' +
+              '<div class="mini-trend-col">' +
+                '<span class="mini-trend-bar' + peakClass + '" style="height:' + h + 'px"></span>' +
+                '<span class="mini-trend-day">' + entry.day + '</span>' +
+              '</div>';
+          }).join('');
+        }
+
+        setDistValue('dist-healthy', distribution.healthy);
+        setDistValue('dist-stable', distribution.stable);
+        setDistValue('dist-watch', distribution.watchlist);
+        setDistValue('dist-critical', distribution.critical);
+        setDistValue('dist-total', distribution.healthy + distribution.stable + distribution.watchlist + distribution.critical);
+
+        setRingArcs(
+          ['dist-arc-healthy', 'dist-arc-stable', 'dist-arc-watch', 'dist-arc-critical'],
+          [distribution.healthy, distribution.stable, distribution.watchlist, distribution.critical]
+        );
+
+        var compRowsEl = document.getElementById('risk-composition-rows');
+        if (compRowsEl) {
+          compRowsEl.innerHTML = rows.map(function (r) {
+            var label = String(r.label || 'Block');
+            var lowVal = Number(r.low || 0);
+            var modVal = Number(r.moderate || 0);
+            var highVal = Number(r.high || 0);
+            var totalVal = Math.max(1, lowVal + modVal + highVal);
+            var lowPct = Math.round((lowVal / totalVal) * 100);
+            var modPct = Math.round((modVal / totalVal) * 100);
+            var highPct = Math.max(0, 100 - lowPct - modPct);
+            return '' +
+              '<div class="comp-row">' +
+                '<span class="w-16 text-[10px] font-black uppercase tracking-[0.08em] text-[#44516a]">' + escapeHtml(label) + '</span>' +
+                '<div class="comp-track">' +
+                  '<span class="comp-seg-low" style="width:' + lowPct + '%"></span>' +
+                  '<span class="comp-seg-mod" style="width:' + modPct + '%"></span>' +
+                  '<span class="comp-seg-high" style="width:' + highPct + '%"></span>' +
+                '</div>' +
+                '<span class="w-8 text-right text-[11px] font-bold text-[#33425b]">' + totalVal + '</span>' +
+              '</div>';
+          }).join('');
+        }
+
+        setRingArcs(
+          ['demand-arc-pending', 'demand-arc-progress'],
+          [Number(demand.pending || 0), Number(demand.in_progress || 0), Number(demand.completed || 0)]
+        );
+      }
+
+      function setDistValue(id, value) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = String(value);
+      }
+
+      function setRingArcs(arcIds, rawValues) {
+        var values = rawValues.slice();
+        var total = values.reduce(function (acc, v) { return acc + Number(v || 0); }, 0);
+        var circumference = 251.2;
+        var offset = 0;
+        arcIds.forEach(function (id, idx) {
+          var el = document.getElementById(id);
+          if (!el) return;
+          var value = Number(values[idx] || 0);
+          var share = total ? value / total : 0;
+          el.style.strokeDashoffset = String(circumference - share * circumference + offset);
+          offset += share * circumference;
+        });
+      }
+
+      function escapeHtml(value) {
+        return String(value || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      populateHostels();
+      document.getElementById('hostel-filter').addEventListener('change', function (e) { state.hostel = e.target.value; draw(); });
+      document.getElementById('threshold-filter').addEventListener('change', function (e) { state.threshold = Number(e.target.value || 60); draw(); });
+      draw();
+    })();
+  </script>
+</body>
+</html>
+
+
+

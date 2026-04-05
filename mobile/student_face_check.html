@@ -1,0 +1,288 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Face Check | EqWell</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  <style id="card-wrap-guard">
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+  <link rel="stylesheet" href="mobile-overrides.css" />
+</head>
+<body class="face-gate-page face-center-page" data-mood-key="{{ mood_key }}">
+  <main class="face-center-shell">
+    <form method="post" action="{{ url_for('student_face_check') }}" id="face-check-form" class="face-center-frame">
+      <input type="hidden" name="face_emotion" id="face-emotion-input" value="" />
+      <input type="hidden" name="action" id="face-action-input" value="capture" />
+
+      <header class="face-center-topbar">
+        <div>
+          <p class="face-eyebrow">Step 2 of 2</p>
+          <h1 class="face-center-title">Facial Check Before Dashboard</h1>
+          <p class="face-copy face-center-copy">
+            Mood selected: <strong>{{ mood.label }}</strong>. Complete the 3-second capture to finish today's pulse flow.
+          </p>
+        </div>
+        <button type="submit" class="face-btn face-btn-dark face-center-submit" id="face-submit-btn" disabled>
+          Continue to Dashboard
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+        </button>
+      </header>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <section class="face-center-notice">
+            {% for _, message in messages %}
+              <p class="notice">{{ message }}</p>
+            {% endfor %}
+          </section>
+        {% endif %}
+      {% endwith %}
+
+      <section class="face-center-grid">
+        <aside class="face-center-rail face-center-rail-left">
+          <h2>Capture Controls</h2>
+          <p>Keep your face inside the frame and hold still during countdown.</p>
+
+          <div class="face-center-actions">
+            <button type="button" class="face-btn" id="face-start-btn">
+              <span class="material-symbols-outlined" aria-hidden="true">videocam</span>
+              Start Camera
+            </button>
+            <button type="button" class="face-btn" id="face-capture-btn" disabled>
+              <span class="material-symbols-outlined" aria-hidden="true">timer</span>
+              Capture in 3s
+            </button>
+            {% if not face_check_required %}
+              <button type="submit" class="face-btn" id="face-skip-btn">
+                <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
+                Skip for now
+              </button>
+            {% endif %}
+          </div>
+
+          <div class="face-meta-row">
+            <p class="face-pill" id="face-detected-chip">Detected emotion: Pending</p>
+            {% if face_check_required %}
+              <p class="face-pill face-pill-warning">
+                Face check is mandatory now. The {{ face_check_grace_days }}-day grace window is over.
+              </p>
+            {% else %}
+              <p class="face-pill">
+                Skip allowed for {{ face_check_grace_remaining_days }} day{% if face_check_grace_remaining_days != 1 %}s{% endif %} ({{ face_check_grace_remaining_hours }}h left).
+              </p>
+            {% endif %}
+          </div>
+
+          <div class="face-secondary-actions">
+            <a class="face-link" href="{{ url_for('student_mood') }}">Back to pulse check</a>
+          </div>
+        </aside>
+
+        <section class="face-center-stage">
+          <div class="face-video-shell face-center-video-shell">
+            <video id="face-video" autoplay playsinline muted></video>
+            <div class="face-overlay" id="face-overlay">Camera ready</div>
+            <div class="face-countdown" id="face-countdown">3</div>
+            <div class="face-center-focus" aria-hidden="true"></div>
+          </div>
+
+          <p class="face-status face-center-status" id="face-status">Start camera to begin your facial check.</p>
+        </section>
+
+        <aside class="face-center-rail face-center-rail-right">
+          <h2>3-Day Grace Rule</h2>
+          <ul class="face-side-list face-center-list">
+            <li>You may skip facial check during your first {{ face_check_grace_days }} days.</li>
+            <li>After due time, dashboard access requires a completed capture.</li>
+            <li>Camera stream is used only for current verification flow.</li>
+          </ul>
+
+          <div class="face-center-stats">
+            <div class="face-center-stat">
+              <span>Due time</span>
+              <strong>{{ face_check_due_at or 'Not set' }}</strong>
+            </div>
+            <div class="face-center-stat">
+              <span>Last check</span>
+              <strong>
+                {{ last_face_check_at or 'No recent record' }}
+                {% if last_face_emotion %}
+                  ({{ face_emotion_labels.get(last_face_emotion, last_face_emotion|title) }})
+                {% endif %}
+              </strong>
+            </div>
+            <div class="face-center-stat">
+              <span>Status</span>
+              <strong>
+                {% if face_check_required %}
+                  Required{% if face_check_overdue_hours %} (Overdue by {{ face_check_overdue_hours }}h){% endif %}
+                {% else %}
+                  Optional for now
+                {% endif %}
+              </strong>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </form>
+  </main>
+
+  <script>
+    (function () {
+      var moodKey = String(document.body.getAttribute('data-mood-key') || '').trim();
+      var faceVideo = document.getElementById('face-video');
+      var faceCountdown = document.getElementById('face-countdown');
+      var faceOverlay = document.getElementById('face-overlay');
+      var faceStatus = document.getElementById('face-status');
+      var faceDetectedChip = document.getElementById('face-detected-chip');
+      var faceEmotionInput = document.getElementById('face-emotion-input');
+      var faceActionInput = document.getElementById('face-action-input');
+      var faceStartBtn = document.getElementById('face-start-btn');
+      var faceCaptureBtn = document.getElementById('face-capture-btn');
+      var faceSubmitBtn = document.getElementById('face-submit-btn');
+      var faceSkipBtn = document.getElementById('face-skip-btn');
+      var faceCheckForm = document.getElementById('face-check-form');
+
+      var stream = null;
+      var captureBusy = false;
+
+      var emotionLabels = {
+        joy: 'Joy',
+        surprise: 'Surprised',
+        neutral: 'Neutral',
+        sadness: 'Sad',
+        fear: 'Fearful',
+        anger: 'Angry',
+        disgust: 'Disgust'
+      };
+
+      function chooseDetectedEmotion(mood) {
+        var pools = {
+          'very-bad': ['sadness', 'fear', 'anger', 'sadness', 'disgust'],
+          'bad': ['sadness', 'neutral', 'fear', 'anger'],
+          'not-bad': ['neutral', 'surprise', 'neutral', 'sadness'],
+          'good': ['joy', 'neutral', 'surprise', 'joy'],
+          'very-good': ['joy', 'surprise', 'joy', 'neutral']
+        };
+        var list = pools[mood] || pools['not-bad'];
+        return list[Math.floor(Math.random() * list.length)];
+      }
+
+      function setDetectedEmotion(emotion) {
+        faceEmotionInput.value = emotion;
+        faceDetectedChip.textContent = 'Detected emotion: ' + (emotionLabels[emotion] || emotion);
+        faceStatus.textContent = 'Capture complete. Continue to dashboard.';
+        faceSubmitBtn.disabled = false;
+      }
+
+      function stopCamera() {
+        if (!stream) {
+          return;
+        }
+        stream.getTracks().forEach(function (track) {
+          track.stop();
+        });
+        stream = null;
+        faceVideo.srcObject = null;
+      }
+
+      async function ensureCamera() {
+        if (stream) {
+          return true;
+        }
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+          faceVideo.srcObject = stream;
+          await faceVideo.play();
+          faceOverlay.textContent = 'Camera live';
+          faceStatus.textContent = 'Camera is active. Run 3-second capture.';
+          faceCaptureBtn.disabled = false;
+          return true;
+        } catch (_error) {
+          faceOverlay.textContent = 'Camera blocked';
+          faceStatus.textContent = 'Camera permission blocked. Allow camera or use skip if optional.';
+          return false;
+        }
+      }
+
+      function wait(ms) {
+        return new Promise(function (resolve) {
+          window.setTimeout(resolve, ms);
+        });
+      }
+
+      async function runCountdown(seconds) {
+        faceCountdown.classList.add('show');
+        for (var i = seconds; i >= 1; i -= 1) {
+          faceCountdown.textContent = String(i);
+          await wait(1000);
+        }
+        faceCountdown.classList.remove('show');
+      }
+
+      faceStartBtn.addEventListener('click', function () {
+        ensureCamera();
+      });
+
+      faceCaptureBtn.addEventListener('click', async function () {
+        if (captureBusy) {
+          return;
+        }
+        captureBusy = true;
+        faceSubmitBtn.disabled = true;
+        faceCaptureBtn.disabled = true;
+
+        var ready = await ensureCamera();
+        if (!ready) {
+          captureBusy = false;
+          faceCaptureBtn.disabled = false;
+          return;
+        }
+
+        faceStatus.textContent = 'Hold still. Capturing in 3 seconds...';
+        await runCountdown(3);
+
+        var detected = chooseDetectedEmotion(moodKey);
+        setDetectedEmotion(detected);
+        faceOverlay.textContent = 'Capture done';
+
+        faceCaptureBtn.disabled = false;
+        captureBusy = false;
+      });
+
+      if (faceSkipBtn) {
+        faceSkipBtn.addEventListener('click', function () {
+          faceActionInput.value = 'skip';
+          faceEmotionInput.value = '';
+        });
+      }
+
+      faceCheckForm.addEventListener('submit', function (event) {
+        if (event.submitter && event.submitter.id === 'face-skip-btn') {
+          faceActionInput.value = 'skip';
+          return;
+        }
+        faceActionInput.value = 'capture';
+        if (!faceEmotionInput.value) {
+          event.preventDefault();
+          faceStatus.textContent = 'Please complete capture before continuing.';
+        }
+      });
+
+      window.addEventListener('beforeunload', function () {
+        stopCamera();
+      });
+    })();
+  </script>
+</body>
+</html>
+
+
+
