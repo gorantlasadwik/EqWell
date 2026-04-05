@@ -59,15 +59,12 @@ def should_use_mobile_templates():
 
 
 def render_template(template_name_or_list, *args, **kwargs):
-    if (
-        isinstance(template_name_or_list, str)
-        and MOBILE_TEMPLATE_DIR is not None
-        and should_use_mobile_templates()
-    ):
-        try:
-            return flask_render_template(f"mobile/{template_name_or_list}", *args, **kwargs)
-        except TemplateNotFound:
-            pass
+    if isinstance(template_name_or_list, str) and should_use_mobile_templates():
+        if template_name_or_list != "mobile_desktop_only.html":
+            return flask_render_template(
+                "mobile_desktop_only.html",
+                requested_template=template_name_or_list,
+            )
     return flask_render_template(template_name_or_list, *args, **kwargs)
 
 
