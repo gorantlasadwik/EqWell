@@ -28,6 +28,7 @@ Thumbs.db
 
 # Temporary archives
 *.zip
+!application/static/downloads/eqwell-extension.zip
 
 # Local legacy workspace snapshot (not part of clean repo layout)
 frontend/
