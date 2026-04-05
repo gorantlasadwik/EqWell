@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }} | EqWell</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <style id="card-wrap-guard">
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+</head>
+<body class="bg-[#ece8e2] font-['Inter'] text-[#1a1c22] antialiased">
+  <aside class="fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-40">
+    <div class="mb-12 px-4"><h1 class="text-2xl font-black text-[#f4f6fa] font-['Plus_Jakarta_Sans']">EqWell</h1><p class="text-xs tracking-widest uppercase text-[#a7afc2] mt-1">Proctor Console</p></div>
+    <nav class="flex-1 space-y-3">
+      <a class="{% if active_nav == 'overview' %}rounded-full px-6 py-3.5 font-bold bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('proctor_overview_page') }}"><span class="material-symbols-outlined">space_dashboard</span>Overview</a>
+      <a class="{% if active_nav == 'students' %}rounded-full px-6 py-3.5 font-bold bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('proctor_students_page') }}"><span class="material-symbols-outlined">group</span>Students</a>
+      <a class="{% if active_nav == 'analytics' %}rounded-full px-6 py-3.5 font-bold bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('proctor_analytics_page') }}"><span class="material-symbols-outlined">analytics</span>Analytics</a>
+      <a class="{% if active_nav == 'alerts' %}rounded-full px-6 py-3.5 font-bold bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('proctor_alerts_page') }}"><span class="material-symbols-outlined">warning</span>Alerts</a>
+      <a class="{% if active_nav == 'contact' %}rounded-full px-6 py-3.5 font-bold bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('proctor_contact_page') }}"><span class="material-symbols-outlined">contacts</span>Contact</a>
+      <form method="post" action="{{ url_for('logout') }}" class="pt-2"><button type="submit" class="w-full text-left text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4"><span class="material-symbols-outlined">logout</span>Logout</button></form>
+    </nav>
+  </aside>
+
+  <main class="ml-72 min-h-screen px-10 py-8">
+    <header class="mb-7">
+      <p class="text-xs uppercase tracking-widest text-stone-500 font-black">Proctor Contact</p>
+      <h2 class="text-4xl font-black font-['Plus_Jakarta_Sans'] mt-1">Profile And Support Channels</h2>
+      <p class="text-sm text-stone-500 mt-2">Key coordination contacts for intervention and escalation.</p>
+    </header>
+
+    <section class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-7">
+      <article class="bg-white rounded-3xl p-6 border border-[#ddd9d2] shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+        <h3 class="text-2xl font-bold font-['Plus_Jakarta_Sans']">Proctor Profile</h3>
+        <div class="space-y-3 mt-4 text-sm text-[#415071]">
+          <div class="rounded-2xl border border-[#e6dfd4] bg-[#faf7f2] p-3"><p class="text-xs uppercase tracking-wider text-stone-500 font-bold">Name</p><p class="font-semibold mt-1 text-[#1e304c]">{{ proctor_profile.name }}</p></div>
+          <div class="rounded-2xl border border-[#e6dfd4] bg-[#faf7f2] p-3"><p class="text-xs uppercase tracking-wider text-stone-500 font-bold">Email</p><p class="font-semibold mt-1 text-[#1e304c] break-all">{{ proctor_profile.email }}</p></div>
+          <div class="rounded-2xl border border-[#e6dfd4] bg-[#faf7f2] p-3"><p class="text-xs uppercase tracking-wider text-stone-500 font-bold">Member Since</p><p class="font-semibold mt-1 text-[#1e304c]">{{ proctor_profile.member_since }}</p></div>
+        </div>
+      </article>
+
+      <article class="bg-white rounded-3xl p-6 border border-[#ddd9d2] shadow-[0_12px_48px_rgba(28,28,25,0.06)] xl:col-span-2">
+        <h3 class="text-2xl font-bold font-['Plus_Jakarta_Sans']">Contact Channels</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
+          {% for card in proctor_contact_cards %}
+          <article class="rounded-2xl border border-[#e6dfd4] bg-[#faf7f2] p-4">
+            <p class="text-xs uppercase tracking-widest text-stone-500 font-bold">{{ card.role }}</p>
+            <p class="font-semibold text-[#1f3150] mt-2">{{ card.name }}</p>
+            <p class="text-sm text-[#466081] mt-1 break-all">{{ card.email }}</p>
+            <p class="text-xs text-stone-500 mt-2">{{ card.channel }}</p>
+          </article>
+          {% endfor %}
+        </div>
+      </article>
+    </section>
+
+    <section class="bg-gradient-to-br from-[#11131a] to-[#232b39] text-white rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.12)]">
+      <h3 class="text-2xl font-bold font-['Plus_Jakarta_Sans']">Data Governance</h3>
+      <p class="text-sm text-[#d3ddf3] mt-3">{{ proctor_privacy_line }}</p>
+    </section>
+  </main>
+</body>
+</html>

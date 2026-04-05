@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }} | EqWell</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="{{ url_for('static', filename='figma_chart_theme.js') }}"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { surface: '#ece8e2', on: '#1a1c22' },
+          fontFamily: { headline: ['Plus Jakarta Sans', 'sans-serif'], body: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+  </script>
+  <style id="card-wrap-guard">
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+</head>
+<body class="bg-surface font-body text-on antialiased">
+  <aside class="fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-40">
+    <div class="mb-12 px-4">
+      <h1 class="text-2xl font-black text-[#f4f6fa] font-headline">EqWell</h1>
+      <p class="text-xs tracking-widest uppercase text-[#a7afc2] mt-1">Parent Console</p>
+    </div>
+    <nav class="flex-1 space-y-3">
+      <a class="{% if active_nav == 'overview' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_overview_page') }}"><span class="material-symbols-outlined">home</span>Overview</a>
+      <a class="{% if active_nav == 'weekly-trend' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_weekly_trend_page') }}"><span class="material-symbols-outlined">query_stats</span>Weekly Trend</a>
+      <a class="{% if active_nav == 'alerts' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_alerts_page') }}"><span class="material-symbols-outlined">warning</span>Alerts</a>
+      <a class="{% if active_nav == 'lifestyle' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_lifestyle_page') }}"><span class="material-symbols-outlined">self_improvement</span>Lifestyle</a>
+      <a class="{% if active_nav == 'contact' %}rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('parent_contact_page') }}"><span class="material-symbols-outlined">contacts</span>Contact</a>
+      <form class="pt-2" method="post" action="{{ url_for('logout') }}"><button class="w-full text-left text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4" type="submit"><span class="material-symbols-outlined">logout</span>Logout</button></form>
+    </nav>
+  </aside>
+
+  <main class="ml-72 min-h-screen px-10 py-8">
+    <header class="mb-7 flex items-center justify-between gap-3">
+      <div>
+        <p class="text-xs tracking-widest uppercase text-stone-500 font-black">Parent Weekly Trend</p>
+        <h2 class="font-headline text-4xl font-extrabold mt-1">Detailed Stress Analysis</h2>
+        <p class="text-sm text-stone-500 mt-2">Weekly profile, peak windows, and momentum indicators.</p>
+      </div>
+      <span class="px-3 py-1 rounded-full bg-white border border-[#ddd9d2] text-xs font-bold">{{ display_name }}</span>
+    </header>
+
+    <section class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-7">
+      <article class="xl:col-span-2 bg-white rounded-3xl p-6 border border-[#ddd9d2] shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+        <h3 class="font-headline text-2xl font-bold">7-Day Stress Curve</h3>
+        <div class="h-72 mt-4"><canvas id="parentTrendLine"></canvas></div>
+      </article>
+      <article class="bg-white rounded-3xl p-6 border border-[#ddd9d2] shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+        <h3 class="font-headline text-2xl font-bold">Trend Summary</h3>
+        <div class="space-y-3 mt-4 text-sm">
+          <div class="rounded-2xl bg-[#f7f4ef] border border-[#e7dfd2] p-3"><p class="text-xs uppercase tracking-wider text-stone-500 font-bold">Average</p><p class="font-semibold text-lg text-[#20324d] mt-1">{{ parent_analysis.weekly_average }}</p></div>
+          <div class="rounded-2xl bg-[#f7f4ef] border border-[#e7dfd2] p-3"><p class="text-xs uppercase tracking-wider text-stone-500 font-bold">Peak</p><p class="font-semibold text-lg text-[#20324d] mt-1">{{ parent_analysis.weekly_peak }}</p></div>
+          <div class="rounded-2xl bg-[#f7f4ef] border border-[#e7dfd2] p-3"><p class="text-xs uppercase tracking-wider text-stone-500 font-bold">Lowest</p><p class="font-semibold text-lg text-[#20324d] mt-1">{{ parent_analysis.weekly_low }}</p></div>
+          <div class="rounded-2xl bg-[#eef5ff] border border-[#d5e1f4] p-3"><p class="text-xs uppercase tracking-wider text-stone-500 font-bold">Momentum</p><p class="font-semibold text-lg text-[#20324d] mt-1">{{ parent_analysis.momentum_label }}</p></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="bg-white rounded-3xl p-6 border border-[#ddd9d2] shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+      <h3 class="font-headline text-2xl font-bold">Risk Interpretation</h3>
+      <p class="text-sm text-stone-500 mt-2">Current risk level: <span class="font-bold text-[#223655]">{{ parent_analysis.risk_level }}</span></p>
+      <ul class="space-y-3 mt-4">
+        {% for tip in parent_analysis.recommendations %}
+        <li class="rounded-2xl border border-[#e7dfd2] bg-[#fbf8f3] p-3 text-sm text-[#3c4c66]">{{ tip }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  </main>
+
+  <script id="parent-weekly-logs" type="application/json">{{ parent_weekly_logs | tojson }}</script>
+  <script>
+    (function () {
+      var theme = window.EqWellChartTheme || null;
+      if (theme && typeof theme.applyDefaults === 'function') {
+        theme.applyDefaults();
+      }
+      var palette = theme ? theme.palette : { navy: '#355f8e' };
+
+      var logs = [];
+      try { logs = JSON.parse(document.getElementById('parent-weekly-logs').textContent || '[]'); } catch (_err) { logs = []; }
+      if (!Array.isArray(logs) || !logs.length) {
+        logs = [{ day: 'Mon', stress: 58 }, { day: 'Tue', stress: 57 }, { day: 'Wed', stress: 56 }, { day: 'Thu', stress: 55 }, { day: 'Fri', stress: 53 }, { day: 'Sat', stress: 51 }, { day: 'Sun', stress: 50 }];
+      }
+      var canvas = document.getElementById('parentTrendLine');
+      if (!canvas || typeof Chart === 'undefined') return;
+
+      var trendValues = logs.map(function (r) { return Number(r.stress || 0); });
+      var dataset = theme
+        ? theme.lineDataset('Stress Index', trendValues, palette.navy)
+        : {
+            data: trendValues,
+            borderColor: '#385a82',
+            backgroundColor: 'rgba(56,90,130,0.15)',
+            pointBackgroundColor: '#1e3554',
+            borderWidth: 3,
+            tension: 0.35,
+            fill: true
+          };
+
+      new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: logs.map(function (r) { return r.day; }),
+          datasets: [dataset]
+        },
+        options: theme
+          ? theme.cartesianOptions({
+              plugins: { legend: { display: false } },
+              scales: { y: { max: 100 }, x: { grid: { display: false } } }
+            })
+          : {
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { beginAtZero: true, max: 100, grid: { color: '#eee6da' }, ticks: { color: '#5a6a82' } },
+                x: { grid: { display: false }, ticks: { color: '#5a6a82' } }
+              }
+            }
+      });
+    })();
+  </script>
+</body>
+</html>

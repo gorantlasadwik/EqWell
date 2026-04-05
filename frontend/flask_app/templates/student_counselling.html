@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }} | EqWell</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            surface: '#ece8e2',
+            'surface-container-lowest': '#ffffff',
+            'surface-container-low': '#f3f2f1',
+            'surface-container': '#ece8e2',
+            'surface-container-high': '#e4e0da',
+            'surface-container-highest': '#dcd8d2',
+            'on-surface': '#1a1c22',
+            'on-surface-variant': '#5f687b',
+            primary: '#11131a',
+            secondary: '#355f8e',
+            'secondary-container': '#e6dab2',
+            'on-secondary-container': '#2d3240'
+          },
+          fontFamily: {
+            headline: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 450, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .main-calendar-grid {
+      display: grid;
+      grid-template-columns: 72px repeat(6, minmax(110px, 1fr));
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #c9c6c2;
+      border-radius: 999px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-enter {
+      animation: fadeSlideIn 280ms ease both;
+    }
+
+    @media (max-width: 1024px) {
+      .student-main {
+        margin-left: 0;
+      }
+
+      .student-sidebar {
+        display: none;
+      }
+
+      .student-page {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+    }
+  </style>
+  <style id="card-wrap-guard">
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased overflow-x-hidden">
+  <aside class="student-sidebar fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-50">
+    <div class="mb-12 px-4">
+      <h1 class="text-2xl font-black text-[#f4f6fa] font-headline">EqWell</h1>
+      <p class="text-xs font-medium tracking-widest uppercase text-[#a7afc2] mt-1">Student Wellbeing</p>
+    </div>
+
+    <nav class="flex-1 space-y-3">
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_dashboard') }}">
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-headline tracking-tight">Home</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_tasks_page') }}">
+        <span class="material-symbols-outlined">checklist</span>
+        <span class="font-headline tracking-tight">Tasks</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_quiz_selector_page', quiz=sidebar_quiz_key) }}">
+        <span class="material-symbols-outlined">quiz</span>
+        <span class="font-headline tracking-tight">Quizzes</span>
+      </a>
+      <a class="rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]" href="{{ url_for('student_counselling_page') }}">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="font-headline tracking-tight">Counselling</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" href="{{ url_for('student_profile') }}">
+        <span class="material-symbols-outlined">badge</span>
+        <span class="font-headline tracking-tight">Profile</span>
+      </a>
+
+      <form class="pt-2" method="post" action="{{ url_for('logout') }}">
+        <button class="w-full text-left text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200" type="submit">
+          <span class="material-symbols-outlined">logout</span>
+          <span class="font-headline tracking-tight">Logout</span>
+        </button>
+      </form>
+    </nav>
+  </aside>
+
+  <main class="student-main ml-72 min-h-screen relative">
+    <header class="flex justify-between items-center w-full px-12 py-6 sticky top-0 bg-[#f3f2f1]/85 backdrop-blur-[20px] border-b border-[#d7d4cf] z-40">
+      <div class="flex flex-col">
+        <h2 class="font-headline text-3xl font-bold tracking-tight text-[#1a1c22]">Hi, {{ student_name }}!</h2>
+        <p class="text-on-surface-variant font-medium mt-1">Choose your counsellor and schedule the next available support session.</p>
+      </div>
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-3">
+          <button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container-high hover:opacity-80 transition-opacity" type="button">
+            <span class="material-symbols-outlined">notifications</span>
+          </button>
+          <img src="{{ user_avatar_url }}" alt="Student avatar" class="w-12 h-12 rounded-full object-cover border-2 border-[#d7d4cf] shadow-sm" />
+        </div>
+      </div>
+    </header>
+
+    <div class="student-page px-5 lg:px-10 py-8">
+      <section class="max-w-[1700px] mx-auto space-y-6">
+        <article id="selection-card" class="max-w-[360px] bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+          <p class="text-[11px] font-black tracking-widest uppercase text-[#8f8572]">Step 1</p>
+          <h3 class="font-headline text-4xl leading-[1.08] font-bold mt-2">Select Counsellor</h3>
+          <p class="text-base text-on-surface-variant mt-3 leading-[1.5]">Pick who you want to talk with. Submit once to unlock calendar booking for this visit.</p>
+
+          <label for="counsellor-select" class="block mt-6 text-xs font-black tracking-wide uppercase text-on-surface-variant">Counsellor</label>
+          <select id="counsellor-select" class="mt-2 w-full rounded-2xl border border-[#90b8d8] bg-surface-container-low px-4 py-3 font-semibold focus:ring-2 focus:ring-[#9fbfda]">
+            <option value="">Choose counsellor</option>
+          </select>
+
+          <button id="confirm-counsellor-btn" type="button" class="mt-4 w-full rounded-full bg-[#101320] text-white py-3 text-sm font-bold hover:opacity-90 transition-opacity">
+            Submit Counsellor Selection
+          </button>
+
+          <div id="selection-error" class="hidden mt-3 text-sm font-semibold text-[#a1382e]">Please choose a counsellor before submitting.</div>
+        </article>
+
+        <div id="post-selection-panels" class="hidden grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <article id="selected-summary" class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+            <p class="text-[11px] font-black tracking-widest uppercase text-[#8f8572]">Counsellor Selected</p>
+            <p id="meta-name" class="font-headline text-3xl font-bold mt-2"></p>
+            <p id="meta-role" class="text-lg text-on-surface-variant mt-2 leading-[1.3]"></p>
+            <div class="flex gap-2 pt-4 flex-wrap">
+              <span id="meta-occupied" class="px-3 py-1 rounded-full text-xs font-black bg-[#d7efe0] text-[#215138]"></span>
+              <span id="meta-free" class="px-3 py-1 rounded-full text-xs font-black bg-surface-container-high text-[#454241]"></span>
+            </div>
+          </article>
+
+          <article class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+            <p class="text-[11px] font-black tracking-widest uppercase text-[#8f8572]">Booked Sessions</p>
+            <p class="text-sm text-on-surface-variant mt-2">Appointments from manual or auto-booking appear here.</p>
+            <div id="booked-list" class="mt-4 space-y-3"></div>
+          </article>
+        </div>
+
+        <article class="bg-surface-container-lowest rounded-3xl shadow-[0_12px_48px_rgba(28,28,25,0.06)] overflow-hidden">
+          <div class="px-6 py-5 border-b border-[#e6e2dc] flex items-center justify-between gap-3 flex-wrap">
+            <div>
+              <p class="text-[11px] font-black tracking-widest uppercase text-[#8f8572]">Step 2</p>
+              <h3 class="font-headline text-[46px] leading-[1.06] font-bold mt-1">Counselling Calendar</h3>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-3 py-1 rounded-full text-xs font-black tracking-wide bg-secondary-container text-on-secondary-container">Weekly View</span>
+              <span class="px-3 py-1 rounded-full text-xs font-black tracking-wide bg-[#d7efe0] text-[#215138]">Green: Occupied</span>
+              <span class="px-3 py-1 rounded-full text-xs font-black tracking-wide bg-surface-container-low text-[#3d3a38]">White: Free</span>
+            </div>
+          </div>
+
+          <div id="calendar-empty" class="px-8 py-12 text-center">
+            <div class="w-16 h-16 rounded-full bg-surface-container-low mx-auto grid place-items-center text-[#5b6070]">
+              <span class="material-symbols-outlined">calendar_month</span>
+            </div>
+            <h4 class="font-headline text-xl font-bold mt-4">Select and submit a counsellor first</h4>
+            <p class="text-sm text-on-surface-variant mt-2">Selection form disappears after submit for this session.</p>
+          </div>
+
+          <div id="calendar-wrap" class="hidden border-t border-[#ece8e2]">
+            <div id="calendar-header" class="main-calendar-grid bg-surface-container-low border-b border-[#ece8e2]"></div>
+            <div id="calendar-grid" class="max-h-[560px] overflow-auto custom-scrollbar"></div>
+            <div class="px-6 py-5 border-t border-[#ece8e2] bg-surface-container-low space-y-3">
+              <button id="auto-book-btn" class="px-5 py-2.5 rounded-full bg-[#101320] text-white font-bold text-sm hover:opacity-90 transition-opacity" type="button">Book Nearest Available Session</button>
+              <p id="status-msg" class="text-sm font-semibold text-on-surface-variant">Select and submit a counsellor to begin booking.</p>
+            </div>
+          </div>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const timeSlots = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'];
+
+    function buildWeekDays() {
+      const now = new Date();
+      const day = now.getDay();
+      const shift = day === 0 ? -6 : 1 - day;
+      const monday = new Date(now);
+      monday.setDate(now.getDate() + shift);
+      const dayFmt = new Intl.DateTimeFormat('en-US', { weekday: 'short' });
+      const dateFmt = new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit' });
+
+      return Array.from({ length: 6 }).map((_, index) => {
+        const date = new Date(monday);
+        date.setDate(monday.getDate() + index);
+        return {
+          dayText: dayFmt.format(date),
+          dateText: dateFmt.format(date),
+        };
+      });
+    }
+
+    const weekDays = buildWeekDays();
+
+    const counsellors = {
+      aris: {
+        name: 'Dr. Aris Mendez',
+        role: 'Clinical Lead',
+        occupied: ['0-1', '0-3', '1-2', '2-2', '3-5', '4-0', '5-4'],
+      },
+      nisha: {
+        name: 'Dr. Nisha Rao',
+        role: 'Student Wellness Specialist',
+        occupied: ['0-0', '1-1', '1-4', '2-6', '3-2', '4-5', '5-1'],
+      },
+      vincent: {
+        name: 'Dr. Vincent Hale',
+        role: 'Performance Counsellor',
+        occupied: ['0-4', '1-0', '2-3', '2-5', '3-1', '4-3', '5-2'],
+      },
+    };
+
+    const slotState = Object.fromEntries(
+      Object.entries(counsellors).map(([id, profile]) => [id, new Set(profile.occupied)])
+    );
+
+    const bookings = [];
+    let selectedCounsellor = '';
+    let selectionSubmitted = false;
+
+    const counsellorSelect = document.getElementById('counsellor-select');
+    const confirmCounsellorBtn = document.getElementById('confirm-counsellor-btn');
+    const selectionCard = document.getElementById('selection-card');
+    const postSelectionPanels = document.getElementById('post-selection-panels');
+    const selectedSummary = document.getElementById('selected-summary');
+    const selectionError = document.getElementById('selection-error');
+
+    const metaName = document.getElementById('meta-name');
+    const metaRole = document.getElementById('meta-role');
+    const metaOccupied = document.getElementById('meta-occupied');
+    const metaFree = document.getElementById('meta-free');
+
+    const calendarEmpty = document.getElementById('calendar-empty');
+    const calendarWrap = document.getElementById('calendar-wrap');
+    const calendarHeader = document.getElementById('calendar-header');
+    const calendarGrid = document.getElementById('calendar-grid');
+    const statusMsg = document.getElementById('status-msg');
+    const autoBookBtn = document.getElementById('auto-book-btn');
+    const bookedList = document.getElementById('booked-list');
+
+    function animateReveal(element) {
+      element.classList.add('fade-enter');
+      window.setTimeout(() => {
+        element.classList.remove('fade-enter');
+      }, 320);
+    }
+
+    function timeLabel(time24) {
+      const parts = time24.split(':');
+      const hour = Number(parts[0]);
+      const suffix = hour >= 12 ? 'PM' : 'AM';
+      const labelHour = hour % 12 === 0 ? 12 : hour % 12;
+      return `${labelHour}:00 ${suffix}`;
+    }
+
+    function slotReadable(dayIndex, timeIndex) {
+      return `${weekDays[dayIndex].dayText}, ${weekDays[dayIndex].dateText} at ${timeLabel(timeSlots[timeIndex])}`;
+    }
+
+    function renderBookings() {
+      if (!bookings.length) {
+        bookedList.innerHTML = '<div class="rounded-2xl bg-surface-container-low px-4 py-4 text-sm font-semibold text-on-surface-variant">No sessions booked yet.</div>';
+        return;
+      }
+
+      bookedList.innerHTML = bookings
+        .slice()
+        .reverse()
+        .map((booking) => {
+          return `
+            <article class="rounded-2xl bg-surface-container-low p-4">
+              <p class="text-[11px] font-black tracking-widest uppercase text-[#8f8572]">${booking.source}</p>
+              <p class="font-headline font-bold mt-1">${booking.counsellor}</p>
+              <p class="text-sm font-semibold text-on-surface-variant mt-1">${booking.when}</p>
+            </article>
+          `;
+        })
+        .join('');
+    }
+
+    function updateMeta() {
+      if (!selectedCounsellor) {
+        metaName.textContent = '';
+        metaRole.textContent = '';
+        metaOccupied.textContent = '';
+        metaFree.textContent = '';
+        return;
+      }
+
+      const profile = counsellors[selectedCounsellor];
+      const total = weekDays.length * timeSlots.length;
+      const occupied = slotState[selectedCounsellor].size;
+      const free = total - occupied;
+
+      metaName.textContent = profile.name;
+      metaRole.textContent = profile.role;
+      metaOccupied.textContent = `${occupied} occupied`;
+      metaFree.textContent = `${free} free`;
+    }
+
+    function bookSlot(dayIndex, timeIndex, source) {
+      if (!selectionSubmitted || !selectedCounsellor) {
+        statusMsg.textContent = 'Submit counsellor selection first.';
+        return;
+      }
+
+      const slotKey = `${dayIndex}-${timeIndex}`;
+      const selectedSet = slotState[selectedCounsellor];
+
+      if (selectedSet.has(slotKey)) {
+        statusMsg.textContent = 'That slot is occupied. Choose another free slot.';
+        return;
+      }
+
+      selectedSet.add(slotKey);
+      bookings.push({
+        source,
+        counsellor: counsellors[selectedCounsellor].name,
+        when: slotReadable(dayIndex, timeIndex),
+      });
+
+      statusMsg.textContent = `Booked ${slotReadable(dayIndex, timeIndex)} with ${counsellors[selectedCounsellor].name}.`;
+      updateMeta();
+      renderCalendar();
+      renderBookings();
+    }
+
+    function renderCalendar() {
+      if (!selectionSubmitted || !selectedCounsellor) {
+        calendarWrap.classList.add('hidden');
+        calendarEmpty.classList.remove('hidden');
+        return;
+      }
+
+      const occupiedSet = slotState[selectedCounsellor];
+      calendarWrap.classList.remove('hidden');
+      calendarEmpty.classList.add('hidden');
+
+      calendarHeader.innerHTML = `
+        <div class="p-3 text-center text-[11px] font-black tracking-widest uppercase text-on-surface-variant">Time</div>
+        ${weekDays
+          .map((day) => {
+            return `
+              <div class="p-3 text-center border-l border-[#ece8e2]">
+                <p class="text-xs font-black">${day.dateText}</p>
+                <p class="text-[11px] font-bold text-on-surface-variant mt-0.5">${day.dayText}</p>
+              </div>
+            `;
+          })
+          .join('')}
+      `;
+
+      calendarGrid.innerHTML = timeSlots
+        .map((slot, timeIndex) => {
+          const rowCells = weekDays
+            .map((_, dayIndex) => {
+              const key = `${dayIndex}-${timeIndex}`;
+
+              if (occupiedSet.has(key)) {
+                return `
+                  <div class="p-2 border-l border-t border-[#ece8e2]">
+                    <div class="h-16 rounded-2xl bg-[#d7efe0] px-3 py-2 flex flex-col justify-center text-[#215138]">
+                      <p class="text-[11px] font-black">Occupied</p>
+                      <p class="text-[10px] font-bold opacity-80">Counsellor unavailable</p>
+                    </div>
+                  </div>
+                `;
+              }
+
+              return `
+                <div class="p-2 border-l border-t border-[#ece8e2]">
+                  <button class="slot-free-btn h-16 w-full rounded-2xl bg-white border border-[#e5e0d8] text-[11px] font-black text-[#4b4c52] hover:bg-[#f8f6f2] transition" data-day="${dayIndex}" data-time="${timeIndex}" type="button">Free Slot</button>
+                </div>
+              `;
+            })
+            .join('');
+
+          return `
+            <div class="main-calendar-grid">
+              <div class="p-2 border-t border-[#ece8e2] flex items-center justify-center text-xs font-black text-on-surface-variant">${timeLabel(slot)}</div>
+              ${rowCells}
+            </div>
+          `;
+        })
+        .join('');
+
+      document.querySelectorAll('.slot-free-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          const dayIndex = Number(button.dataset.day);
+          const timeIndex = Number(button.dataset.time);
+          const confirmation = window.confirm(`Book ${slotReadable(dayIndex, timeIndex)} with ${counsellors[selectedCounsellor].name}?`);
+          if (confirmation) {
+            bookSlot(dayIndex, timeIndex, 'Manual booking');
+          }
+        });
+      });
+    }
+
+    function autoBookNearest() {
+      if (!selectionSubmitted || !selectedCounsellor) {
+        statusMsg.textContent = 'Submit counsellor selection first.';
+        return;
+      }
+
+      const selectedSet = slotState[selectedCounsellor];
+      let target = null;
+
+      for (let dayIndex = 0; dayIndex < weekDays.length; dayIndex += 1) {
+        for (let timeIndex = 0; timeIndex < timeSlots.length; timeIndex += 1) {
+          const key = `${dayIndex}-${timeIndex}`;
+          if (!selectedSet.has(key)) {
+            target = { dayIndex, timeIndex };
+            break;
+          }
+        }
+        if (target) {
+          break;
+        }
+      }
+
+      if (!target) {
+        statusMsg.textContent = 'No free slots available for this counsellor this week.';
+        return;
+      }
+
+      bookSlot(target.dayIndex, target.timeIndex, 'Auto booking');
+    }
+
+    function seedCounsellorOptions() {
+      Object.entries(counsellors).forEach(([id, profile]) => {
+        const option = document.createElement('option');
+        option.value = id;
+        option.textContent = `${profile.name} - ${profile.role}`;
+        counsellorSelect.appendChild(option);
+      });
+    }
+
+    counsellorSelect.addEventListener('change', (event) => {
+      selectedCounsellor = String(event.target.value || '');
+      selectionError.classList.add('hidden');
+      updateMeta();
+    });
+
+    confirmCounsellorBtn.addEventListener('click', () => {
+      if (!selectedCounsellor) {
+        selectionError.classList.remove('hidden');
+        return;
+      }
+
+      selectionError.classList.add('hidden');
+      selectionSubmitted = true;
+      selectionCard.classList.add('hidden');
+      postSelectionPanels.classList.remove('hidden');
+      selectedSummary.classList.remove('hidden');
+      statusMsg.textContent = `Calendar loaded for ${counsellors[selectedCounsellor].name}.`;
+      updateMeta();
+      renderCalendar();
+      animateReveal(postSelectionPanels);
+      animateReveal(calendarWrap);
+    });
+
+    autoBookBtn.addEventListener('click', autoBookNearest);
+
+    seedCounsellorOptions();
+    renderCalendar();
+    renderBookings();
+  </script>
+</body>
+</html>

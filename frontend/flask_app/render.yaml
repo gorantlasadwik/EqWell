@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: eqwell-flask
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --workers 2 --threads 4 --timeout 120 --bind 0.0.0.0:$PORT wsgi:app
+    healthCheckPath: /healthz
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: FLASK_DEBUG
+        value: "0"
+      - key: EQWELL_TRUST_PROXY
+        value: "1"
+      - key: SESSION_COOKIE_SECURE
+        value: "1"
+      - key: REMEMBER_COOKIE_SECURE
+        value: "1"
+      - key: EQWELL_ENABLE_MOCK_LOGINS
+        value: "1"
+      - key: EQWELL_SEED_MOCK_DATA
+        value: "1"

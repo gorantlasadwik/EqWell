@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }} | EqWell</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="{{ url_for('static', filename='figma_chart_theme.js') }}"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <style id="card-wrap-guard">
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+</head>
+<body class="bg-[#ece8e2] font-['Inter'] text-[#1a1c22] antialiased">
+  <aside class="fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-40">
+    <div class="mb-12 px-4"><h1 class="text-2xl font-black text-[#f4f6fa] font-['Plus_Jakarta_Sans']">EqWell</h1><p class="text-xs tracking-widest uppercase text-[#a7afc2] mt-1">Proctor Console</p></div>
+    <nav class="flex-1 space-y-3">
+      <a class="{% if active_nav == 'overview' %}rounded-full px-6 py-3.5 font-bold bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('proctor_overview_page') }}"><span class="material-symbols-outlined">space_dashboard</span>Overview</a>
+      <a class="{% if active_nav == 'students' %}rounded-full px-6 py-3.5 font-bold bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('proctor_students_page') }}"><span class="material-symbols-outlined">group</span>Students</a>
+      <a class="{% if active_nav == 'analytics' %}rounded-full px-6 py-3.5 font-bold bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('proctor_analytics_page') }}"><span class="material-symbols-outlined">analytics</span>Analytics</a>
+      <a class="{% if active_nav == 'alerts' %}rounded-full px-6 py-3.5 font-bold bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('proctor_alerts_page') }}"><span class="material-symbols-outlined">warning</span>Alerts</a>
+      <a class="{% if active_nav == 'contact' %}rounded-full px-6 py-3.5 font-bold bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white flex items-center gap-4{% else %}text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4{% endif %}" href="{{ url_for('proctor_contact_page') }}"><span class="material-symbols-outlined">contacts</span>Contact</a>
+      <form method="post" action="{{ url_for('logout') }}" class="pt-2"><button type="submit" class="w-full text-left text-[#d3d9e8] px-6 py-3.5 hover:bg-white/10 rounded-full flex items-center gap-4"><span class="material-symbols-outlined">logout</span>Logout</button></form>
+    </nav>
+  </aside>
+
+  <main class="ml-72 min-h-screen px-10 py-8">
+    <header class="mb-7">
+      <p class="text-xs uppercase tracking-widest text-stone-500 font-black">Proctor Analytics</p>
+      <h2 class="text-4xl font-black font-['Plus_Jakarta_Sans'] mt-1">Group Distribution Analysis</h2>
+      <p class="text-sm text-stone-500 mt-2">Risk profile and hostel spread for assigned wards.</p>
+    </header>
+
+    <section class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-7">
+      <article class="bg-white rounded-3xl p-6 border border-[#ddd9d2] shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+        <h3 class="text-2xl font-bold font-['Plus_Jakarta_Sans']">Risk Distribution</h3>
+        <div class="h-72 mt-4"><canvas id="riskChart"></canvas></div>
+      </article>
+      <article class="bg-white rounded-3xl p-6 border border-[#ddd9d2] shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+        <h3 class="text-2xl font-bold font-['Plus_Jakarta_Sans']">Hostel Distribution</h3>
+        <div class="h-72 mt-4"><canvas id="hostelChart"></canvas></div>
+      </article>
+    </section>
+
+    <section class="bg-white rounded-3xl p-6 border border-[#ddd9d2] shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+      <h3 class="text-2xl font-bold font-['Plus_Jakarta_Sans']">Analysis Highlights</h3>
+      <ul class="space-y-3 mt-4 text-sm text-[#415071]">
+        <li class="rounded-2xl border border-[#e6dfd4] bg-[#faf7f2] p-3">High-risk count: {{ proctor_high_count }} students.</li>
+        <li class="rounded-2xl border border-[#e6dfd4] bg-[#faf7f2] p-3">Watchlist count: {{ proctor_watch_count }} students.</li>
+        <li class="rounded-2xl border border-[#e6dfd4] bg-[#faf7f2] p-3">Stable count: {{ proctor_stable_count }} students.</li>
+        <li class="rounded-2xl border border-[#e6dfd4] bg-[#faf7f2] p-3">Average stress index: {{ proctor_avg_stress }} / 100.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script id="hostel-data" type="application/json">{{ proctor_hostel_distribution | tojson }}</script>
+  <script>
+    (function () {
+      var theme = window.EqWellChartTheme || null;
+      if (theme && typeof theme.applyDefaults === 'function') {
+        theme.applyDefaults();
+      }
+      var palette = theme ? theme.palette : { rose: '#d06a87', amber: '#d7b56a', mint: '#6fa57e', blue: '#6f8fb4' };
+
+      var hostel = [];
+      try { hostel = JSON.parse(document.getElementById('hostel-data').textContent || '[]'); } catch (_err) { hostel = []; }
+      var riskCanvas = document.getElementById('riskChart');
+      var hostelCanvas = document.getElementById('hostelChart');
+      if (typeof Chart === 'undefined') return;
+
+      if (riskCanvas) {
+        new Chart(riskCanvas, {
+          type: 'doughnut',
+          data: {
+            labels: ['High', 'Watch', 'Stable'],
+            datasets: [{
+              data: [Number('{{ proctor_high_count }}' || 0), Number('{{ proctor_watch_count }}' || 0), Number('{{ proctor_stable_count }}' || 0)],
+              backgroundColor: [palette.rose, palette.amber, palette.mint],
+              spacing: 2,
+              hoverOffset: 8
+            }]
+          },
+          options: theme
+            ? theme.donutOptions({
+                plugins: { legend: { position: 'bottom' } }
+              })
+            : { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+        });
+      }
+
+      if (hostelCanvas) {
+        var labels = hostel.map(function (row) { return row.label; });
+        var counts = hostel.map(function (row) { return Number(row.count || 0); });
+        if (!labels.length) {
+          labels = ['Block A'];
+          counts = [0];
+        }
+        new Chart(hostelCanvas, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [theme ? theme.barDataset('Students', counts, palette.blue) : { data: counts, backgroundColor: '#6f8fb4', borderRadius: 12 }]
+          },
+          options: theme
+            ? theme.cartesianOptions({
+                plugins: { legend: { display: false } },
+                scales: { x: { grid: { display: false } } }
+              })
+            : {
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, ticks: { color: '#5c6d86' }, grid: { color: '#ece4d9' } }, x: { ticks: { color: '#5c6d86' }, grid: { display: false } } }
+              }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

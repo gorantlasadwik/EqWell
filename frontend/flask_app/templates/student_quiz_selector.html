@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }} | EqWell</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            surface: '#ece8e2',
+            'surface-container-lowest': '#ffffff',
+            'surface-container-low': '#f3f2f1',
+            'surface-container': '#ece8e2',
+            'surface-container-high': '#e4e0da',
+            'on-surface': '#1a1c22',
+            primary: '#11131a',
+            secondary: '#355f8e',
+            'secondary-container': '#e6dab2',
+            'on-secondary-container': '#2d3240',
+            outline: '#d7d4cf'
+          },
+          fontFamily: {
+            headline: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .selector-card.active {
+      border-color: #355f8e;
+      box-shadow: 0 0 0 2px rgba(53, 95, 142, 0.18);
+      background: #f5f8fc;
+    }
+  </style>
+  <style id="card-wrap-guard">
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
+    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased overflow-x-hidden">
+  <aside class="fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-50">
+    <div class="mb-12 px-4">
+      <h1 class="text-2xl font-black text-[#f4f6fa] font-headline">EqWell</h1>
+      <p class="text-xs font-medium tracking-widest uppercase text-[#a7afc2] mt-1">Student Wellbeing</p>
+    </div>
+
+    <nav class="flex-1 space-y-3">
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200" href="{{ url_for('student_dashboard') }}">
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-headline tracking-tight">Home</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200" href="{{ url_for('student_tasks_page') }}">
+        <span class="material-symbols-outlined">checklist</span>
+        <span class="font-headline tracking-tight">Tasks</span>
+      </a>
+      <a class="rounded-full px-6 py-3.5 font-bold flex items-center gap-4 bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]" href="{{ url_for('student_quiz_selector_page') }}">
+        <span class="material-symbols-outlined">quiz</span>
+        <span class="font-headline tracking-tight">Quizzes</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200" href="{{ url_for('student_counselling_page') }}">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="font-headline tracking-tight">Counselling</span>
+      </a>
+      <a class="text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200" href="{{ url_for('student_profile') }}">
+        <span class="material-symbols-outlined">badge</span>
+        <span class="font-headline tracking-tight">Profile</span>
+      </a>
+      <form class="pt-2" method="post" action="{{ url_for('logout') }}">
+        <button class="w-full text-left text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200" type="submit">
+          <span class="material-symbols-outlined">logout</span>
+          <span class="font-headline tracking-tight">Logout</span>
+        </button>
+      </form>
+    </nav>
+  </aside>
+
+  <main class="ml-72 min-h-screen px-8 py-10">
+    <div class="max-w-7xl mx-auto">
+      <header class="flex flex-wrap items-start justify-between gap-4 mb-8">
+        <div>
+          <p class="text-xs font-black tracking-widest uppercase text-stone-500">Quiz Selection</p>
+          <h1 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight mt-1">Choose Your Next Quiz</h1>
+          <p class="text-sm text-stone-600 mt-3">Pick any quiz yourself, or start with the suggested one based on your current mood trend.</p>
+        </div>
+        <a class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white text-sm font-bold" href="{{ url_for('student_dashboard') }}#quiz-section">
+          <span class="material-symbols-outlined text-base">arrow_back</span>
+          Back to Dashboard
+        </a>
+      </header>
+
+      {% if quiz_cards %}
+      <section class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <article class="xl:col-span-1 bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+          <p class="text-xs font-black tracking-widest uppercase text-stone-500">Recommended</p>
+          <h2 class="font-headline text-2xl font-extrabold mt-2">{{ stress_band }} Stress Band</h2>
+          <p class="text-sm text-stone-600 mt-2">Focus recommendation: {{ student_quiz_focus }}</p>
+          <p class="text-sm text-[#355f8e] font-semibold mt-4">{{ recommendation_reason }}</p>
+
+          <label class="block mt-6">
+            <span class="text-xs font-bold tracking-widest uppercase text-stone-500">Select quiz</span>
+            <div class="relative mt-2">
+              <select id="quiz-select" class="w-full rounded-2xl border-[#d7d4cf] bg-[#fbfaf8] pr-10">
+                {% for quiz in quiz_cards %}
+                <option value="{{ quiz.key }}" {% if quiz.key == selected_quiz_key %}selected{% endif %}>{{ quiz.title }} ({{ quiz.duration }})</option>
+                {% endfor %}
+              </select>
+              <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-stone-500 pointer-events-none">expand_more</span>
+            </div>
+          </label>
+
+          <div id="selected-quiz-panel" class="mt-5 p-4 rounded-2xl bg-[#f7f4ef] border border-[#e1ddd6]">
+            <p id="selected-quiz-title" class="font-bold text-lg text-[#1f2736]">{{ selected_quiz.title if selected_quiz else 'Select a quiz' }}</p>
+            <p id="selected-quiz-meta" class="text-xs text-stone-500 mt-1">
+              {% if selected_quiz %}{{ selected_quiz.duration }} | {{ selected_quiz.difficulty }} | {{ selected_quiz.focus }}{% endif %}
+            </p>
+            <p id="selected-quiz-description" class="text-sm text-stone-600 mt-3">{{ selected_quiz.description if selected_quiz else '' }}</p>
+          </div>
+
+          <a id="start-quiz-btn" class="mt-6 inline-flex items-center justify-center w-full px-5 py-3 rounded-full bg-primary text-white text-sm font-bold" href="{{ url_for('student_quiz_attempt_page', quiz_key=selected_quiz_key) }}">
+            Start Selected Quiz
+          </a>
+        </article>
+
+        <section class="xl:col-span-2 bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+          <div class="flex items-center justify-between gap-3 mb-4">
+            <h3 class="font-headline text-2xl font-bold">Available Quizzes</h3>
+            <span class="px-3 py-1 rounded-full bg-surface-container text-stone-700 text-xs font-bold">{{ quiz_cards|length }} options</span>
+          </div>
+
+          <div class="space-y-3">
+            {% for quiz in quiz_cards %}
+            <button type="button" class="selector-card w-full text-left bg-white rounded-2xl border border-[#eadfca] px-4 py-4 transition-all {% if quiz.key == selected_quiz_key %}active{% endif %}" data-quiz-key="{{ quiz.key }}" data-quiz-title="{{ quiz.title }}" data-quiz-duration="{{ quiz.duration }}" data-quiz-difficulty="{{ quiz.difficulty }}" data-quiz-focus="{{ quiz.focus }}" data-quiz-description="{{ quiz.description }}">
+              <div class="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <p class="font-bold text-[#1f1f1d]">{{ quiz.title }}</p>
+                  <p class="text-sm text-stone-500 mt-1">{{ quiz.description }}</p>
+                  <div class="flex flex-wrap gap-2 mt-2 text-xs font-bold">
+                    <span class="px-2.5 py-1 rounded-full bg-surface-container text-stone-700">{{ quiz.duration }}</span>
+                    <span class="px-2.5 py-1 rounded-full bg-surface-container text-stone-700">{{ quiz.difficulty }}</span>
+                    <span class="px-2.5 py-1 rounded-full bg-surface-container text-stone-700">{{ quiz.focus }}</span>
+                    {% if quiz.key == suggested_quiz_key %}
+                    <span class="px-2.5 py-1 rounded-full bg-[#dceaf9] text-[#2a4f7e]">Suggested</span>
+                    {% endif %}
+                    {% if quiz.last_attempt %}
+                    <span class="px-2.5 py-1 rounded-full bg-[#f2e7c4] text-[#3d3428]">Last: {{ quiz.last_attempt.score_percent }}%</span>
+                    {% endif %}
+                  </div>
+                </div>
+                <span class="material-symbols-outlined text-secondary">arrow_forward</span>
+              </div>
+            </button>
+            {% endfor %}
+          </div>
+        </section>
+      </section>
+      {% else %}
+      <section class="bg-surface-container-lowest rounded-3xl p-8 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
+        <h3 class="font-headline text-2xl font-bold">No quizzes available</h3>
+        <p class="text-sm text-stone-600 mt-2">Quiz catalog is empty right now. Please try again later.</p>
+      </section>
+      {% endif %}
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var select = document.getElementById('quiz-select');
+      var startButton = document.getElementById('start-quiz-btn');
+      var cards = Array.from(document.querySelectorAll('.selector-card[data-quiz-key]'));
+      var titleEl = document.getElementById('selected-quiz-title');
+      var metaEl = document.getElementById('selected-quiz-meta');
+      var descEl = document.getElementById('selected-quiz-description');
+
+      if (!select || !startButton || !cards.length) {
+        return;
+      }
+
+      function setActiveQuiz(quizKey) {
+        var chosen = cards.find(function (card) {
+          return String(card.getAttribute('data-quiz-key') || '') === String(quizKey || '');
+        });
+        if (!chosen) {
+          return;
+        }
+
+        cards.forEach(function (card) {
+          card.classList.toggle('active', card === chosen);
+        });
+
+        var key = String(chosen.getAttribute('data-quiz-key') || '');
+        var title = String(chosen.getAttribute('data-quiz-title') || '');
+        var duration = String(chosen.getAttribute('data-quiz-duration') || '');
+        var difficulty = String(chosen.getAttribute('data-quiz-difficulty') || '');
+        var focus = String(chosen.getAttribute('data-quiz-focus') || '');
+        var description = String(chosen.getAttribute('data-quiz-description') || '');
+
+        select.value = key;
+        startButton.href = '/student/quiz/' + encodeURIComponent(key);
+        if (titleEl) titleEl.textContent = title;
+        if (metaEl) metaEl.textContent = duration + ' | ' + difficulty + ' | ' + focus;
+        if (descEl) descEl.textContent = description;
+      }
+
+      select.addEventListener('change', function () {
+        setActiveQuiz(select.value);
+      });
+
+      cards.forEach(function (card) {
+        card.addEventListener('click', function () {
+          setActiveQuiz(card.getAttribute('data-quiz-key'));
+        });
+      });
+
+      setActiveQuiz(select.value);
+    })();
+  </script>
+</body>
+</html>

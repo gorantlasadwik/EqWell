@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EqWell Monitor</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7f1;
+        --card: #ffffff;
+        --ink: #142015;
+        --muted: #4b5e4d;
+        --line: #d5ddcf;
+        --accent: #2f6a3d;
+        --warn: #b91c1c;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        width: 350px;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        background: radial-gradient(circle at top right, #e7efe2, var(--bg));
+        color: var(--ink);
+      }
+
+      .wrap {
+        padding: 14px;
+      }
+
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px;
+        margin-bottom: 10px;
+      }
+
+      h1 {
+        margin: 0 0 4px;
+        font-size: 16px;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .status-pill {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .status-pill.active {
+        color: #115e2d;
+        background: #dff6e4;
+        border-color: #b6e9c1;
+      }
+
+      .status-pill.paused {
+        color: #5f6a62;
+        background: #eef1ec;
+      }
+
+      .switch {
+        width: 44px;
+        height: 24px;
+        appearance: none;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: #d6ddd2;
+        position: relative;
+        cursor: pointer;
+        transition: 0.2s ease;
+      }
+
+      .switch::after {
+        content: "";
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #fff;
+        border: 1px solid #c8d0c2;
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        transition: 0.2s ease;
+      }
+
+      .switch:checked {
+        background: var(--accent);
+        border-color: var(--accent);
+      }
+
+      .switch:checked::after {
+        left: 22px;
+      }
+
+      label {
+        font-size: 12px;
+        color: var(--muted);
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      input[type="password"],
+      input[type="email"] {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-size: 12px;
+        color: var(--ink);
+        margin-bottom: 8px;
+      }
+
+      button {
+        width: 100%;
+        margin-top: 6px;
+        border: none;
+        border-radius: 10px;
+        padding: 8px 10px;
+        background: var(--accent);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      button.secondary {
+        background: #667a6a;
+      }
+
+      .alert {
+        border-color: #fecaca;
+        background: #fff1f1;
+        color: var(--warn);
+      }
+
+      .alert.hidden {
+        display: none;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .meta {
+        margin-top: 8px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="panel">
+        <h1>EqWell Wellbeing Monitor</h1>
+        <p>We do not track browsing history. We only send temporary contextual signals for safety checks.</p>
+      </div>
+
+      <div class="panel row">
+        <div>
+          <div id="statusPill" class="status-pill paused">Monitoring Paused</div>
+          <p class="meta" id="statusMeta">Consent required</p>
+        </div>
+        <input id="consentToggle" class="switch" type="checkbox" aria-label="Enable wellbeing monitoring" />
+      </div>
+
+      <div class="panel">
+        <div id="loginSection">
+          <label for="emailInput">Student email</label>
+          <input id="emailInput" type="email" placeholder="student@eqwell.app" autocomplete="off" />
+
+          <label for="passwordInput">Student password</label>
+          <input id="passwordInput" type="password" placeholder="Enter password" autocomplete="off" />
+
+          <button id="loginButton" type="button">Connect with EqWell Login</button>
+        </div>
+        <button id="logoutButton" class="secondary hidden" type="button">Disconnect</button>
+        <p class="meta" id="authMessage">Sign in with the same student credentials used in EqWell.</p>
+        <p class="meta" id="studentInfo">No student connected</p>
+      </div>
+
+      <div id="alertPanel" class="panel alert hidden">
+        <strong>Please contact the counsellor.</strong>
+        <p>Your recent activity has repeatedly triggered high stress signals.</p>
+        <button id="clearAlertButton" type="button">Acknowledge Alert</button>
+      </div>
+    </div>
+    <script src="popup.js" type="module"></script>
+  </body>
+</html>
