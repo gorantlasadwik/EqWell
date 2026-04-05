@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/index.py", "use": "@vercel/python" },
+    { "src": "api/stress_api.py", "use": "@vercel/python" }
+  ],
+  "routes": [
+    { "src": "/extension-analyze", "dest": "api/stress_api.py" },
+    { "src": "/health", "dest": "api/stress_api.py" },
+    { "src": "/(.*)", "dest": "api/index.py" }
+  ]
+}

@@ -1,4 +1,4 @@
-# EqWell Deployment Guide (Render Free)
+# EqWell Deployment Guide (Render + Vercel)
 
 This project is now configured for production-style deployment while preserving demo mock logins and seeded mock data.
 
@@ -61,7 +61,7 @@ If you want real WhatsApp alerts, set Twilio credentials and use:
 
 1. Push this folder to a Git repo.
 2. In Render, create a new **Web Service** from the repo.
-3. Root directory: this `frontend/flask_app` folder.
+3. Root directory: this `application` folder.
 4. Render can auto-detect `render.yaml`. If not:
    - Build command: `pip install -r requirements.txt`
    - Start command: `gunicorn --workers 2 --threads 4 --timeout 120 --bind 0.0.0.0:$PORT wsgi:app`
@@ -75,3 +75,18 @@ If you want real WhatsApp alerts, set Twilio credentials and use:
 - SQLite is file-based and suitable for demo/small deployments. For larger scale, migrate to Postgres.
 - Keep `.env` out of source control.
 - Rotate any credentials that were ever exposed.
+
+## Deploy on Vercel
+
+The repository now includes a root `vercel.json` and `api/` entrypoints.
+
+1. Import the repository into Vercel.
+2. Keep the project root as the repository root (do not set `application/` as root).
+3. Add environment variables from `application/.env.example` in Vercel Project Settings.
+4. Set `EQWELL_DB_PATH=/tmp/eqwell_scores.db` for serverless-safe SQLite writes.
+5. Deploy.
+
+Vercel routes are configured as:
+
+- `/(.*)` -> Flask app via `api/index.py`
+- `/extension-analyze` and `/health` -> FastAPI service via `api/stress_api.py`

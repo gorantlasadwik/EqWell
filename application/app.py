@@ -118,13 +118,18 @@ EXTENSION_LIVE_SIGNALS = {}
 EXTENSION_SECURITY_STATUS = {}
 STUDENT_BEHAVIOR_CONTEXT = {}
 configured_db_path = str(os.getenv("EQWELL_DB_PATH", "")).strip()
+is_vercel_runtime = os.getenv("VERCEL", "").strip() == "1"
 if configured_db_path:
     score_db_candidate = Path(configured_db_path).expanduser()
     if not score_db_candidate.is_absolute():
         score_db_candidate = (Path(__file__).resolve().parent / score_db_candidate).resolve()
     SCORE_DB_PATH = score_db_candidate
 else:
-    SCORE_DB_PATH = Path(__file__).resolve().with_name("eqwell_scores.db")
+    # Vercel serverless runtime allows writes only in /tmp.
+    if is_vercel_runtime:
+        SCORE_DB_PATH = Path("/tmp/eqwell_scores.db")
+    else:
+        SCORE_DB_PATH = Path(__file__).resolve().with_name("eqwell_scores.db")
 EQWELL_ENABLE_MOCK_LOGINS = read_env_bool("EQWELL_ENABLE_MOCK_LOGINS", True)
 EQWELL_SEED_MOCK_DATA = read_env_bool("EQWELL_SEED_MOCK_DATA", True)
 QUIZ_MODES_DIR = Path(__file__).resolve().parent / "quiz_questions"

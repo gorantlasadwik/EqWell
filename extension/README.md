@@ -18,12 +18,12 @@ The extension reads only active-tab context and sends it to the Flask backend as
 ## Run Backend
 
 1. Install dependencies:
-   pip install -r requirements.txt
+   pip install -r application/requirements.txt
 2. Set environment variables in .env:
    - HUGGINGFACE_API_TOKEN
    - EQWELL_JWT_SECRET
 3. Start Flask app:
-   python app.py
+   python application/app.py
 
 ## Load Extension
 
@@ -31,7 +31,9 @@ The extension reads only active-tab context and sends it to the Flask backend as
 2. Enable Developer mode
 3. Click Load unpacked
 4. Select this folder:
-   chrome_extension
+   extension
+
+For production, update `AUTH_BASE_URL` in `extension/config.js` to your deployed domain.
 
 ## Use
 

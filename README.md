@@ -10,6 +10,9 @@ EqWell is a student wellbeing platform with:
 
 ```
 EqWell/
+  api/
+    index.py
+    stress_api.py
   application/
     app.py
     stress_api.py
@@ -143,9 +146,14 @@ These are ready for Render-style deployment.
 
 If you deploy on Vercel:
 
-- Treat `application/` as the application root.
-- Deploy Flask app as one service.
-- If you need isolated analysis scaling, deploy `stress_api.py` as a separate service and point your app to it via environment configuration.
+- Keep repository root as Vercel project root.
+- `vercel.json` routes traffic to:
+  - `api/index.py` for Flask app (`/(.*)`)
+  - `api/stress_api.py` for FastAPI endpoints (`/extension-analyze`, `/health`)
+- Root `requirements.txt` delegates to `application/requirements.txt`.
+- Set `EQWELL_DB_PATH=/tmp/eqwell_scores.db` in Vercel environment variables.
+- Update Google Fit redirect URI for production domain:
+  - `https://<your-vercel-domain>/api/student/google-fit/callback`
 
 ## Security notes
 
