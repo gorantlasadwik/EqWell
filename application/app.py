@@ -24,6 +24,90 @@ MOBILE_USER_AGENT_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+DESKTOP_ONLY_CLIENT_GUARD = """
+<script src="https://cdn.jsdelivr.net/npm/ismobilejs@1.1.1/dist/isMobile.min.js"></script>
+<script id="eqwell-desktop-client-guard">
+(function () {
+    function getMobileInfo() {
+        if (typeof window.isMobile !== "function") {
+            return null;
+        }
+        try {
+            return window.isMobile(window.navigator || navigator);
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function blockedByLibrary() {
+        var info = getMobileInfo();
+        if (!info) {
+            return false;
+        }
+        return Boolean(info.phone || info.tablet || info.any);
+    }
+
+    function blockedByClientHints() {
+        var uaData = navigator.userAgentData || null;
+        if (!uaData) {
+            return false;
+        }
+
+        var platform = String(uaData.platform || "").toLowerCase();
+        var mobile = Boolean(uaData.mobile);
+        var androidTablet = platform.indexOf("android") >= 0 && !mobile;
+        var iosPlatform = /(ios|iphone|ipad|ipod|ipados)/.test(platform);
+
+        return mobile || androidTablet || iosPlatform;
+    }
+
+    function renderDesktopOnlyNotice() {
+        var html = [
+            "<!DOCTYPE html>",
+            '<html lang="en">',
+            "<head>",
+            '  <meta charset="utf-8" />',
+            '  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />',
+            "  <title>EqWell Desktop Only</title>",
+            "  <style>",
+            "    * { box-sizing: border-box; }",
+            "    html, body { margin: 0; min-height: 100%; font-family: Segoe UI, system-ui, sans-serif; }",
+            "    body { display: grid; place-items: center; padding: 20px; background: linear-gradient(145deg, #f9f6f0 0%, #ebf1fb 100%); color: #1a2438; }",
+            "    .card { width: min(520px, 100%); background: #fff; border: 1px solid rgba(26, 36, 56, 0.16); border-radius: 20px; padding: 22px; box-shadow: 0 18px 40px rgba(15, 26, 42, 0.14); }",
+            "    h1 { margin: 0; font-size: 28px; line-height: 1.1; }",
+            "    p { margin: 12px 0 0; color: #5b6678; line-height: 1.6; font-size: 15px; }",
+            "  </style>",
+            "</head>",
+            "<body>",
+            '  <main class="card" role="status" aria-live="polite">',
+            "    <h1>Open EqWell on Desktop</h1>",
+            "    <p>This portal is available only in desktop view right now. Please open this link from a laptop or PC browser.</p>",
+            "  </main>",
+            "</body>",
+            "</html>"
+        ].join("\n");
+
+        document.open();
+        document.write(html);
+        document.close();
+    }
+
+    function enforceDesktopOnly() {
+        if (!(blockedByLibrary() || blockedByClientHints())) {
+            return;
+        }
+        renderDesktopOnlyNotice();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", enforceDesktopOnly, { once: true });
+    } else {
+        enforceDesktopOnly();
+    }
+})();
+</script>
+"""
+
 
 def resolve_mobile_template_dir():
     current_file = Path(__file__).resolve()
@@ -189,6 +273,28 @@ def apply_extension_cors_headers(response):
     return response
 
 
+def inject_client_desktop_guard(response):
+    if response.status_code >= 400:
+        return response
+
+    content_type = str(response.headers.get("Content-Type", "")).lower()
+    if "text/html" not in content_type:
+        return response
+
+    if response.direct_passthrough:
+        return response
+
+    html = response.get_data(as_text=True)
+    if "eqwell-desktop-client-guard" in html:
+        return response
+
+    if "</head>" not in html:
+        return response
+
+    response.set_data(html.replace("</head>", f"{DESKTOP_ONLY_CLIENT_GUARD}</head>", 1))
+    return response
+
+
 @app.before_request
 def handle_extension_preflight_request():
     if request.method == "OPTIONS" and is_extension_api_path(request.path):
@@ -198,7 +304,8 @@ def handle_extension_preflight_request():
 
 @app.after_request
 def add_extension_cors_headers(response):
-    return apply_extension_cors_headers(response)
+    response = apply_extension_cors_headers(response)
+    return inject_client_desktop_guard(response)
 
 
 def normalize_avatar_style(style):
