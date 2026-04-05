@@ -61,6 +61,28 @@ DESKTOP_ONLY_CLIENT_GUARD = """
         return mobile || androidTablet || iosPlatform;
     }
 
+    function mediaMatches(query) {
+        try {
+            return Boolean(window.matchMedia && window.matchMedia(query).matches);
+        } catch (error) {
+            return false;
+        }
+    }
+
+    function blockedByDeviceSignals() {
+        var maxTouchPoints = Number(navigator.maxTouchPoints || 0);
+        var hasTouch = maxTouchPoints > 1 || ("ontouchstart" in window);
+        var coarsePointer = mediaMatches("(pointer: coarse)") || mediaMatches("(any-pointer: coarse)");
+        var noHover = mediaMatches("(hover: none)") || mediaMatches("(any-hover: none)");
+        var platform = String(navigator.platform || "").toLowerCase();
+        var isIpadDesktopMode = platform.indexOf("mac") >= 0 && maxTouchPoints > 1;
+        var smallestSide = Math.min(Number(screen.width || 0), Number(screen.height || 0));
+        var tabletOrPhoneLikeViewport = smallestSide > 0 && smallestSide <= 1024;
+        var touchLikeMobile = hasTouch && (coarsePointer || noHover);
+
+        return isIpadDesktopMode || touchLikeMobile || (hasTouch && tabletOrPhoneLikeViewport);
+    }
+
     function renderDesktopOnlyNotice() {
         var html = [
             "<!DOCTYPE html>",
@@ -93,7 +115,7 @@ DESKTOP_ONLY_CLIENT_GUARD = """
     }
 
     function enforceDesktopOnly() {
-        if (!(blockedByLibrary() || blockedByClientHints())) {
+        if (!(blockedByLibrary() || blockedByClientHints() || blockedByDeviceSignals())) {
             return;
         }
         renderDesktopOnlyNotice();
