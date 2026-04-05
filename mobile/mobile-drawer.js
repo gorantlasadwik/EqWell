@@ -1,25 +1,25 @@
 (function () {
-  var root = document.body;
-  var drawer = document.querySelector('[data-mobile-drawer]');
-  var openButtons = document.querySelectorAll('[data-mobile-open]');
-  var closeButtons = document.querySelectorAll('[data-mobile-close]');
+  var body = document.body;
+  var drawer = document.querySelector('[data-mq-drawer]');
+  var openers = document.querySelectorAll('[data-mq-open]');
+  var closers = document.querySelectorAll('[data-mq-close]');
 
-  if (!root || !drawer || !openButtons.length || !closeButtons.length) {
+  if (!body || !drawer) {
     return;
   }
 
-  var setOpen = function (isOpen) {
-    root.classList.toggle('mobile-menu-open', isOpen);
-    drawer.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-  };
+  function setOpen(open) {
+    body.classList.toggle('mq-open', open);
+    drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+  }
 
-  openButtons.forEach(function (button) {
+  openers.forEach(function (button) {
     button.addEventListener('click', function () {
       setOpen(true);
     });
   });
 
-  closeButtons.forEach(function (button) {
+  closers.forEach(function (button) {
     button.addEventListener('click', function () {
       setOpen(false);
     });

@@ -1,244 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EqWell | Sign Up</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
-  <style id="card-wrap-guard">
-    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
-    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
-  </style>
-  <link rel="stylesheet" href="/mobile-overrides.css" />
-</head>
-<body class="mobile-shell-page auth-atelier-page auth-signup-page">
-  <div class="mobile-shell-app">
-    <header class="mobile-shell-header">
-      <button type="button" class="mobile-shell-icon-btn" data-mobile-open aria-label="Open menu">
-        <span class="material-symbols-outlined">menu</span>
-      </button>
-      <div class="mobile-shell-brand">
-        <strong>EqWell</strong>
-        <span>Signup Showcase</span>
-      </div>
-      <a class="mobile-shell-icon-btn" href="{{ url_for('home') }}" aria-label="Go home">
-        <span class="material-symbols-outlined">home</span>
-      </a>
-    </header>
-
-    <aside class="mobile-shell-drawer" data-mobile-drawer aria-hidden="true">
-      <div class="mobile-shell-drawer-head">
-        <strong>Navigation</strong>
-        <button type="button" class="mobile-shell-icon-btn" data-mobile-close aria-label="Close menu">
-          <span class="material-symbols-outlined">close</span>
-        </button>
-      </div>
-      <nav class="mobile-shell-nav">
-        <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span>Home</a>
-        <a href="{{ url_for('login') }}"><span class="material-symbols-outlined">login</span>Login</a>
-        <a href="{{ url_for('signup_showcase') }}"><span class="material-symbols-outlined">person_add</span>Sign Up</a>
-        <a href="{{ url_for('install_extension') }}"><span class="material-symbols-outlined">extension</span>Extension</a>
-        <a href="{{ url_for('login', role='student') }}"><span class="material-symbols-outlined">school</span>Student</a>
-        <a href="{{ url_for('login', role='warden') }}"><span class="material-symbols-outlined">apartment</span>Warden</a>
-        <a href="{{ url_for('login', role='counsellor') }}"><span class="material-symbols-outlined">psychology</span>Counsellor</a>
-        <a href="{{ url_for('login', role='developer') }}"><span class="material-symbols-outlined">code</span>Developer</a>
-        <a href="{{ url_for('login', role='parent') }}"><span class="material-symbols-outlined">family_restroom</span>Parent</a>
-        <a href="{{ url_for('login', role='proctor') }}"><span class="material-symbols-outlined">admin_panel_settings</span>Proctor</a>
-        <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined">logout</span>Logout</a>
-      </nav>
-    </aside>
-
-    <button type="button" class="mobile-shell-backdrop" data-mobile-close aria-label="Close navigation"></button>
-
-    <main class="mobile-shell-main">
-      <section class="mobile-shell-content">
-<section class="auth-atelier">
-    <div class="auth-orb auth-orb-a" aria-hidden="true"></div>
-    <div class="auth-orb auth-orb-c" aria-hidden="true"></div>
-
-    <div class="auth-shell-main">
-      <header class="auth-head">
-        <a class="auth-wordmark" href="{{ url_for('home') }}">EqWell</a>
-        <nav class="auth-head-links" aria-label="Auth navigation">
-          <a href="{{ url_for('home') }}">Home</a>
-          <a href="{{ url_for('login') }}">Login</a>
-        </nav>
-      </header>
-
-      <div class="auth-grid-main auth-grid-signup">
-        <aside class="auth-panel auth-panel-story">
-          <p class="auth-eyebrow">Guided Onboarding</p>
-          <h1>Create your role profile and request access.</h1>
-          <p class="auth-copy">
-            Signup requests are reviewed before credentials are activated. This helps keep sensitive wellbeing tools
-            secure and role-appropriate.
-          </p>
-
-          <div class="signup-step-list" aria-label="Signup process">
-            <div class="signup-step">
-              <span class="material-symbols-outlined">person_add</span>
-              <div>
-                <h3>Share role details</h3>
-                <p>Provide your institutional identity and preferred portal.</p>
-              </div>
-            </div>
-            <div class="signup-step">
-              <span class="material-symbols-outlined">policy</span>
-              <div>
-                <h3>Get verified</h3>
-                <p>Developer review validates account scope and access rights.</p>
-              </div>
-            </div>
-            <div class="signup-step">
-              <span class="material-symbols-outlined">login</span>
-              <div>
-                <h3>Enter your dashboard</h3>
-                <p>Use login to access the approved role workspace.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="auth-trust-inline">
-            <span class="material-symbols-outlined">encrypted</span>
-            Privacy-first access with role-restricted views.
-          </div>
-        </aside>
-
-        <article class="auth-panel auth-panel-form">
-          <p class="auth-eyebrow">Secure Sign Up</p>
-          <h2>Create your EqWell account</h2>
-          <p class="auth-copy">Submit once, then sign in after your account is approved.</p>
-
-          <form class="auth-form signup-auth-form" method="post" action="{{ url_for('signup_showcase') }}">
-            <div class="auth-field">
-              <label class="auth-label" for="name">Full Name</label>
-              <input class="auth-input" id="name" name="name" type="text" placeholder="Ariana Vale" required />
-            </div>
-
-            <div class="auth-field">
-              <label class="auth-label" for="email">Institution Email</label>
-              <input class="auth-input" id="email" name="email" type="email" placeholder="name@campus.edu" required />
-            </div>
-
-            <div class="auth-field">
-              <label class="auth-label" for="signup-role-trigger">Role</label>
-              <div class="role-select" id="signup-role-select">
-                <input id="signup-role" name="role" type="hidden" value="{{ selected_role | default('student') }}" required />
-
-                <button class="role-select-trigger" id="signup-role-trigger" type="button" aria-expanded="false" aria-haspopup="listbox">
-                  <span id="signup-role-trigger-label">Student</span>
-                  <span class="material-symbols-outlined">expand_more</span>
-                </button>
-
-                <div class="role-select-menu" id="signup-role-menu" role="listbox" aria-label="Signup role">
-                  <button class="role-option" type="button" data-value="student" data-label="Student">Student</button>
-                  <button class="role-option" type="button" data-value="warden" data-label="Warden">Warden</button>
-                  <button class="role-option" type="button" data-value="counsellor" data-label="Counsellor">Counsellor</button>
-                  <button class="role-option" type="button" data-value="developer" data-label="Developer">Developer</button>
-                  <button class="role-option" type="button" data-value="parent" data-label="Parent">Parent</button>
-                  <button class="role-option" type="button" data-value="proctor" data-label="Proctor">Proctor</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="auth-split-fields">
-              <div class="auth-field">
-                <label class="auth-label" for="password">Password</label>
-                <input class="auth-input" id="password" name="password" type="password" placeholder="At least 6 characters" required minlength="6" />
-              </div>
-
-              <div class="auth-field">
-                <label class="auth-label" for="confirm_password">Confirm Password</label>
-                <input class="auth-input" id="confirm_password" name="confirm_password" type="password" placeholder="Re-enter password" required minlength="6" />
-              </div>
-            </div>
-
-            <div class="auth-field">
-              <label class="auth-label" for="note">Optional Note For Developer</label>
-              <input class="auth-input" id="note" name="note" type="text" placeholder="Department, shift, hostel block, etc." />
-            </div>
-
-            <button class="auth-primary-btn" type="submit">Submit for approval</button>
-          </form>
-
-          {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-              {% for category, message in messages %}
-                <p class="auth-notice" data-category="{{ category }}">{{ message }}</p>
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
-
-          <div class="auth-footer-links">
-            <p>Already approved?</p>
-            <a href="{{ url_for('login') }}">Go to Login</a>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <script>
-    (function () {
-      var root = document.getElementById('signup-role-select');
-      if (!root) return;
-
-      var trigger = document.getElementById('signup-role-trigger');
-      var label = document.getElementById('signup-role-trigger-label');
-      var roleInput = document.getElementById('signup-role');
-      var options = Array.from(root.querySelectorAll('.role-option'));
-
-      function setOpen(open) {
-        root.classList.toggle('open', !!open);
-        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
-      }
-
-      function syncSelection(value) {
-        var selected = options.find(function (btn) { return btn.dataset.value === value; }) || options[0];
-        if (!selected) return;
-
-        roleInput.value = selected.dataset.value;
-        label.textContent = selected.dataset.label;
-
-        options.forEach(function (btn) {
-          btn.classList.toggle('active', btn === selected);
-        });
-      }
-
-      trigger.addEventListener('click', function () {
-        setOpen(!root.classList.contains('open'));
-      });
-
-      options.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          syncSelection(btn.dataset.value);
-          setOpen(false);
-        });
-      });
-
-      document.addEventListener('click', function (event) {
-        if (!root.contains(event.target)) {
-          setOpen(false);
-        }
-      });
-
-      document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-          setOpen(false);
-        }
-      });
-
-      syncSelection(roleInput.value || 'student');
-    })();
-  </script>
-      </section>
-    </main>
-  </div>
-
-  <script defer src="/mobile-drawer.js"></script>
-</body>
-</html>
+{% extends "mobile/_layout.html" %}
+{% set page_title = "Signup" %}
+{% block content %}
+<section class="mq-grid">
+  <article class="mq-card">
+    <h2>Create Account Request</h2>
+    <p>Submit your details for role approval.</p>
+    <form class="mq-form" method="post" action="{{ url_for('signup_showcase') }}" style="margin-top: 10px;">
+      <label class="mq-label">Full Name<input class="mq-input" type="text" name="name" required /></label>
+      <label class="mq-label">Email<input class="mq-input" type="email" name="email" required /></label>
+      <label class="mq-label">Password<input class="mq-input" type="password" name="password" minlength="6" required /></label>
+      <label class="mq-label">Confirm Password<input class="mq-input" type="password" name="confirm_password" minlength="6" required /></label>
+      <label class="mq-label">
+        Role
+        <select class="mq-select" name="role" required>
+          {% for role_key, role_label in [('student','Student'),('warden','Warden'),('counsellor','Counsellor'),('developer','Developer'),('parent','Parent'),('proctor','Proctor')] %}
+            <option value="{{ role_key }}" {% if selected_role == role_key %}selected{% endif %}>{{ role_label }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label class="mq-label">Note
+        <textarea class="mq-textarea" name="note" placeholder="Optional reason or context"></textarea>
+      </label>
+      <button class="mq-btn" type="submit">Submit Signup</button>
+    </form>
+  </article>
+</section>
+{% endblock %}

@@ -1,530 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{{ page_title }} | EqWell</title>
-  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            surface: '#ece8e2',
-            'surface-container-lowest': '#ffffff',
-            'surface-container-low': '#f3f2f1',
-            'surface-container': '#ece8e2',
-            'surface-container-high': '#e4e0da',
-            'on-surface': '#1a1c22',
-            primary: '#11131a',
-            secondary: '#355f8e',
-            outline: '#d7d4cf'
-          },
-          fontFamily: {
-            headline: ['Plus Jakarta Sans', 'sans-serif'],
-            body: ['Inter', 'sans-serif']
-          }
-        }
-      }
-    };
-  </script>
-  <style>
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      border-radius: 14px;
-      border: 1px solid #ddd9d2;
-      background: #fff;
-    }
-
-    .pipeline-row {
-      border-radius: 14px;
-      border: 1px solid #ddd9d2;
-      background: #fff;
-      padding: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-  </style>
-  <style id="card-wrap-guard">
-    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
-    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
-  </style>
-  <link rel="stylesheet" href="/mobile-overrides.css" />
-</head>
-<body class="mobile-shell-page bg-surface font-body text-on-surface antialiased overflow-x-hidden">
-  <div class="mobile-shell-app">
-    <header class="mobile-shell-header">
-      <button type="button" class="mobile-shell-icon-btn" data-mobile-open aria-label="Open menu">
-        <span class="material-symbols-outlined">menu</span>
-      </button>
-      <div class="mobile-shell-brand">
-        <strong>EqWell</strong>
-        <span>Developer Dashboard</span>
-      </div>
-      <a class="mobile-shell-icon-btn" href="{{ url_for('home') }}" aria-label="Go home">
-        <span class="material-symbols-outlined">home</span>
-      </a>
-    </header>
-
-    <aside class="mobile-shell-drawer" data-mobile-drawer aria-hidden="true">
-      <div class="mobile-shell-drawer-head">
-        <strong>Navigation</strong>
-        <button type="button" class="mobile-shell-icon-btn" data-mobile-close aria-label="Close menu">
-          <span class="material-symbols-outlined">close</span>
-        </button>
-      </div>
-      <nav class="mobile-shell-nav">
-        <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span>Home</a>
-        <a href="{{ url_for('login') }}"><span class="material-symbols-outlined">login</span>Login</a>
-        <a href="{{ url_for('signup_showcase') }}"><span class="material-symbols-outlined">person_add</span>Sign Up</a>
-        <a href="{{ url_for('install_extension') }}"><span class="material-symbols-outlined">extension</span>Extension</a>
-        <a href="{{ url_for('login', role='student') }}"><span class="material-symbols-outlined">school</span>Student</a>
-        <a href="{{ url_for('login', role='warden') }}"><span class="material-symbols-outlined">apartment</span>Warden</a>
-        <a href="{{ url_for('login', role='counsellor') }}"><span class="material-symbols-outlined">psychology</span>Counsellor</a>
-        <a href="{{ url_for('login', role='developer') }}"><span class="material-symbols-outlined">code</span>Developer</a>
-        <a href="{{ url_for('login', role='parent') }}"><span class="material-symbols-outlined">family_restroom</span>Parent</a>
-        <a href="{{ url_for('login', role='proctor') }}"><span class="material-symbols-outlined">admin_panel_settings</span>Proctor</a>
-        <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined">logout</span>Logout</a>
-      </nav>
-    </aside>
-
-    <button type="button" class="mobile-shell-backdrop" data-mobile-close aria-label="Close navigation"></button>
-
-    <main class="mobile-shell-main">
-      <section class="mobile-shell-content">
-{% set page = developer_page | default('overview') %}
-
-  <aside class="fixed left-0 top-0 h-full w-72 flex flex-col py-8 px-6 bg-[#0f1118] border-r border-[#1b2130] z-50">
-    <div class="mb-12 px-4">
-      <h1 class="text-2xl font-black text-[#f4f6fa] font-headline">EqWell</h1>
-      <p class="text-xs font-medium tracking-widest uppercase text-[#a7afc2] mt-1">Developer Console</p>
+{% extends "mobile/_layout.html" %}
+{% set page_title = "Developer Console" %}
+{% block content %}
+<section class="mq-grid">
+  <article class="mq-card">
+    <h2>{{ page_title|default('Developer Console') }}</h2>
+    <p>{{ page_subtitle|default('System and account operations on mobile.') }}</p>
+    <div class="mq-pill-row">
+      <a class="mq-pill" href="{{ url_for('developer_overview_page') }}">Overview</a>
+      <a class="mq-pill" href="{{ url_for('developer_accounts_page') }}">Accounts</a>
+      <a class="mq-pill" href="{{ url_for('developer_pipeline_page') }}">Pipeline</a>
+      <a class="mq-pill" href="{{ url_for('developer_requests_page') }}">Requests</a>
     </div>
+  </article>
 
-    <nav class="flex-1 space-y-3">
-      <a class="rounded-full px-6 py-3.5 font-bold flex items-center gap-4 {% if page == 'overview' %}bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]{% else %}text-[#d3d9e8] hover:text-[#f4f6fa] hover:bg-white/10 transition-transform duration-200{% endif %}" href="{{ url_for('developer_overview_page') }}">
-        <span class="material-symbols-outlined">space_dashboard</span>
-        <span class="font-headline tracking-tight">Overview</span>
-      </a>
-      <a class="rounded-full px-6 py-3.5 font-bold flex items-center gap-4 {% if page == 'accounts' %}bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]{% else %}text-[#d3d9e8] hover:text-[#f4f6fa] hover:bg-white/10 transition-transform duration-200{% endif %}" href="{{ url_for('developer_accounts_page') }}">
-        <span class="material-symbols-outlined">manage_accounts</span>
-        <span class="font-headline tracking-tight">Accounts</span>
-      </a>
-      <a class="rounded-full px-6 py-3.5 font-bold flex items-center gap-4 {% if page == 'pipeline' %}bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]{% else %}text-[#d3d9e8] hover:text-[#f4f6fa] hover:bg-white/10 transition-transform duration-200{% endif %}" href="{{ url_for('developer_pipeline_page') }}">
-        <span class="material-symbols-outlined">schema</span>
-        <span class="font-headline tracking-tight">Pipeline</span>
-      </a>
-      <a class="rounded-full px-6 py-3.5 font-bold flex items-center gap-4 {% if page == 'requests' %}bg-gradient-to-r from-[#4f90b7] to-[#6b9dbf] text-white shadow-[0_10px_28px_rgba(38,94,128,0.35)]{% else %}text-[#d3d9e8] hover:text-[#f4f6fa] hover:bg-white/10 transition-transform duration-200{% endif %}" href="{{ url_for('developer_requests_page') }}">
-        <span class="material-symbols-outlined">approval_delegation</span>
-        <span class="font-headline tracking-tight">Requests</span>
-      </a>
+  <article class="mq-card">
+    <h3>Platform Metrics</h3>
+    <div class="mq-grid two" style="margin-top: 8px;">
+      <div class="mq-metric"><small>Pending</small><strong>{{ pending_count|default(0) }}</strong></div>
+      <div class="mq-metric"><small>Approved</small><strong>{{ approved_count|default(0) }}</strong></div>
+      <div class="mq-metric"><small>Signals</small><strong>{{ developer_live_signals|default(0) }}</strong></div>
+      <div class="mq-metric"><small>High Risk</small><strong>{{ developer_high_risk_students|default(0) }}</strong></div>
+    </div>
+  </article>
 
-      <form class="pt-2" method="post" action="{{ url_for('logout') }}">
-        <button class="w-full text-left text-[#d3d9e8] px-6 py-3.5 hover:text-[#f4f6fa] hover:bg-white/10 rounded-full flex items-center gap-4 transition-transform duration-200" type="submit">
-          <span class="material-symbols-outlined">logout</span>
-          <span class="font-headline tracking-tight">Logout</span>
-        </button>
-      </form>
-    </nav>
-  </aside>
-
-  <main class="ml-72 min-h-screen px-10 py-8">
-    <header class="flex flex-wrap items-start justify-between gap-4 mb-7">
-      <div>
-        <p class="text-xs font-black tracking-widest uppercase text-stone-500">Developer Dashboard</p>
-        <h2 class="font-headline text-4xl font-extrabold tracking-tight mt-1">{{ page_title }}</h2>
-        <p class="text-sm text-stone-500 mt-2">{{ page_subtitle }}</p>
-      </div>
-      <div class="flex items-center gap-2">
-        <span class="px-3 py-1 rounded-full bg-[#e4f3e8] text-[#31593a] text-xs font-bold">Developer Mode</span>
-        <span class="px-3 py-1 rounded-full bg-surface-container text-stone-700 text-xs font-bold">{{ display_name }}</span>
-      </div>
-    </header>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <section class="space-y-2 mb-6">
-          {% for category, message in messages %}
-            <div class="rounded-2xl border px-4 py-3 text-sm font-semibold {% if category == 'success' %}border-[#cde8d3] bg-[#e7f6eb] text-[#2f6a3d]{% else %}border-[#efcad3] bg-[#f9e8ed] text-[#7a2f49]{% endif %}">
-              {{ message }}
-            </div>
-          {% endfor %}
-        </section>
-      {% endif %}
-    {% endwith %}
-
-    {% if page == 'overview' %}
-    <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-7">
-      <article class="rounded-2xl border border-[#ddd9d2] p-4 bg-[#fff8df]">
-        <p class="text-xs font-black tracking-widest uppercase text-stone-500">Pending Approvals</p>
-        <p class="text-3xl font-headline font-extrabold mt-1">{{ pending_count }}</p>
-        <p class="text-xs text-stone-600 mt-1">Requests waiting for decision</p>
-      </article>
-      <article class="rounded-2xl border border-[#ddd9d2] p-4 bg-[#eaf3ff]">
-        <p class="text-xs font-black tracking-widest uppercase text-stone-500">Live Signals</p>
-        <p class="text-3xl font-headline font-extrabold mt-1">{{ developer_live_signals }}</p>
-        <p class="text-xs text-stone-600 mt-1">Runtime extension signal sessions</p>
-      </article>
-      <article class="rounded-2xl border border-[#ddd9d2] p-4 bg-[#fbe7ec]">
-        <p class="text-xs font-black tracking-widest uppercase text-stone-500">High-Risk Students</p>
-        <p class="text-3xl font-headline font-extrabold mt-1">{{ developer_high_risk_students }}</p>
-        <p class="text-xs text-stone-600 mt-1">Current high category snapshots</p>
-      </article>
-      <article class="rounded-2xl border border-[#ddd9d2] p-4 bg-[#e7f7ea]">
-        <p class="text-xs font-black tracking-widest uppercase text-stone-500">Approved Accounts</p>
-        <p class="text-3xl font-headline font-extrabold mt-1">{{ approved_count }}</p>
-        <p class="text-xs text-stone-600 mt-1">Role accounts active in system</p>
-      </article>
-    </section>
-
-    <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-      <article class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
-        <h3 class="font-headline text-2xl font-bold">Quick Navigation</h3>
-        <p class="text-sm text-stone-500 mt-1">Move into operational areas using dedicated pages.</p>
-        <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <a class="rounded-2xl border border-[#ddd9d2] bg-[#f7f4ef] p-4 hover:bg-white transition" href="{{ url_for('developer_accounts_page') }}">
-            <p class="text-sm font-bold text-[#263245]">Accounts</p>
-            <p class="text-xs text-stone-500 mt-1">Create accounts, assign roles, add quizzes.</p>
-          </a>
-          <a class="rounded-2xl border border-[#ddd9d2] bg-[#f7f4ef] p-4 hover:bg-white transition" href="{{ url_for('developer_pipeline_page') }}">
-            <p class="text-sm font-bold text-[#263245]">Pipeline</p>
-            <p class="text-xs text-stone-500 mt-1">Inspect score/event/risk storage flow.</p>
-          </a>
-          <a class="rounded-2xl border border-[#ddd9d2] bg-[#f7f4ef] p-4 hover:bg-white transition" href="{{ url_for('developer_requests_page') }}">
-            <p class="text-sm font-bold text-[#263245]">Requests</p>
-            <p class="text-xs text-stone-500 mt-1">Approve or reject signup requests.</p>
-          </a>
-        </div>
-      </article>
-
-      <article class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
-        <h3 class="font-headline text-2xl font-bold">Recent Risk Signatures</h3>
-        <p class="text-sm text-stone-500 mt-1">Latest detected risky signatures from extension events.</p>
-        <div class="table-wrap mt-4">
-          <table class="w-full text-sm">
-            <thead class="bg-[#f7f4ef]">
-              <tr>
-                <th class="text-left px-4 py-3">Student</th>
-                <th class="text-left px-4 py-3">Signature</th>
-                <th class="text-left px-4 py-3">Observed</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% if developer_recent_risk_events %}
-                {% for event in developer_recent_risk_events %}
-                <tr class="border-t border-[#e8e2d8]">
-                  <td class="px-4 py-3 font-semibold text-[#222c3a]">{{ event.name }}</td>
-                  <td class="px-4 py-3 text-stone-600">{{ event.signature }}</td>
-                  <td class="px-4 py-3 text-stone-600">{{ event.observed_at }}</td>
-                </tr>
-                {% endfor %}
-              {% else %}
-                <tr><td class="px-4 py-3 text-stone-600" colspan="3">No recent risk signatures recorded yet.</td></tr>
-              {% endif %}
-            </tbody>
-          </table>
-        </div>
-      </article>
-    </section>
-    {% endif %}
-
-    {% if page == 'pipeline' %}
-    <section class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-7">
-      <article class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
-        <h3 class="font-headline text-2xl font-bold">System Pipeline</h3>
-        <p class="text-sm text-stone-500 mt-1">End-to-end data flow and storage checkpoints.</p>
-        <div class="space-y-3 mt-4">
-          <div class="pipeline-row"><span class="font-semibold text-[#263245]">Student score snapshots</span><span class="px-2.5 py-1 rounded-full bg-[#eaf3ff] text-[#2b4d7b] text-xs font-bold">{{ developer_score_rows }} rows</span></div>
-          <div class="pipeline-row"><span class="font-semibold text-[#263245]">Extension event queue</span><span class="px-2.5 py-1 rounded-full bg-[#fff2d5] text-[#7b5a23] text-xs font-bold">{{ developer_event_rows }} events</span></div>
-          <div class="pipeline-row"><span class="font-semibold text-[#263245]">Risk signatures archive</span><span class="px-2.5 py-1 rounded-full bg-[#f9e8ed] text-[#7a2f49] text-xs font-bold">{{ developer_risk_rows }} logs</span></div>
-          <div class="pipeline-row"><span class="font-semibold text-[#263245]">Identity/session guard</span><span class="px-2.5 py-1 rounded-full bg-[#ece8e2] text-[#3f4b63] text-xs font-bold">Strict</span></div>
-        </div>
-      </article>
-
-      <article class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
-        <h3 class="font-headline text-2xl font-bold">Role Distribution</h3>
-        <p class="text-sm text-stone-500 mt-1">Approved account footprint by role.</p>
-        {% set total_roles = (role_totals.get('student', 0) + role_totals.get('counsellor', 0) + role_totals.get('warden', 0) + role_totals.get('developer', 0) + role_totals.get('parent', 0) + role_totals.get('proctor', 0)) %}
-        <div class="space-y-4 mt-5">
-          {% for role_name, color in [('student', '#4f90b7'), ('counsellor', '#355f8e'), ('warden', '#e0b54f'), ('developer', '#4b5563'), ('parent', '#10b981'), ('proctor', '#a855f7')] %}
-          <div>
-            <div class="flex justify-between text-xs font-semibold text-[#415371]"><span>{{ role_name | capitalize }}</span><span>{{ role_totals.get(role_name, 0) }}</span></div>
-            <div class="mt-1 h-2 rounded-full bg-[#ece8e2] overflow-hidden"><span class="block h-full rounded-full" style="width:{% if total_roles %}{{ (role_totals.get(role_name, 0) * 100 / total_roles)|round(0) }}{% else %}0{% endif %}%; background: {{ color }};"></span></div>
+  <article class="mq-card">
+    <h3>Pending Requests</h3>
+    <ul class="mq-list" style="margin-top: 8px;">
+      {% for account in pending_accounts|default([]) %}
+        <li class="mq-list-item">
+          <h4>{{ account.get('name', '-') }} ({{ account.get('role', '-') }})</h4>
+          <p>{{ account.get('email', '-') }}</p>
+          <div class="mq-btn-row" style="margin-top: 8px;">
+            <form method="post" action="{{ url_for('developer_update_account_status', account_id=account.get('id')) }}">
+              <input type="hidden" name="status" value="approved" />
+              <button class="mq-btn" type="submit">Approve</button>
+            </form>
+            <form method="post" action="{{ url_for('developer_update_account_status', account_id=account.get('id')) }}">
+              <input type="hidden" name="status" value="rejected" />
+              <button class="mq-btn-ghost" type="submit">Reject</button>
+            </form>
           </div>
+        </li>
+      {% else %}
+        <li class="mq-list-item"><p>No pending accounts.</p></li>
+      {% endfor %}
+    </ul>
+  </article>
+
+  <article class="mq-card">
+    <h3>Create Account</h3>
+    <form class="mq-form" method="post" action="{{ url_for('developer_create_account') }}" style="margin-top: 8px;">
+      <label class="mq-label">Name<input class="mq-input" type="text" name="name" required /></label>
+      <label class="mq-label">Email<input class="mq-input" type="email" name="email" required /></label>
+      <label class="mq-label">Password<input class="mq-input" type="password" name="password" minlength="6" required /></label>
+      <label class="mq-label">Role
+        <select class="mq-select" name="role" required>
+          {% for role in ['student','warden','counsellor','developer','parent','proctor'] %}
+            <option value="{{ role }}">{{ role|capitalize }}</option>
           {% endfor %}
-        </div>
-      </article>
-    </section>
-
-    <section class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
-      <h3 class="font-headline text-2xl font-bold">Recent Risk Signatures</h3>
-      <p class="text-sm text-stone-500 mt-1">Latest detected risky signatures from extension events.</p>
-      <div class="table-wrap mt-4">
-        <table class="w-full text-sm">
-          <thead class="bg-[#f7f4ef]">
-            <tr>
-              <th class="text-left px-4 py-3">Student</th>
-              <th class="text-left px-4 py-3">Signature</th>
-              <th class="text-left px-4 py-3">Observed</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% if developer_recent_risk_events %}
-              {% for event in developer_recent_risk_events %}
-              <tr class="border-t border-[#e8e2d8]">
-                <td class="px-4 py-3 font-semibold text-[#222c3a]">{{ event.name }}</td>
-                <td class="px-4 py-3 text-stone-600">{{ event.signature }}</td>
-                <td class="px-4 py-3 text-stone-600">{{ event.observed_at }}</td>
-              </tr>
-              {% endfor %}
-            {% else %}
-              <tr><td class="px-4 py-3 text-stone-600" colspan="3">No recent risk signatures recorded yet.</td></tr>
-            {% endif %}
-          </tbody>
-        </table>
-      </div>
-    </section>
-    {% endif %}
-
-    {% if page == 'accounts' %}
-    <section class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-7">
-      <article class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
-        <h3 class="font-headline text-2xl font-bold">Create Account</h3>
-        <p class="text-sm text-stone-500 mt-1">Provision role accounts with immediate status control.</p>
-        <form method="post" action="{{ url_for('developer_create_account') }}" class="grid grid-cols-1 gap-3 mt-4">
-          <input class="rounded-2xl border-[#d7d4cf]" name="name" type="text" placeholder="Full name" required />
-          <input class="rounded-2xl border-[#d7d4cf]" name="email" type="email" placeholder="name@eqwell.app" required />
-          <input class="rounded-2xl border-[#d7d4cf]" name="password" type="text" placeholder="Temporary password" required />
-          <select class="rounded-2xl border-[#d7d4cf]" name="role" required>
-            <option value="student">Student</option>
-            <option value="warden">Warden</option>
-            <option value="counsellor">Counsellor</option>
-            <option value="developer">Developer</option>
-            <option value="parent">Parent</option>
-            <option value="proctor">Proctor</option>
-          </select>
-          <select class="rounded-2xl border-[#d7d4cf]" name="status" required>
-            <option value="approved">Approved</option>
-            <option value="pending">Pending</option>
-          </select>
-          <input class="rounded-2xl border-[#d7d4cf]" name="requested_note" type="text" placeholder="Optional note" />
-          <button class="mt-1 rounded-full bg-[#11131a] text-white font-bold px-5 py-3 hover:brightness-110 transition" type="submit">Save Account</button>
-        </form>
-
-        <div class="mt-6 rounded-2xl border border-[#ddd9d2] bg-[#f8f5ef] p-4">
-          <h4 class="font-headline text-lg font-bold">Parent Assignment</h4>
-          <form method="post" action="{{ url_for('developer_assign_parent_student') }}" class="grid grid-cols-1 gap-2 mt-3">
-            <input class="rounded-2xl border-[#d7d4cf]" name="parent_email" type="email" placeholder="parent@eqwell.app" required />
-            <input class="rounded-2xl border-[#d7d4cf]" name="student_email" type="email" placeholder="student@eqwell.app" required />
-            <button class="rounded-full bg-[#11131a] text-white text-xs font-bold px-4 py-2.5" type="submit">Assign Parent to Student</button>
-          </form>
-        </div>
-
-        <div class="mt-4 rounded-2xl border border-[#ddd9d2] bg-[#f8f5ef] p-4">
-          <h4 class="font-headline text-lg font-bold">Proctor Group Assignment</h4>
-          <form method="post" action="{{ url_for('developer_assign_proctor_students') }}" class="grid grid-cols-1 gap-2 mt-3">
-            <input class="rounded-2xl border-[#d7d4cf]" name="proctor_email" type="email" placeholder="proctor@eqwell.app" required />
-            <select class="rounded-2xl border-[#d7d4cf]" name="hostel_block">
-              <option value="">All Hostels</option>
-              <option value="Block A">Block A</option>
-              <option value="Block B">Block B</option>
-              <option value="Block C">Block C</option>
-              <option value="Block D1">Block D1</option>
-              <option value="Block D2">Block D2</option>
-              <option value="Block E">Block E</option>
-            </select>
-            <input class="rounded-2xl border-[#d7d4cf]" name="max_students" type="number" min="8" max="30" value="24" />
-            <button class="rounded-full bg-[#11131a] text-white text-xs font-bold px-4 py-2.5" type="submit">Assign Proctor Group</button>
-          </form>
-        </div>
-      </article>
-
-      <article id="quiz-manager" class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
-        <h3 class="font-headline text-2xl font-bold">Quiz Manager</h3>
-        <p class="text-sm text-stone-500 mt-1">Admin can add quizzes that immediately appear in student quiz pages.</p>
-        <form method="post" action="{{ url_for('developer_create_quiz') }}" class="grid grid-cols-1 gap-3 mt-4">
-          <input class="rounded-2xl border-[#d7d4cf]" name="quiz_title" type="text" placeholder="Quiz title" required />
-          <select class="rounded-2xl border-[#d7d4cf]" name="quiz_type" required>
-            <option value="casual">Casual</option>
-            <option value="serious">Serious</option>
-          </select>
-          <textarea class="rounded-2xl border-[#d7d4cf]" name="quiz_questions" rows="8" placeholder="One question per line" required></textarea>
-          <button class="rounded-full bg-[#11131a] text-white font-bold px-5 py-3 hover:brightness-110 transition" type="submit">Create Quiz</button>
-        </form>
-
-        <div class="mt-6 table-wrap">
-          <table class="w-full text-sm">
-            <thead class="bg-[#f7f4ef]">
-              <tr>
-                <th class="text-left px-4 py-3">Quiz</th>
-                <th class="text-left px-4 py-3">Type</th>
-                <th class="text-left px-4 py-3">Duration</th>
-                <th class="text-left px-4 py-3">Focus</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% if developer_quiz_catalog %}
-                {% for quiz in developer_quiz_catalog %}
-                <tr class="border-t border-[#e8e2d8]">
-                  <td class="px-4 py-3 font-semibold text-[#222c3a]">{{ quiz.title }}</td>
-                  <td class="px-4 py-3 text-stone-600">{{ quiz.difficulty }}</td>
-                  <td class="px-4 py-3 text-stone-600">{{ quiz.duration }}</td>
-                  <td class="px-4 py-3 text-stone-600">{{ quiz.focus }}</td>
-                </tr>
-                {% endfor %}
-              {% else %}
-                <tr><td class="px-4 py-3 text-stone-600" colspan="4">No quizzes available.</td></tr>
-              {% endif %}
-            </tbody>
-          </table>
-        </div>
-      </article>
-    </section>
-
-    <section class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)] mb-7">
-      <h3 class="font-headline text-2xl font-bold">All Accounts Details</h3>
-      <p class="text-sm text-stone-500 mt-1">Complete list of accounts with role, status, timestamps, and notes.</p>
-      <div class="table-wrap mt-4">
-        <table class="w-full text-sm">
-          <thead class="bg-[#f7f4ef]">
-            <tr>
-              <th class="text-left px-4 py-3">Name</th>
-              <th class="text-left px-4 py-3">Email</th>
-              <th class="text-left px-4 py-3">Role</th>
-              <th class="text-left px-4 py-3">Status</th>
-              <th class="text-left px-4 py-3">Created</th>
-              <th class="text-left px-4 py-3">Approved</th>
-              <th class="text-left px-4 py-3">Note</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% if all_accounts %}
-              {% for account in all_accounts %}
-              <tr class="border-t border-[#e8e2d8]">
-                <td class="px-4 py-3 font-semibold text-[#222c3a]">{{ account.name }}</td>
-                <td class="px-4 py-3 text-stone-600">{{ account.email }}</td>
-                <td class="px-4 py-3 text-stone-600">{{ account.role | capitalize }}</td>
-                <td class="px-4 py-3 text-stone-600">{{ account.status | capitalize }}</td>
-                <td class="px-4 py-3 text-stone-600">{{ account.created_at_label }}</td>
-                <td class="px-4 py-3 text-stone-600">{{ account.approved_at_label }}</td>
-                <td class="px-4 py-3 text-stone-600">{{ account.requested_note_short or '-' }}</td>
-              </tr>
-              {% endfor %}
-            {% else %}
-              <tr><td class="px-4 py-3 text-stone-600" colspan="7">No accounts available.</td></tr>
-            {% endif %}
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.06)]">
-      <h3 class="font-headline text-2xl font-bold">Parent Contact Verification</h3>
-      <p class="text-sm text-stone-500 mt-1">Student-registered parent contacts, OTP status, and single admin-edit usage.</p>
-      <form class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-2" method="post" action="{{ url_for('developer_edit_parent_contact_once') }}">
-        <input class="rounded-2xl border-[#d7d4cf]" name="student_email" type="email" placeholder="Student email" required />
-        <input class="rounded-2xl border-[#d7d4cf]" name="parent_name" type="text" placeholder="Corrected parent name" required />
-        <input class="rounded-2xl border-[#d7d4cf]" name="parent_phone" type="text" placeholder="Corrected parent phone" required />
-        <button class="rounded-full bg-[#11131a] text-white text-xs font-bold px-4 py-2.5" type="submit">Apply One-Time Edit + OTP</button>
-      </form>
-      <div class="table-wrap mt-4">
-        <table class="w-full text-sm">
-          <thead class="bg-[#f7f4ef]">
-            <tr>
-              <th class="text-left px-4 py-3">Student</th>
-              <th class="text-left px-4 py-3">Parent</th>
-              <th class="text-left px-4 py-3">Phone</th>
-              <th class="text-left px-4 py-3">Status</th>
-              <th class="text-left px-4 py-3">Admin Edit Used</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% if parent_contact_rows %}
-              {% for row in parent_contact_rows %}
-              <tr class="border-t border-[#e8e2d8]">
-                <td class="px-4 py-3">
-                  <div class="font-semibold text-[#222c3a]">{{ row.student_name }}</div>
-                  <div class="text-xs text-stone-500">{{ row.student_email }}</div>
-                </td>
-                <td class="px-4 py-3 text-stone-700">{{ row.parent_name }}</td>
-                <td class="px-4 py-3 text-stone-700">{{ row.parent_phone_masked }}</td>
-                <td class="px-4 py-3">
-                  {% if row.verified %}
-                  <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-[#e4f3e8] text-[#31593a]">Verified</span>
-                  {% else %}
-                  <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-[#fff2d5] text-[#7b5a23]">Pending OTP</span>
-                  {% endif %}
-                </td>
-                <td class="px-4 py-3 text-stone-700">{{ row.admin_edit_count }}/1</td>
-              </tr>
-              {% endfor %}
-            {% else %}
-              <tr><td class="px-4 py-3 text-stone-600" colspan="5">No parent contacts captured yet.</td></tr>
-            {% endif %}
-          </tbody>
-        </table>
-      </div>
-    </section>
-    {% endif %}
-
-    {% if page == 'requests' %}
-    <section class="bg-[#11131a] text-[#f4f7fe] rounded-3xl p-6 shadow-[0_12px_48px_rgba(28,28,25,0.1)]">
-      <h3 class="font-headline text-2xl font-bold">Pending Signup Requests</h3>
-      <p class="text-sm text-[#d4dcf0] mt-1">Approve or reject newly submitted portal accounts.</p>
-      <div class="table-wrap mt-4" style="border-color: rgba(255,255,255,0.14); background: rgba(255,255,255,0.03);">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="border-b border-white/10 text-[#dce4f7]">
-              <th class="text-left px-4 py-3">Name</th>
-              <th class="text-left px-4 py-3">Email</th>
-              <th class="text-left px-4 py-3">Role</th>
-              <th class="text-left px-4 py-3">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% if pending_accounts %}
-              {% for account in pending_accounts %}
-              <tr class="border-b border-white/10 last:border-b-0">
-                <td class="px-4 py-3 font-semibold">{{ account.name }}</td>
-                <td class="px-4 py-3 text-[#d4dcf0]">{{ account.email }}</td>
-                <td class="px-4 py-3 text-[#d4dcf0]">{{ account.role | capitalize }}</td>
-                <td class="px-4 py-3">
-                  <div class="flex gap-2">
-                    <form method="post" action="{{ url_for('developer_update_account_status', account_id=account.id) }}">
-                      <input type="hidden" name="status" value="approved" />
-                      <button class="rounded-full bg-[#e4f3e8] text-[#31593a] px-3 py-1 text-xs font-bold" type="submit">Approve</button>
-                    </form>
-                    <form method="post" action="{{ url_for('developer_update_account_status', account_id=account.id) }}">
-                      <input type="hidden" name="status" value="rejected" />
-                      <button class="rounded-full bg-[#f9e8ed] text-[#7a2f49] px-3 py-1 text-xs font-bold" type="submit">Reject</button>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-              {% endfor %}
-            {% else %}
-              <tr>
-                <td class="px-4 py-3 text-[#d4dcf0]" colspan="4">No pending signup requests.</td>
-              </tr>
-            {% endif %}
-          </tbody>
-        </table>
-      </div>
-    </section>
-    {% endif %}
-  </main>
-      </section>
-    </main>
-  </div>
-
-  <script defer src="/mobile-drawer.js"></script>
-</body>
-</html>
+        </select>
+      </label>
+      <label class="mq-label">Status
+        <select class="mq-select" name="status">
+          <option value="approved">approved</option>
+          <option value="pending">pending</option>
+          <option value="rejected">rejected</option>
+        </select>
+      </label>
+      <button class="mq-btn" type="submit">Create</button>
+    </form>
+  </article>
+</section>
+{% endblock %}

@@ -1,344 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EqWell Login</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
-  <style id="card-wrap-guard">
-    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
-    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
-  </style>
-  <link rel="stylesheet" href="/mobile-overrides.css" />
-</head>
-<body class="mobile-shell-page auth-atelier-page auth-login-page">
-  <div class="mobile-shell-app">
-    <header class="mobile-shell-header">
-      <button type="button" class="mobile-shell-icon-btn" data-mobile-open aria-label="Open menu">
-        <span class="material-symbols-outlined">menu</span>
-      </button>
-      <div class="mobile-shell-brand">
-        <strong>EqWell</strong>
-        <span>Login</span>
-      </div>
-      <a class="mobile-shell-icon-btn" href="{{ url_for('home') }}" aria-label="Go home">
-        <span class="material-symbols-outlined">home</span>
-      </a>
-    </header>
+{% extends "mobile/_layout.html" %}
+{% set page_title = "Login" %}
+{% block content %}
+<section class="mq-grid">
+  <article class="mq-card">
+    <h2>Sign In</h2>
+    <p>Access your role console from this mobile portal.</p>
+    <form class="mq-form" method="post" action="{{ url_for('login', role=initial_role) if lock_role else url_for('login') }}" style="margin-top: 10px;">
+      <input type="hidden" id="extension-portal-nonce" name="extension_portal_nonce" value="{{ portal_extension_nonce | default('') }}" />
+      <input type="hidden" id="extension-portal-proof" name="extension_portal_proof" value="" />
 
-    <aside class="mobile-shell-drawer" data-mobile-drawer aria-hidden="true">
-      <div class="mobile-shell-drawer-head">
-        <strong>Navigation</strong>
-        <button type="button" class="mobile-shell-icon-btn" data-mobile-close aria-label="Close menu">
-          <span class="material-symbols-outlined">close</span>
-        </button>
-      </div>
-      <nav class="mobile-shell-nav">
-        <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span>Home</a>
-        <a href="{{ url_for('login') }}"><span class="material-symbols-outlined">login</span>Login</a>
-        <a href="{{ url_for('signup_showcase') }}"><span class="material-symbols-outlined">person_add</span>Sign Up</a>
-        <a href="{{ url_for('install_extension') }}"><span class="material-symbols-outlined">extension</span>Extension</a>
-        <a href="{{ url_for('login', role='student') }}"><span class="material-symbols-outlined">school</span>Student</a>
-        <a href="{{ url_for('login', role='warden') }}"><span class="material-symbols-outlined">apartment</span>Warden</a>
-        <a href="{{ url_for('login', role='counsellor') }}"><span class="material-symbols-outlined">psychology</span>Counsellor</a>
-        <a href="{{ url_for('login', role='developer') }}"><span class="material-symbols-outlined">code</span>Developer</a>
-        <a href="{{ url_for('login', role='parent') }}"><span class="material-symbols-outlined">family_restroom</span>Parent</a>
-        <a href="{{ url_for('login', role='proctor') }}"><span class="material-symbols-outlined">admin_panel_settings</span>Proctor</a>
-        <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined">logout</span>Logout</a>
-      </nav>
-    </aside>
+      <label class="mq-label">
+        Role
+        <select class="mq-select" name="role" {% if lock_role %}disabled{% endif %}>
+          {% for role_key, role_label in [('student','Student Dashboard'),('warden','Warden Dashboard'),('counsellor','Counsellor Dashboard'),('developer','Developer Dashboard'),('parent','Parent Dashboard'),('proctor','Proctor Dashboard')] %}
+            <option value="{{ role_key }}" {% if (initial_role|default('student')) == role_key %}selected{% endif %}>{{ role_label }}</option>
+          {% endfor %}
+        </select>
+      </label>
 
-    <button type="button" class="mobile-shell-backdrop" data-mobile-close aria-label="Close navigation"></button>
+      {% if lock_role %}
+        <input type="hidden" name="role" value="{{ initial_role | default('student') }}" />
+      {% endif %}
 
-    <main class="mobile-shell-main">
-      <section class="mobile-shell-content">
-<section class="auth-atelier">
-    <div class="auth-orb auth-orb-a" aria-hidden="true"></div>
-    <div class="auth-orb auth-orb-b" aria-hidden="true"></div>
+      <label class="mq-label">
+        Email
+        <input class="mq-input" type="email" name="email" placeholder="name@example.com" required />
+      </label>
 
-    <div class="auth-shell-main">
-      <header class="auth-head">
-        <a class="auth-wordmark" href="{{ url_for('home') }}">EqWell</a>
-        <nav class="auth-head-links" aria-label="Auth navigation">
-          <a href="{{ url_for('home') }}">Home</a>
-          <a href="{{ url_for('signup_showcase') }}">Sign up</a>
-        </nav>
-      </header>
+      <label class="mq-label">
+        Password
+        <input class="mq-input" type="password" name="password" placeholder="Enter password" required />
+      </label>
 
-      <div class="auth-grid-main">
-        <aside class="auth-panel auth-panel-story">
-          <p class="auth-eyebrow">Mental Health Infrastructure</p>
-          <h1>Log in to your role-specific wellbeing dashboard.</h1>
-          <p class="auth-copy">
-            One coordinated platform for students, wardens, counsellors, developers, parents, and proctors.
-            Access exactly the signals and actions your role is designed for.
-          </p>
+      <button class="mq-btn" type="submit">Continue</button>
+    </form>
 
-          <div class="auth-role-card-grid" id="auth-role-cards" aria-label="Pick a role">
-            <button class="auth-role-card role-student" type="button" data-role="student">
-              <span class="auth-role-avatar" aria-hidden="true">
-                <img src="https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=eqwell-student&backgroundColor=dbeafe&radius=50" alt="Student avatar" loading="lazy" />
-              </span>
-              <span class="auth-role-meta"><strong>Student</strong><small>Pulse and check-ins</small></span>
-            </button>
-
-            <button class="auth-role-card role-warden" type="button" data-role="warden">
-              <span class="auth-role-avatar" aria-hidden="true">
-                <img src="https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=eqwell-warden&backgroundColor=fef3c7&radius=50" alt="Warden avatar" loading="lazy" />
-              </span>
-              <span class="auth-role-meta"><strong>Warden</strong><small>Alerts and blocks</small></span>
-            </button>
-
-            <button class="auth-role-card role-counsellor" type="button" data-role="counsellor">
-              <span class="auth-role-avatar" aria-hidden="true">
-                <img src="https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=eqwell-counsellor&backgroundColor=f3e8ff&radius=50" alt="Counsellor avatar" loading="lazy" />
-              </span>
-              <span class="auth-role-meta"><strong>Counsellor</strong><small>Sessions and care</small></span>
-            </button>
-
-            <button class="auth-role-card role-developer" type="button" data-role="developer">
-              <span class="auth-role-avatar" aria-hidden="true">
-                <img src="https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=eqwell-developer&backgroundColor=dcfce7&radius=50" alt="Developer avatar" loading="lazy" />
-              </span>
-              <span class="auth-role-meta"><strong>Developer</strong><small>Systems and logs</small></span>
-            </button>
-
-            <button class="auth-role-card role-parent" type="button" data-role="parent">
-              <span class="auth-role-avatar" aria-hidden="true">
-                <img src="https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=eqwell-parent&backgroundColor=ffe4e6&radius=50" alt="Parent avatar" loading="lazy" />
-              </span>
-              <span class="auth-role-meta"><strong>Parent</strong><small>Summaries and trends</small></span>
-            </button>
-
-            <button class="auth-role-card role-proctor" type="button" data-role="proctor">
-              <span class="auth-role-avatar" aria-hidden="true">
-                <img src="https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=eqwell-proctor&backgroundColor=e0e7ff&radius=50" alt="Proctor avatar" loading="lazy" />
-              </span>
-              <span class="auth-role-meta"><strong>Proctor</strong><small>Group risk view</small></span>
-            </button>
-          </div>
-
-          <div class="auth-stat-grid" aria-label="Platform overview">
-            <div class="auth-stat-card">
-              <h3>6</h3>
-              <p>Role portals</p>
-            </div>
-            <div class="auth-stat-card">
-              <h3>1</h3>
-              <p>Unified system</p>
-            </div>
-            <div class="auth-stat-card">
-              <h3>24/7</h3>
-              <p>Signal visibility</p>
-            </div>
-          </div>
-
-          <div class="auth-trust-inline">
-            <span class="material-symbols-outlined">encrypted</span>
-            Privacy-first access with role-restricted views.
-          </div>
-        </aside>
-
-        <article class="auth-panel auth-panel-form">
-          <p class="auth-eyebrow">Secure Sign In</p>
-          <h2>Welcome back</h2>
-          <p class="auth-copy">Use your approved email and password to continue.</p>
-
-          <form class="auth-form" method="post" action="{{ url_for('login', role=initial_role) if lock_role else url_for('login') }}">
-            <input id="extension-portal-nonce" name="extension_portal_nonce" type="hidden" value="{{ portal_extension_nonce | default('') }}" />
-            <input id="extension-portal-proof" name="extension_portal_proof" type="hidden" value="" />
-
-            <div class="auth-field">
-              <label class="auth-label" for="role">Dashboard Role</label>
-              <div class="role-select" id="role-select">
-                <input id="role" name="role" type="hidden" value="{{ initial_role | default('student') }}" required />
-
-                <button class="role-select-trigger" id="role-trigger" type="button" aria-expanded="false" aria-haspopup="listbox" {% if lock_role %}disabled{% endif %}>
-                  <span id="role-trigger-label">Student Dashboard</span>
-                  <span class="material-symbols-outlined">expand_more</span>
-                </button>
-
-                <div class="role-select-menu" id="role-menu" role="listbox" aria-label="Dashboard role" {% if lock_role %}hidden{% endif %}>
-                  <button class="role-option" type="button" data-value="student" data-label="Student Dashboard">Student Dashboard</button>
-                  <button class="role-option" type="button" data-value="warden" data-label="Warden Dashboard">Warden Dashboard</button>
-                  <button class="role-option" type="button" data-value="counsellor" data-label="Counsellor Dashboard">Counsellor Dashboard</button>
-                  <button class="role-option" type="button" data-value="developer" data-label="Developer Dashboard">Developer Dashboard</button>
-                  <button class="role-option" type="button" data-value="parent" data-label="Parent Dashboard">Parent Dashboard</button>
-                  <button class="role-option" type="button" data-value="proctor" data-label="Proctor Dashboard">Proctor Dashboard</button>
-                </div>
-              </div>
-              {% if lock_role %}
-              <p class="auth-hint">Role locked for this portal. Use this login for {{ (initial_role or 'student') | capitalize }} only.</p>
-              {% endif %}
-            </div>
-
-            <div class="auth-field">
-              <label class="auth-label" for="email">Email</label>
-              <input class="auth-input" id="email" name="email" type="email" placeholder="name@eqwell.app" required />
-            </div>
-
-            <div class="auth-field">
-              <label class="auth-label" for="password">Password</label>
-              <input class="auth-input" id="password" name="password" type="password" placeholder="Enter password" required />
-            </div>
-
-            <p class="auth-hint" id="extension-proof-status" aria-live="polite">
-              Student login requires EqWell extension active and logged in on this browser.
-            </p>
-
-            <a
-              class="auth-secondary-btn"
-              href="{{ url_for('static', filename='downloads/eqwell-extension.zip') }}"
-              download
-            >
-              Download EqWell Extension ZIP
-            </a>
-
-            <button class="auth-primary-btn" type="submit">Sign in</button>
-          </form>
-
-          {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-              {% for category, message in messages %}
-                <p class="auth-notice" data-category="{{ category }}">{{ message }}</p>
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
-
-          <div class="auth-mock-box">
-            <h3>Mock login credentials</h3>
-            <div class="auth-mock-grid" aria-label="Mock login credentials list">
-              {% if mock_logins %}
-                {% for item in mock_logins %}
-                  <div class="auth-mock-item">
-                    <p class="auth-mock-role">{{ item.role|capitalize }}</p>
-                    <p class="auth-mock-creds">{{ item.email }} / {{ item.password }}</p>
-                  </div>
-                {% endfor %}
-              {% else %}
-                <div class="auth-mock-item">
-                  <p class="auth-mock-role">Student</p>
-                  <p class="auth-mock-creds">student@eqwell.app / student123</p>
-                </div>
-                <div class="auth-mock-item">
-                  <p class="auth-mock-role">Warden</p>
-                  <p class="auth-mock-creds">warden@eqwell.app / warden123</p>
-                </div>
-                <div class="auth-mock-item">
-                  <p class="auth-mock-role">Counsellor</p>
-                  <p class="auth-mock-creds">counsellor@eqwell.app / counsellor123</p>
-                </div>
-                <div class="auth-mock-item">
-                  <p class="auth-mock-role">Developer</p>
-                  <p class="auth-mock-creds">developer@wellnest / WellNest2026</p>
-                </div>
-                <div class="auth-mock-item">
-                  <p class="auth-mock-role">Parent</p>
-                  <p class="auth-mock-creds">parent@eqwell.app / parent123</p>
-                </div>
-                <div class="auth-mock-item">
-                  <p class="auth-mock-role">Proctor</p>
-                  <p class="auth-mock-creds">proctor@eqwell.app / proctor123</p>
-                </div>
-              {% endif %}
-            </div>
-          </div>
-        </article>
-      </div>
+    <div class="mq-pill-row">
+      <a class="mq-pill" href="{{ url_for('install_extension') }}">Install Extension</a>
+      <a class="mq-pill" href="{{ url_for('signup_showcase') }}">Need account?</a>
     </div>
-  </section>
-
-  <script>
-    (function () {
-      var root = document.getElementById('role-select');
-      if (!root) return;
-
-      var trigger = document.getElementById('role-trigger');
-      var label = document.getElementById('role-trigger-label');
-      var menu = document.getElementById('role-menu');
-      var roleInput = document.getElementById('role');
-      var options = Array.from(root.querySelectorAll('.role-option'));
-      var roleCards = Array.from(document.querySelectorAll('.auth-role-card'));
-
-      function setOpen(open) {
-        root.classList.toggle('open', !!open);
-        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
-      }
-
-      function syncSelection(value) {
-        var selected = options.find(function (btn) { return btn.dataset.value === value; }) || options[0];
-        if (!selected) return;
-
-        roleInput.value = selected.dataset.value;
-        label.textContent = selected.dataset.label;
-
-        options.forEach(function (btn) {
-          btn.classList.toggle('active', btn === selected);
-        });
-
-        roleCards.forEach(function (card) {
-          card.classList.toggle('active', card.dataset.role === selected.dataset.value);
-        });
-      }
-
-      trigger.addEventListener('click', function () {
-        if (trigger.disabled) return;
-        setOpen(!root.classList.contains('open'));
-      });
-
-      options.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          syncSelection(btn.dataset.value);
-          setOpen(false);
-        });
-      });
-
-      roleCards.forEach(function (card) {
-        card.addEventListener('click', function () {
-          if (trigger.disabled) return;
-          syncSelection(card.dataset.role);
-          setOpen(false);
-        });
-      });
-
-      document.addEventListener('click', function (event) {
-        if (!root.contains(event.target)) {
-          setOpen(false);
-        }
-      });
-
-      document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-          setOpen(false);
-        }
-      });
-
-      syncSelection(roleInput.value || 'student');
-
-      var securityNotices = Array.from(document.querySelectorAll('.notice[data-category="security_popup"]'));
-      if (!securityNotices.length) {
-        securityNotices = Array.from(document.querySelectorAll('.auth-notice[data-category="security_popup"]'));
-      }
-      if (securityNotices.length) {
-        var popupText = securityNotices.map(function (el) {
-          return (el.textContent || '').trim();
-        }).join('\n');
-        if (popupText) {
-          setTimeout(function () {
-            alert(popupText);
-          }, 120);
-        }
-      }
-    })();
-  </script>
-      </section>
-    </main>
-  </div>
-
-  <script defer src="/mobile-drawer.js"></script>
-</body>
-</html>
+  </article>
+</section>
+{% endblock %}

@@ -1,14 +1,16 @@
 :root {
-  --mobile-bg-1: #f7f3e8;
-  --mobile-bg-2: #e8edf8;
-  --mobile-surface: rgba(255, 255, 255, 0.92);
-  --mobile-text: #18212f;
-  --mobile-muted: #5a6475;
-  --mobile-border: rgba(30, 43, 67, 0.12);
-  --mobile-brand: #1f3f72;
-  --mobile-brand-soft: #dfe8fb;
-  --mobile-accent: #c15e3f;
-  --mobile-shadow: 0 14px 34px rgba(24, 33, 47, 0.12);
+  --mq-bg: #f3efe6;
+  --mq-ink: #152033;
+  --mq-muted: #58657a;
+  --mq-card: #ffffff;
+  --mq-brand: #0f2d5e;
+  --mq-brand-soft: #dbe7ff;
+  --mq-accent: #cb6a46;
+  --mq-ok: #127a51;
+  --mq-warn: #a55a16;
+  --mq-bad: #9f2338;
+  --mq-border: rgba(21, 32, 51, 0.12);
+  --mq-shadow: 0 16px 34px rgba(15, 26, 41, 0.15);
 }
 
 * {
@@ -19,201 +21,361 @@ html,
 body {
   margin: 0;
   padding: 0;
-  max-width: 100%;
-  overflow-x: hidden;
-  font-family: "Manrope", "Sora", "Segoe UI", sans-serif;
-  color: var(--mobile-text);
+  width: 100%;
+  min-height: 100%;
+  font-family: "Manrope", sans-serif;
+  color: var(--mq-ink);
   background:
-    radial-gradient(circle at 8% 0%, rgba(31, 63, 114, 0.16), transparent 40%),
-    radial-gradient(circle at 100% 90%, rgba(193, 94, 63, 0.16), transparent 38%),
-    linear-gradient(150deg, var(--mobile-bg-1), var(--mobile-bg-2));
+    radial-gradient(circle at 0% 0%, rgba(15, 45, 94, 0.14), transparent 36%),
+    radial-gradient(circle at 100% 100%, rgba(203, 106, 70, 0.16), transparent 40%),
+    linear-gradient(150deg, #f8f6f0 0%, #eef2f9 100%);
 }
 
-.mobile-shell-app {
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+.mq-app {
   min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
 }
 
-.mobile-shell-header {
+.mq-topbar {
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 80;
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  grid-template-columns: 44px 1fr 44px;
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.86);
-  border-bottom: 1px solid var(--mobile-border);
+  border-bottom: 1px solid var(--mq-border);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(12px);
 }
 
-.mobile-shell-brand {
+.mq-brand {
   min-width: 0;
   display: flex;
   flex-direction: column;
 }
 
-.mobile-shell-brand strong {
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.02em;
+.mq-brand strong {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.1;
 }
 
-.mobile-shell-brand span {
+.mq-brand small {
+  color: var(--mq-muted);
   font-size: 11px;
-  color: var(--mobile-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.mobile-shell-icon-btn {
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--mobile-border);
-  border-radius: 14px;
-  background: var(--mobile-surface);
-  color: var(--mobile-text);
+.mq-icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid var(--mq-border);
+  background: var(--mq-card);
+  color: var(--mq-ink);
   text-decoration: none;
 }
 
-.mobile-shell-icon-btn .material-symbols-outlined {
-  font-size: 24px;
+.mq-main {
+  padding: 14px;
+  padding-bottom: 86px;
 }
 
-.mobile-shell-drawer {
+.mq-stack {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.mq-alert {
+  border-radius: 14px;
+  border: 1px solid var(--mq-border);
+  padding: 10px 12px;
+  font-size: 13px;
+  background: #fff;
+}
+
+.mq-alert-success { border-color: rgba(18, 122, 81, 0.3); }
+.mq-alert-error { border-color: rgba(159, 35, 56, 0.3); }
+.mq-alert-security_popup { border-color: rgba(165, 90, 22, 0.4); }
+
+.mq-card {
+  background: var(--mq-card);
+  border: 1px solid var(--mq-border);
+  border-radius: 20px;
+  box-shadow: var(--mq-shadow);
+  padding: 14px;
+}
+
+.mq-card h1,
+.mq-card h2,
+.mq-card h3 {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  line-height: 1.15;
+}
+
+.mq-card p {
+  margin: 8px 0 0;
+  color: var(--mq-muted);
+}
+
+.mq-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.mq-grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mq-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.mq-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--mq-border);
+  background: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mq-ink);
+  text-decoration: none;
+}
+
+.mq-metric {
+  border-radius: 14px;
+  border: 1px solid var(--mq-border);
+  background: #fff;
+  padding: 10px;
+}
+
+.mq-metric strong {
+  display: block;
+  font-size: 20px;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.mq-form {
+  display: grid;
+  gap: 11px;
+}
+
+.mq-label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mq-input,
+.mq-select,
+.mq-textarea {
+  width: 100%;
+  border: 1px solid var(--mq-border);
+  border-radius: 12px;
+  padding: 11px 12px;
+  font-size: 14px;
+  background: #fff;
+  color: var(--mq-ink);
+}
+
+.mq-textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+
+.mq-btn-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.mq-btn,
+.mq-btn-ghost {
+  border: 1px solid var(--mq-border);
+  border-radius: 12px;
+  padding: 11px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mq-btn {
+  background: var(--mq-brand);
+  color: #fff;
+}
+
+.mq-btn-ghost {
+  background: #fff;
+  color: var(--mq-ink);
+}
+
+.mq-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mq-list-item {
+  border: 1px solid var(--mq-border);
+  border-radius: 14px;
+  padding: 10px;
+  background: #fff;
+}
+
+.mq-list-item h4 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.mq-list-item p {
+  margin: 4px 0 0;
+  font-size: 12px;
+}
+
+.mq-progress {
+  margin-top: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #e7edf8;
+  overflow: hidden;
+}
+
+.mq-progress > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--mq-brand), var(--mq-accent));
+}
+
+.mq-drawer {
   position: fixed;
-  top: 0;
   left: 0;
+  top: 0;
   bottom: 0;
-  width: min(82vw, 320px);
-  z-index: 70;
-  background: #fbfdff;
-  border-right: 1px solid var(--mobile-border);
-  box-shadow: var(--mobile-shadow);
+  width: min(84vw, 320px);
+  background: #0e1730;
+  color: #f1f5ff;
+  z-index: 100;
   transform: translateX(-104%);
   transition: transform 220ms ease;
-  display: flex;
-  flex-direction: column;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
-.mobile-shell-page.mobile-menu-open .mobile-shell-drawer {
+.mq-body.mq-open .mq-drawer {
   transform: translateX(0);
 }
 
-.mobile-shell-drawer-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+.mq-drawer-head {
   padding: 14px;
-  border-bottom: 1px solid var(--mobile-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
 }
 
-.mobile-shell-nav {
+.mq-drawer-head p {
+  margin: 4px 0 0;
+  color: #b8c6ef;
+  font-size: 12px;
+}
+
+.mq-drawer .mq-icon-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.mq-nav {
   padding: 10px;
+  overflow: auto;
   display: grid;
   gap: 8px;
-  overflow: auto;
 }
 
-.mobile-shell-nav a {
+.mq-nav a {
+  color: #f4f7ff;
   text-decoration: none;
-  color: var(--mobile-text);
-  border: 1px solid var(--mobile-border);
-  border-radius: 14px;
-  padding: 12px;
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #fff;
-  font-size: 14px;
-  font-weight: 650;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  padding: 10px 11px;
+  background: rgba(255, 255, 255, 0.06);
 }
 
-.mobile-shell-nav a .material-symbols-outlined {
-  font-size: 20px;
-}
-
-.mobile-shell-backdrop {
+.mq-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: 90;
   border: 0;
-  background: rgba(18, 26, 39, 0.34);
+  background: rgba(6, 12, 20, 0.45);
   opacity: 0;
   pointer-events: none;
   transition: opacity 220ms ease;
 }
 
-.mobile-shell-page.mobile-menu-open .mobile-shell-backdrop {
+.mq-body.mq-open .mq-backdrop {
   opacity: 1;
   pointer-events: auto;
 }
 
-.mobile-shell-main {
-  padding: 12px;
+.mq-bottom-nav {
+  position: fixed;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  z-index: 70;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--mq-border);
+  box-shadow: var(--mq-shadow);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  padding: 7px 6px;
 }
 
-.mobile-shell-content {
-  background: var(--mobile-surface);
-  border: 1px solid var(--mobile-border);
-  border-radius: 22px;
-  box-shadow: var(--mobile-shadow);
-  padding: 12px;
-  min-height: calc(100dvh - 88px);
-  overflow: hidden;
+.mq-bottom-nav a {
+  color: var(--mq-ink);
+  text-decoration: none;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  font-size: 10px;
 }
 
-.mobile-shell-content * {
-  max-width: 100%;
+.mq-bottom-nav .material-symbols-outlined {
+  font-size: 19px;
 }
 
-.mobile-shell-content :where(img, video, canvas, svg, iframe) {
-  max-width: 100% !important;
-  height: auto !important;
-}
-
-.mobile-shell-content :where(table) {
-  display: block;
-  width: 100%;
-  overflow-x: auto;
-}
-
-.mobile-shell-content :where(input, select, textarea, button) {
-  max-width: 100%;
-}
-
-.mobile-shell-content :where([class*="sidebar"], [class*="side-nav"], [class*="sidenav"], [class*="drawer"]) {
-  display: none !important;
-}
-
-.mobile-shell-content :where([class*="grid"], [class*="columns-"]) {
-  grid-template-columns: 1fr !important;
-}
-
-.mobile-shell-content :where([class*="w-1/2"], [class*="w-2/3"], [class*="w-3/4"], [class*="w-5/12"], [class*="w-7/12"]) {
-  width: 100% !important;
-}
-
-.mobile-shell-content :where([class*="max-w-"]) {
-  max-width: 100% !important;
-}
-
-.mobile-shell-content :where(section, article, aside, form, .card, [class*="card"], [class*="panel"], [class*="tile"]) {
-  min-width: 0;
-}
-
-.mobile-shell-content :where(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small, label) {
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-@media (min-width: 768px) {
-  .mobile-shell-main {
+@media (min-width: 720px) {
+  .mq-main {
     max-width: 760px;
     margin: 0 auto;
   }

@@ -1,8 +1,9 @@
-# EqWell Mobile Templates
+# EqWell Mobile Templates (New UI)
 
-These files are dedicated mobile templates used by Flask when a mobile user agent is detected.
-They are generated from application/templates and wrapped in a mobile app shell (header + drawer + content container).
+This folder contains dedicated mobile-first templates with independent HTML structure.
+They do not reuse desktop page markup.
 
-Shared assets:
+Shared files:
+- _layout.html
 - mobile-overrides.css
 - mobile-drawer.js

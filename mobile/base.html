@@ -1,124 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{{ page_title }} | EqWell</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
-  <style id="card-wrap-guard">
-    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) { min-width: 0; }
-    :is(article, [class*='rounded-2xl'], [class*='rounded-3xl'], .kpi-card, .panel-card, .soft-card, .deep-card, .analytics-subcard, .wellbeing-card, .chart-card) :is(p, h1, h2, h3, h4, h5, h6, span, a, li, strong, small) { overflow-wrap: anywhere; word-break: break-word; }
-  </style>
-  <link rel="stylesheet" href="/mobile-overrides.css" />
-</head>
-<body class="mobile-shell-page">
-  <div class="mobile-shell-app">
-    <header class="mobile-shell-header">
-      <button type="button" class="mobile-shell-icon-btn" data-mobile-open aria-label="Open menu">
-        <span class="material-symbols-outlined">menu</span>
-      </button>
-      <div class="mobile-shell-brand">
-        <strong>EqWell</strong>
-        <span>Base</span>
-      </div>
-      <a class="mobile-shell-icon-btn" href="{{ url_for('home') }}" aria-label="Go home">
-        <span class="material-symbols-outlined">home</span>
-      </a>
-    </header>
-
-    <aside class="mobile-shell-drawer" data-mobile-drawer aria-hidden="true">
-      <div class="mobile-shell-drawer-head">
-        <strong>Navigation</strong>
-        <button type="button" class="mobile-shell-icon-btn" data-mobile-close aria-label="Close menu">
-          <span class="material-symbols-outlined">close</span>
-        </button>
-      </div>
-      <nav class="mobile-shell-nav">
-        <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span>Home</a>
-        <a href="{{ url_for('login') }}"><span class="material-symbols-outlined">login</span>Login</a>
-        <a href="{{ url_for('signup_showcase') }}"><span class="material-symbols-outlined">person_add</span>Sign Up</a>
-        <a href="{{ url_for('install_extension') }}"><span class="material-symbols-outlined">extension</span>Extension</a>
-        <a href="{{ url_for('login', role='student') }}"><span class="material-symbols-outlined">school</span>Student</a>
-        <a href="{{ url_for('login', role='warden') }}"><span class="material-symbols-outlined">apartment</span>Warden</a>
-        <a href="{{ url_for('login', role='counsellor') }}"><span class="material-symbols-outlined">psychology</span>Counsellor</a>
-        <a href="{{ url_for('login', role='developer') }}"><span class="material-symbols-outlined">code</span>Developer</a>
-        <a href="{{ url_for('login', role='parent') }}"><span class="material-symbols-outlined">family_restroom</span>Parent</a>
-        <a href="{{ url_for('login', role='proctor') }}"><span class="material-symbols-outlined">admin_panel_settings</span>Proctor</a>
-        <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined">logout</span>Logout</a>
-      </nav>
-    </aside>
-
-    <button type="button" class="mobile-shell-backdrop" data-mobile-close aria-label="Close navigation"></button>
-
-    <main class="mobile-shell-main">
-      <section class="mobile-shell-content">
-<div class="app-shell">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-badge">
-          <span class="material-symbols-outlined">{{ role_sidebar.badge_icon }}</span>
-        </div>
-        <div>
-          <p class="brand-title">EqWell</p>
-          <p class="brand-subtitle">{{ role_sidebar.subtitle }}</p>
-        </div>
-      </div>
-
-      <nav class="nav">
-        {% for item in role_sidebar.menu %}
-        <a class="nav-link {% if item.key == active_nav %}active{% endif %}" href="{{ item.href }}">
-          <span class="material-symbols-outlined">{{ item.icon }}</span>
-          {{ item.label }}
-        </a>
-        {% endfor %}
-      </nav>
-
-      <a class="sidebar-action" href="{{ role_sidebar.action_href }}">{{ role_sidebar.action }}</a>
-
-      <div class="profile-box">
-        <div class="profile-avatar">{{ display_name[:2] | upper }}</div>
-        <div>
-          <div style="font-weight: 700; font-size: 14px;">{{ display_name }}</div>
-          <div style="font-size: 12px; color: #a8afc0;">{{ session.get('email', 'user@eqwell.app') }}</div>
-        </div>
-      </div>
-    </aside>
-
-    <main class="main">
-      <div class="privacy-strip">
-        <span class="material-symbols-outlined" style="font-size: 18px;">lock</span>
-        We do not track students. We track wellbeing signals.
-      </div>
-
-      <header class="topbar">
-        <div>
-          <h1 class="title">{{ page_title }}</h1>
-          <p class="subtitle">{{ page_subtitle }}</p>
-        </div>
-        <div class="top-controls">
-          <span class="role-chip">{{ active_role | capitalize }} portal</span>
-          <form class="logout-form" method="post" action="{{ url_for('logout') }}">
-            <button class="logout-btn" type="submit">Logout</button>
-          </form>
-        </div>
-      </header>
-
-      <section class="content">
-        {% block content %}{% endblock %}
-      </section>
-    </main>
-  </div>
-  {% if extension_bootstrap_payload %}
-  <script id="eqwell-extension-bootstrap" type="application/json">{{ extension_bootstrap_payload | tojson }}</script>
-  {% endif %}
-      </section>
-    </main>
-  </div>
-
-  <script defer src="/mobile-drawer.js"></script>
-</body>
-</html>
+{% extends "mobile/_layout.html" %}
+{% set page_title = "Base" %}
+{% block content %}
+<section class="mq-grid">
+  <article class="mq-card">
+    <h2>{{ page_title }}</h2>
+    <p>This page uses a dedicated mobile-first template and structure.</p>
+    <div class="mq-pill-row">
+      <a class="mq-pill" href="{{ url_for('home') }}">Home</a>
+      <a class="mq-pill" href="{{ url_for('login') }}">Login</a>
+      <a class="mq-pill" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </article>
+</section>
+{% endblock %}

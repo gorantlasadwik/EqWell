@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{{ page_title|default('EqWell Mobile') }} | EqWell Mobile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/mobile-overrides.css" />
+</head>
+<body class="mq-body">
+  <div class="mq-app" id="mq-app">
+    <header class="mq-topbar">
+      <button type="button" class="mq-icon-btn" data-mq-open aria-label="Open menu">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <div class="mq-brand">
+        <strong>EqWell</strong>
+        <small>{{ page_title|default('Mobile') }}</small>
+      </div>
+      <a class="mq-icon-btn" href="{{ url_for('home') }}" aria-label="Home">
+        <span class="material-symbols-outlined">home</span>
+      </a>
+    </header>
+
+    <aside class="mq-drawer" data-mq-drawer aria-hidden="true">
+      <div class="mq-drawer-head">
+        <div>
+          <strong>Mobile Console</strong>
+          <p>{{ (session.get('role') or 'guest')|capitalize }}</p>
+        </div>
+        <button type="button" class="mq-icon-btn" data-mq-close aria-label="Close menu">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <nav class="mq-nav">
+        <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">rocket_launch</span>Landing</a>
+        <a href="{{ url_for('login') }}"><span class="material-symbols-outlined">login</span>Login</a>
+        <a href="{{ url_for('signup_showcase') }}"><span class="material-symbols-outlined">person_add</span>Signup</a>
+        <a href="{{ url_for('install_extension') }}"><span class="material-symbols-outlined">extension</span>Extension</a>
+        <a href="{{ url_for('student_dashboard') }}"><span class="material-symbols-outlined">school</span>Student</a>
+        <a href="{{ url_for('warden_overview_page') }}"><span class="material-symbols-outlined">apartment</span>Warden</a>
+        <a href="{{ url_for('counsellor_overview_page') }}"><span class="material-symbols-outlined">psychology</span>Counsellor</a>
+        <a href="{{ url_for('developer_overview_page') }}"><span class="material-symbols-outlined">code</span>Developer</a>
+        <a href="{{ url_for('parent_overview_page') }}"><span class="material-symbols-outlined">family_restroom</span>Parent</a>
+        <a href="{{ url_for('proctor_overview_page') }}"><span class="material-symbols-outlined">shield_person</span>Proctor</a>
+        <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined">logout</span>Logout</a>
+      </nav>
+    </aside>
+
+    <button type="button" class="mq-backdrop" data-mq-close aria-label="Close navigation"></button>
+
+    <main class="mq-main">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <section class="mq-stack" aria-label="messages">
+            {% for category, message in messages %}
+              <article class="mq-alert mq-alert-{{ category|default('info') }}">{{ message }}</article>
+            {% endfor %}
+          </section>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+
+    <nav class="mq-bottom-nav">
+      <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span><small>Home</small></a>
+      <a href="{{ url_for('student_dashboard') }}"><span class="material-symbols-outlined">monitor_heart</span><small>Pulse</small></a>
+      <a href="{{ url_for('student_tasks_page') }}"><span class="material-symbols-outlined">task_alt</span><small>Tasks</small></a>
+      <a href="{{ url_for('student_quiz_selector_page') }}"><span class="material-symbols-outlined">quiz</span><small>Quiz</small></a>
+      <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined">logout</span><small>Logout</small></a>
+    </nav>
+  </div>
+
+  <script defer src="/mobile-drawer.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
