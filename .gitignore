@@ -32,3 +32,4 @@ Thumbs.db
 
 # Local legacy workspace snapshot (not part of clean repo layout)
 frontend/
+.vercel
