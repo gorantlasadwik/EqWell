@@ -23,6 +23,8 @@ Thumbs.db
 *.log
 .env
 .env.*
+!.env.example
+!application/.env.example
 
 # Temporary archives
 *.zip
